@@ -2,9 +2,9 @@
 #include <string>
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_space_sdrmaker_sdrmobile_benchmarks_MainActivity_stringFromJNI(
+Java_space_sdrmaker_sdrmobile_benchmarks_MainActivity_ndkConvolution(
         JNIEnv *env,
-        jobject /* this */) {
-    std::string hello = "Hello from C++";
-    return env->NewStringUTF(hello.c_str());
+jobject /* this */) {
+std::string bm_result = "NDK convolution result";
+return env->NewStringUTF(bm_result.c_str());
 }

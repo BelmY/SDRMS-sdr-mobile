@@ -2,6 +2,7 @@ package space.sdrmaker.sdrmobile.benchmarks
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -10,15 +11,29 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Example of a call to a native method
-        sample_text.text = stringFromJNI()
+        java_convolution_button.setOnClickListener(View.OnClickListener {
+            this.onJavaConvolutionClick()
+        })
+
+        ndk_convolution_button.setOnClickListener(View.OnClickListener {
+            this.onNDKConvolutionClick()
+        })
+    }
+
+    private fun onJavaConvolutionClick() {
+        println("Java convolution result")
+    }
+
+    private fun onNDKConvolutionClick() {
+        val bmResult = ndkConvolution()
+        println(bmResult)
     }
 
     /**
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-    external fun stringFromJNI(): String
+    external fun ndkConvolution(): String
 
     companion object {
 
