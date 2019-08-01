@@ -1,0 +1,8 @@
+*.iml
+.gradle
+.idea
+.DS_Store
+build/
+/benchmark/local.properties
+/benchmark/captures
+.externalNativeBuild
