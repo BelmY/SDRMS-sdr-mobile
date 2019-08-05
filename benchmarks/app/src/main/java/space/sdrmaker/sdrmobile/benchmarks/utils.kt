@@ -1,17 +1,17 @@
 package space.sdrmaker.sdrmobile.benchmarks
 
-internal class FIR(private val coefs: DoubleArray) {
+internal class FIR(private val coefs: FloatArray) {
     private val length: Int = coefs.size
-    private val delayLine: DoubleArray
+    private val delayLine: FloatArray
     private var count = 0
 
     init {
-        delayLine = DoubleArray(length)
+        delayLine = FloatArray(length)
     }
 
-    fun getOutputSample(inputSample: Double): Double {
+    fun getOutputSample(inputSample: Float): Float {
         delayLine[count] = inputSample
-        var result = 0.0
+        var result = 0.0F
         var index = count
         for (i in 0 until length) {
             result += coefs[i] * delayLine[index--]

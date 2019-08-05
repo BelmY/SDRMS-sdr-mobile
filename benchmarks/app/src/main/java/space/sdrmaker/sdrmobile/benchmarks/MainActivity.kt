@@ -62,8 +62,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun javaConvolutionBenchmark(filterLength: Int = 10, dataLength: Int = 2048): String {
         val randomizer = Random(42)
-        val filter = FIR(DoubleArray(filterLength) {randomizer.nextDouble()})
-        val data = DoubleArray(dataLength) {randomizer.nextDouble()}
+        val filter = FIR(FloatArray(filterLength) {randomizer.nextFloat()})
+        val data = FloatArray(dataLength) {randomizer.nextFloat()}
         val start = System.currentTimeMillis()
         for(i in 0 until dataLength) {
             filter.getOutputSample(data[i])
