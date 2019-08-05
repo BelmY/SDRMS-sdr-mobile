@@ -5,8 +5,6 @@
 #include <vector>
 #include <sstream>
 
-#define APPNAME "BENCHMARK"
-
 using namespace std;
 using namespace std::chrono;
 
@@ -37,7 +35,7 @@ public:
 
 };
 
-extern "C" JNIEXPORT jstring JNICALL
+extern "C" JNIEXPORT jlong JNICALL
 Java_space_sdrmaker_sdrmobile_benchmarks_MainActivity_ndkConvolutionBenchmark(
         JNIEnv *env,
         jobject /* this */,
@@ -58,20 +56,16 @@ Java_space_sdrmaker_sdrmobile_benchmarks_MainActivity_ndkConvolutionBenchmark(
     FIR *filter = new FIR(coefs);
 
     // time it
-    long long int start = duration_cast<milliseconds>(
+    long int start = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
     ).count();
     for (int i = 0; i < dataLength; i++) {
         filter->getOutputSample(data[i]);
     }
-    long long int end = duration_cast<milliseconds>(
+    long int end = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
     ).count();
 
-    int totalTime = end - start;
-
-    stringstream ss;
-    ss << dataLength << " samples processed in " << totalTime << "ms\n" << "samples/ms: " << static_cast<float>(dataLength) / totalTime;
-
-    return env->NewStringUTF(ss.str().c_str());
+    long int totalTime = end - start;
+    return totalTime;
 }

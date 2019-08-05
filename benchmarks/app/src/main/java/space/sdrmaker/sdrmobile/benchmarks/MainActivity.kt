@@ -10,7 +10,7 @@ import kotlin.random.Random
 class MainActivity : AppCompatActivity() {
 
     private var filterLength = 10
-    private var dataLength = 100000
+    private var dataLength = 50000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,32 +34,23 @@ class MainActivity : AppCompatActivity() {
         }
         filterLengthBar.setOnSeekBarChangeListener(filterLengthHandler)
         setFilterLengthLabel()
-
-        // setup data length slider
-        val dataLengthHandler = object: SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                dataLength = (progress + 1) * 1000
-                setDataLengthLabel()
-            }
-            override fun onStartTrackingTouch(p0: SeekBar?) {
-            }
-            override fun onStopTrackingTouch(p0: SeekBar?) {
-            }
-        }
-        dataLengthBar.setOnSeekBarChangeListener(dataLengthHandler)
-        setDataLengthLabel()
     }
 
     private fun onConvolutionButtonClick() {
         // perform java convolution benchmark
-        val javaConvolutionResult = javaConvolutionBenchmark(filterLength = filterLength, dataLength = dataLength)
-        setConvolutionResult(javaConvolutionResult)
+        val javaTotalTime = javaConvolutionBenchmark(filterLength = filterLength, dataLength = dataLength)
+        val javaSamplesPerMS = dataLength / javaTotalTime
+        val javaResultLabel = "Java total time: $javaTotalTime ms\nJava samples/ms: $javaSamplesPerMS"
+        setConvolutionResult(javaResultLabel)
 
-        val ndkConvolutionResult = ndkConvolutionBenchmark(filterLength, dataLength)
-        setConvolutionResult("$javaConvolutionResult\n$ndkConvolutionResult")
+        // perform NDK convolution benchmark
+        val ndkTotalTime = ndkConvolutionBenchmark(filterLength, dataLength)
+        val ndkSamplesPerMS = dataLength / ndkTotalTime
+        val ndkResultLabel = "NDK total time: $ndkTotalTime ms\nNDK samples/ms: $ndkSamplesPerMS"
+        setConvolutionResult("$javaResultLabel\n\n$ndkResultLabel")
     }
 
-    private fun javaConvolutionBenchmark(filterLength: Int = 10, dataLength: Int = 2048): String {
+    private fun javaConvolutionBenchmark(filterLength: Int = 10, dataLength: Int = 50000): Long {
         val randomizer = Random(42)
         val filter = FIR(FloatArray(filterLength) {randomizer.nextFloat()})
         val data = FloatArray(dataLength) {randomizer.nextFloat()}
@@ -68,11 +59,7 @@ class MainActivity : AppCompatActivity() {
             filter.getOutputSample(data[i])
         }
         val end = System.currentTimeMillis()
-        val totalTime = end - start
-        val samplesPerMillisecond = if (totalTime != 0L) dataLength / totalTime else dataLength
-
-        return "$dataLength samples processed in $totalTime ms\n" +
-                "samples/ms: $samplesPerMillisecond"
+        return end - start
     }
 
     private fun setConvolutionResult(result: String) {
@@ -83,15 +70,11 @@ class MainActivity : AppCompatActivity() {
         filterLengthLabel.text = "Filter length: $filterLength"
     }
 
-    private fun setDataLengthLabel() {
-        dataLengthLabel.text = "Data length: $dataLength"
-    }
-
     /**
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-    external fun ndkConvolutionBenchmark(filterLength: Int, dataLength: Int): String
+    external fun ndkConvolutionBenchmark(filterLength: Int, dataLength: Int): Long
 
     companion object {
 
