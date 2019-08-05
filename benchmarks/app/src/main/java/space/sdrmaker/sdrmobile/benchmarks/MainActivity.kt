@@ -10,7 +10,7 @@ import kotlin.random.Random
 class MainActivity : AppCompatActivity() {
 
     private var filterLength = 10
-    private var dataLength = 1024
+    private var dataLength = 100000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +55,8 @@ class MainActivity : AppCompatActivity() {
         val javaConvolutionResult = javaConvolutionBenchmark(filterLength = filterLength, dataLength = dataLength)
         setConvolutionResult(javaConvolutionResult)
 
-        // TODO: perform NDK convolution benchmark
-        val ndkConvolutionResult = ndkConvolution()
-        println(ndkConvolutionResult)
+        val ndkConvolutionResult = ndkConvolutionBenchmark(filterLength, dataLength)
+        setConvolutionResult("$javaConvolutionResult\n$ndkConvolutionResult")
     }
 
     private fun javaConvolutionBenchmark(filterLength: Int = 10, dataLength: Int = 2048): String {
@@ -70,10 +69,10 @@ class MainActivity : AppCompatActivity() {
         }
         val end = System.currentTimeMillis()
         val totalTime = end - start
-        val samplesPerMilisecond = if (totalTime != 0L) dataLength / totalTime else dataLength
+        val samplesPerMillisecond = if (totalTime != 0L) dataLength / totalTime else dataLength
 
         return "$dataLength samples processed in $totalTime ms\n" +
-                "samples/ms: $samplesPerMilisecond"
+                "samples/ms: $samplesPerMillisecond"
     }
 
     private fun setConvolutionResult(result: String) {
@@ -92,7 +91,7 @@ class MainActivity : AppCompatActivity() {
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-    external fun ndkConvolution(): String
+    external fun ndkConvolutionBenchmark(filterLength: Int, dataLength: Int): String
 
     companion object {
 
