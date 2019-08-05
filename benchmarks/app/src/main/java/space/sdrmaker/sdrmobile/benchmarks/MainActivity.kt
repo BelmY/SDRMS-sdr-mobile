@@ -39,13 +39,13 @@ class MainActivity : AppCompatActivity() {
     private fun onConvolutionButtonClick() {
         // perform java convolution benchmark
         val javaTotalTime = javaConvolutionBenchmark(filterLength = filterLength, dataLength = dataLength)
-        val javaSamplesPerMS = dataLength / javaTotalTime
+        val javaSamplesPerMS = if (javaTotalTime != 0L) dataLength / javaTotalTime else dataLength
         val javaResultLabel = "Java total time: $javaTotalTime ms\nJava samples/ms: $javaSamplesPerMS"
         setConvolutionResult(javaResultLabel)
 
         // perform NDK convolution benchmark
         val ndkTotalTime = ndkConvolutionBenchmark(filterLength, dataLength)
-        val ndkSamplesPerMS = dataLength / ndkTotalTime
+        val ndkSamplesPerMS = if (ndkTotalTime != 0L) dataLength / ndkTotalTime else dataLength
         val ndkResultLabel = "NDK total time: $ndkTotalTime ms\nNDK samples/ms: $ndkSamplesPerMS"
         setConvolutionResult("$javaResultLabel\n\n$ndkResultLabel")
     }
