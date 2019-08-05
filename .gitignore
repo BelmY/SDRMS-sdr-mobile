@@ -3,6 +3,6 @@
 .idea
 .DS_Store
 build/
-/benchmark/local.properties
+local.properties
 /benchmark/captures
 .externalNativeBuild

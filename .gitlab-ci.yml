@@ -1,0 +1,22 @@
+image: thyrlian/android-sdk:3.0
+
+stages:
+  - lint_and_test
+  - build
+
+lint_and_test:
+  stage: lint_and_test
+  script:
+    - apt update && apt install -y --no-install-recommends cmake ninja-build
+    # FIXME: linter warnings don't stop the build
+    - cd benchmarks && ./gradlew lint
+    - ./gradlew test
+
+build:
+  stage: build
+  script:
+    - apt update && apt install -y --no-install-recommends cmake ninja-build
+    - cd benchmarks && ./gradlew assembleDebug
+  artifacts:
+    paths:
+      - benchmarks/app/build/outputs/apk/debug/app-debug.apk
