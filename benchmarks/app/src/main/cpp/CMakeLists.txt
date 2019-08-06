@@ -32,10 +32,18 @@ find_library( # Sets the name of the path variable.
         # you want CMake to locate.
         log)
 
+
+# Setup FFTW library
+set(fftw_DIR ${CMAKE_SOURCE_DIR}/fftw3)
+add_library(fftw3 STATIC IMPORTED)
+set_target_properties(fftw3 PROPERTIES IMPORTED_LOCATION
+        ${fftw_DIR}/lib/${ANDROID_ABI}/libfftw3.a)
+target_link_libraries(native-lib fftw3)
+set_target_properties(fftw3 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${fftw_DIR}/include)
+
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this
 # build script, prebuilt third-party libraries, or system libraries.
-
 target_link_libraries( # Specifies the target library.
         native-lib
 
