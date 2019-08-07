@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.SeekBar
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
@@ -55,18 +56,22 @@ class MainActivity : AppCompatActivity() {
         fftWidthBar.setOnSeekBarChangeListener(fftWidthHandler)
         setFFTWidthLabel()
 
+        // setup batch benchmark button listener
+        batchBenchmarkButton.setOnClickListener {
+            onBatchBenchmarkButtonClick()
+        }
     }
 
     private fun onConvolutionButtonClick() {
         // perform JVM convolution benchmark
         val jvmTotalTime = convolutionBenchmark(filterLength = convolutionFilterLength, dataLength = convolutionDataLength)
-        val jvmSamplesPerSecond = if (jvmTotalTime != 0L) convolutionDataLength * 1000 / jvmTotalTime else convolutionDataLength * 1000
+        val jvmSamplesPerSecond = opsPerSecond(convolutionDataLength, jvmTotalTime)
         val jvmResultLabel = "JVM total time: $jvmTotalTime ms\nJVM samples/s: $jvmSamplesPerSecond"
         setConvolutionResult(jvmResultLabel)
 
         // perform NDK convolution benchmark
         val ndkTotalTime = ndkConvolutionBenchmark(convolutionFilterLength, convolutionDataLength)
-        val ndkSamplesPerSecond = if (ndkTotalTime != 0L) convolutionDataLength * 1000 / ndkTotalTime else convolutionDataLength * 1000
+        val ndkSamplesPerSecond = opsPerSecond(convolutionDataLength, ndkTotalTime)
         val ndkResultLabel = "NDK total time: $ndkTotalTime ms\nNDK samples/s: $ndkSamplesPerSecond"
         setConvolutionResult("$jvmResultLabel\n\n$ndkResultLabel")
     }
@@ -74,15 +79,74 @@ class MainActivity : AppCompatActivity() {
     private fun onFFTButtonClick() {
         // perform JVM FFT benchmark
         val jvmTotalTime = fftBenchmark(fftWidth, fftDataLength * fftWidth)
-        val jvmFFTsPerSecond = if (jvmTotalTime != 0L) fftDataLength * 1000 / jvmTotalTime else fftDataLength * 1000
+        val jvmFFTsPerSecond = opsPerSecond(fftDataLength, jvmTotalTime)
         val jvmResultLabel = "JVM total time: $jvmTotalTime ms\nJVM FFTs/s: $jvmFFTsPerSecond"
         setFFTResult(jvmResultLabel)
 
         // perform NDK FFT benchmark
         val ndkTotalTime = ndkFFTBenchmark(fftWidth, fftDataLength * fftWidth)
-        val ndkFFTsPerSecond = if (ndkTotalTime != 0L) fftDataLength * 1000 / ndkTotalTime else fftDataLength * 1000
+        val ndkFFTsPerSecond = opsPerSecond(fftDataLength, ndkTotalTime)
         val ndkResultLabel = "NDK total time: $ndkTotalTime ms\nNDK FFTs/s: $ndkFFTsPerSecond"
         setFFTResult("$jvmResultLabel\n\n$ndkResultLabel")
+    }
+
+    private fun opsPerSecond(totalOps: Int, totalTimeMS: Long): Double {
+        return if(totalTimeMS > 0) totalOps.toDouble() * 1000 / totalTimeMS else totalOps.toDouble() * 1000
+    }
+
+    private fun onBatchBenchmarkButtonClick() {
+        // perform convolution benchmarks
+        val filterLengths = mutableListOf<Int>()
+        val jvmConvolutionResults = mutableListOf<Double>()
+        val ndkConvolutionResults = mutableListOf<Double>()
+        for (batchConvolutionFilterLength in 1 until 100 step 10) {
+            if (batchConvolutionFilterLength.rem(100) == 0)
+                println("Convolution progress $batchConvolutionFilterLength / 10000")
+            filterLengths.add(batchConvolutionFilterLength)
+            val jvmTotalTime = convolutionBenchmark(batchConvolutionFilterLength, convolutionDataLength)
+            jvmConvolutionResults.add(opsPerSecond(convolutionDataLength, jvmTotalTime))
+            val ndkTotalTime = ndkConvolutionBenchmark(batchConvolutionFilterLength, convolutionDataLength)
+            ndkConvolutionResults.add(opsPerSecond(convolutionDataLength, ndkTotalTime))
+        }
+
+        // perform FFT benchmarks
+        val fftWidths = mutableListOf<Int>()
+        val jvmFFTResults = mutableListOf<Double>()
+        val ndkFFTResults = mutableListOf<Double>()
+        for (batchFFTWidth in 1024 until 1024 * 100 step 1024) {
+            println("FFT progress $batchFFTWidth / ${1024 * 100}")
+            fftWidths.add(batchFFTWidth)
+            val jvmTotalTime = fftBenchmark(batchFFTWidth, fftDataLength)
+            jvmFFTResults.add(opsPerSecond(fftDataLength, jvmTotalTime))
+            val ndkTotalTime = ndkConvolutionBenchmark(batchFFTWidth, fftDataLength)
+            ndkFFTResults.add(opsPerSecond(fftDataLength, ndkTotalTime))
+        }
+
+        // dump results to csv file
+        val timestamp = System.currentTimeMillis()
+        var path = "${getExternalFilesDir(null)}/convolution_benchmark_$timestamp.csv"
+        println("Saving benchmark results to ${getExternalFilesDir(null)}")
+        var file = File(path)
+        file.createNewFile()
+        file.printWriter().use {out ->
+            out.print("env,")
+            out.println(filterLengths.joinToString(","))
+            out.print("jvm,")
+            out.println(jvmConvolutionResults.joinToString(","))
+            out.print("ndk,")
+            out.println(ndkConvolutionResults.joinToString(","))
+        }
+        path = "${getExternalFilesDir(null)}/fft_benchmark_$timestamp.csv"
+        file = File(path)
+        file.createNewFile()
+        file.printWriter().use {out ->
+            out.print("env,")
+            out.println(fftWidths.joinToString(","))
+            out.print("jvm,")
+            out.println(jvmFFTResults.joinToString(","))
+            out.print("ndk,")
+            out.println(ndkFFTResults.joinToString(","))
+        }
     }
 
     private fun setConvolutionResult(result: String) {
