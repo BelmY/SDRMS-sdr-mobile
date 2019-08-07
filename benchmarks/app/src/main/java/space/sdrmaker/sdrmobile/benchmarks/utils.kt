@@ -39,12 +39,12 @@ fun convolutionBenchmark(filterLength: Int = 10, dataLength: Int = 50000): Long 
 
 fun fftBenchmark(fftWidth: Int, dataLength: Int): Long {
     val randomizer = Random(42)
-    val data = DoubleArray(dataLength) {randomizer.nextDouble()}
+    val data = DoubleArray(dataLength * 2) {randomizer.nextDouble()}
     val fft = DoubleFFT_1D(fftWidth.toLong())
 
     val start = System.currentTimeMillis()
-    for(i in 0 until (dataLength - 1 )/ fftWidth) {
-        fft.complexForward(data, i * fftWidth)
+    for(i in 0 until (dataLength - 1) / fftWidth) {
+        fft.complexForward(data, i * 2 * fftWidth)
     }
     val end = System.currentTimeMillis()
 
