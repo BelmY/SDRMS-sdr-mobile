@@ -58,31 +58,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onConvolutionButtonClick() {
-        // perform java convolution benchmark
-        val javaTotalTime = convolutionBenchmark(filterLength = convolutionFilterLength, dataLength = convolutionDataLength)
-        val javaSamplesPerSecond = if (javaTotalTime != 0L) convolutionDataLength * 1000 / javaTotalTime else convolutionDataLength * 1000
-        val javaResultLabel = "Java total time: $javaTotalTime ms\nJava samples/s: $javaSamplesPerSecond"
-        setConvolutionResult(javaResultLabel)
+        // perform JVM convolution benchmark
+        val jvmTotalTime = convolutionBenchmark(filterLength = convolutionFilterLength, dataLength = convolutionDataLength)
+        val jvmSamplesPerSecond = if (jvmTotalTime != 0L) convolutionDataLength * 1000 / jvmTotalTime else convolutionDataLength * 1000
+        val jvmResultLabel = "JVM total time: $jvmTotalTime ms\nJVM samples/s: $jvmSamplesPerSecond"
+        setConvolutionResult(jvmResultLabel)
 
         // perform NDK convolution benchmark
         val ndkTotalTime = ndkConvolutionBenchmark(convolutionFilterLength, convolutionDataLength)
         val ndkSamplesPerSecond = if (ndkTotalTime != 0L) convolutionDataLength * 1000 / ndkTotalTime else convolutionDataLength * 1000
         val ndkResultLabel = "NDK total time: $ndkTotalTime ms\nNDK samples/s: $ndkSamplesPerSecond"
-        setConvolutionResult("$javaResultLabel\n\n$ndkResultLabel")
+        setConvolutionResult("$jvmResultLabel\n\n$ndkResultLabel")
     }
 
     private fun onFFTButtonClick() {
-        // perform java FFT benchmark
-        val javaTotalTime = fftBenchmark(fftWidth, fftDataLength * fftWidth)
-        val javaFFTsPerSecond = if (javaTotalTime != 0L) fftDataLength * 1000 / javaTotalTime else fftDataLength * 1000
-        val javaResultLabel = "Java total time: $javaTotalTime ms\nJava FFTs/s: $javaFFTsPerSecond"
-        setFFTResult(javaResultLabel)
+        // perform JVM FFT benchmark
+        val jvmTotalTime = fftBenchmark(fftWidth, fftDataLength * fftWidth)
+        val jvmFFTsPerSecond = if (jvmTotalTime != 0L) fftDataLength * 1000 / jvmTotalTime else fftDataLength * 1000
+        val jvmResultLabel = "JVM total time: $jvmTotalTime ms\nJVM FFTs/s: $jvmFFTsPerSecond"
+        setFFTResult(jvmResultLabel)
 
         // perform NDK FFT benchmark
         val ndkTotalTime = ndkFFTBenchmark(fftWidth, fftDataLength * fftWidth)
         val ndkFFTsPerSecond = if (ndkTotalTime != 0L) fftDataLength * 1000 / ndkTotalTime else fftDataLength * 1000
         val ndkResultLabel = "NDK total time: $ndkTotalTime ms\nNDK FFTs/s: $ndkFFTsPerSecond"
-        setFFTResult("$javaResultLabel\n\n$ndkResultLabel")
+        setFFTResult("$jvmResultLabel\n\n$ndkResultLabel")
     }
 
     private fun setConvolutionResult(result: String) {
