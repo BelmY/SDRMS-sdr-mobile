@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.SeekBar
 import kotlinx.android.synthetic.main.activity_main.*
 
-import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
@@ -60,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onConvolutionButtonClick() {
         // perform java convolution benchmark
-        val javaTotalTime = javaConvolutionBenchmark(filterLength = convolutionFilterLength, dataLength = convolutionDataLength)
+        val javaTotalTime = convolutionBenchmark(filterLength = convolutionFilterLength, dataLength = convolutionDataLength)
         val javaSamplesPerSecond = if (javaTotalTime != 0L) convolutionDataLength * 1000 / javaTotalTime else convolutionDataLength * 1000
         val javaResultLabel = "Java total time: $javaTotalTime ms\nJava samples/s: $javaSamplesPerSecond"
         setConvolutionResult(javaResultLabel)
@@ -74,25 +73,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun onFFTButtonClick() {
         // perform java FFT benchmark
-        val javaResultLabel = "TODO"
+        val javaTotalTime = fftBenchmark(fftWidth, fftDataLength * fftWidth)
+        val javaFFTsPerSecond = if (javaTotalTime != 0L) fftDataLength * 1000 / javaTotalTime else fftDataLength * 1000
+        val javaResultLabel = "Java total time: $javaTotalTime ms\nJava FFTs/s: $javaFFTsPerSecond"
+        setFFTResult(javaResultLabel)
 
         // perform NDK FFT benchmark
         val ndkTotalTime = ndkFFTBenchmark(fftWidth, fftDataLength * fftWidth)
         val ndkFFTsPerSecond = if (ndkTotalTime != 0L) fftDataLength * 1000 / ndkTotalTime else fftDataLength * 1000
         val ndkResultLabel = "NDK total time: $ndkTotalTime ms\nNDK FFTs/s: $ndkFFTsPerSecond"
         setFFTResult("$javaResultLabel\n\n$ndkResultLabel")
-    }
-
-    private fun javaConvolutionBenchmark(filterLength: Int = 10, dataLength: Int = 50000): Long {
-        val randomizer = Random(42)
-        val filter = FIR(FloatArray(filterLength) {randomizer.nextFloat()})
-        val data = FloatArray(dataLength) {randomizer.nextFloat()}
-        val start = System.currentTimeMillis()
-        for(i in 0 until dataLength) {
-            filter.getOutputSample(data[i])
-        }
-        val end = System.currentTimeMillis()
-        return end - start
     }
 
     private fun setConvolutionResult(result: String) {
