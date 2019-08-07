@@ -6,6 +6,9 @@
 #include <sstream>
 
 #include <fftw3.h>
+#include <android/log.h>
+
+#define APPNAME "BENCHMARK"
 
 using namespace std;
 using namespace std::chrono;
@@ -79,25 +82,34 @@ Java_space_sdrmaker_sdrmobile_benchmarks_MainActivity_ndkFFTBenchmark(
         jint dataLength) {
 
     fftw_complex *in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * dataLength);
-    fftw_complex *out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * dataLength);
 
     // initialize input with random data
+    long int initStart = duration_cast<milliseconds>(
+            system_clock::now().time_since_epoch()
+    ).count();
     for (int i = 0; i < dataLength; i++) {
         in[i][0] = static_cast<float> (rand()) / static_cast <float> (RAND_MAX);
         in[i][1] = static_cast<float> (rand()) / static_cast <float> (RAND_MAX);
     }
+    long int initEnd = duration_cast<milliseconds>(
+            system_clock::now().time_since_epoch()
+    ).count();
+    __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "FFT data init took %ldms", initEnd - initStart);
 
     // run FFT & time it
     long int start = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
     ).count();
-    fftw_plan plan = fftw_plan_dft_1d(fftWidth, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
-    fftw_execute(plan);
+    fftw_plan plan = fftw_plan_dft_1d(fftWidth, in, in, FFTW_FORWARD, FFTW_ESTIMATE);
+    for (int i = 0; i <= dataLength / fftWidth; i++) {
+        fftw_execute_dft(plan, &in[i * fftWidth], &in[i * fftWidth]);
+    }
     long int end = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
     ).count();
+
     fftw_destroy_plan(plan);
-    fftw_free(in); fftw_free(out);
+    fftw_free(in);
 
     return end - start;
 }

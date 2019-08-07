@@ -61,14 +61,14 @@ class MainActivity : AppCompatActivity() {
     private fun onConvolutionButtonClick() {
         // perform java convolution benchmark
         val javaTotalTime = javaConvolutionBenchmark(filterLength = convolutionFilterLength, dataLength = convolutionDataLength)
-        val javaSamplesPerMS = if (javaTotalTime != 0L) convolutionDataLength / javaTotalTime else convolutionDataLength
-        val javaResultLabel = "Java total time: $javaTotalTime ms\nJava samples/ms: $javaSamplesPerMS"
+        val javaSamplesPerSecond = if (javaTotalTime != 0L) convolutionDataLength * 1000 / javaTotalTime else convolutionDataLength * 1000
+        val javaResultLabel = "Java total time: $javaTotalTime ms\nJava samples/s: $javaSamplesPerSecond"
         setConvolutionResult(javaResultLabel)
 
         // perform NDK convolution benchmark
         val ndkTotalTime = ndkConvolutionBenchmark(convolutionFilterLength, convolutionDataLength)
-        val ndkSamplesPerMS = if (ndkTotalTime != 0L) convolutionDataLength / ndkTotalTime else convolutionDataLength
-        val ndkResultLabel = "NDK total time: $ndkTotalTime ms\nNDK samples/ms: $ndkSamplesPerMS"
+        val ndkSamplesPerSecond = if (ndkTotalTime != 0L) convolutionDataLength * 1000 / ndkTotalTime else convolutionDataLength * 1000
+        val ndkResultLabel = "NDK total time: $ndkTotalTime ms\nNDK samples/s: $ndkSamplesPerSecond"
         setConvolutionResult("$javaResultLabel\n\n$ndkResultLabel")
     }
 
@@ -78,8 +78,8 @@ class MainActivity : AppCompatActivity() {
 
         // perform NDK FFT benchmark
         val ndkTotalTime = ndkFFTBenchmark(fftWidth, fftDataLength * fftWidth)
-        val ndkFFTsPerMS = if (ndkTotalTime != 0L) fftDataLength / ndkTotalTime else fftDataLength
-        val ndkResultLabel = "NDK total time: $ndkTotalTime ms\nNDK FFTs/ms: $ndkFFTsPerMS"
+        val ndkFFTsPerSecond = if (ndkTotalTime != 0L) fftDataLength * 1000 / ndkTotalTime else fftDataLength * 1000
+        val ndkResultLabel = "NDK total time: $ndkTotalTime ms\nNDK FFTs/s: $ndkFFTsPerSecond"
         setFFTResult("$javaResultLabel\n\n$ndkResultLabel")
     }
 
