@@ -10,14 +10,14 @@
 using namespace std;
 using namespace std::chrono;
 
-class FIR {
+class FIRFloat {
     vector<float> coefs;
     int length;
     vector<float> delayLine;
     int count = 0;
 
 public:
-    FIR(vector<float> coefs) {
+    FIRFloat(vector<float> coefs) {
         this->coefs = coefs;
         this->length = coefs.size();
         this->delayLine = vector<float>(this->length);
@@ -37,14 +37,41 @@ public:
 
 };
 
+class FIRShort {
+    vector<short> coefs;
+    int length;
+    vector<short> delayLine;
+    int count = 0;
+
+public:
+    FIRShort(vector<short> coefs) {
+        this->coefs = coefs;
+        this->length = coefs.size();
+        this->delayLine = vector<short>(this->length);
+    }
+
+    short getOutputSample(short inputSample) {
+        delayLine[count] = inputSample;
+        short result = 0;
+        int index = count;
+        for (int i = 0; i < length; i++) {
+            result += coefs[i] * delayLine[index--];
+            if (index < 0) index = length - 1;
+        }
+        if (++count >= length) count = 0;
+        return result;
+    }
+
+};
+
 extern "C" JNIEXPORT jlong JNICALL
-Java_space_sdrmaker_sdrmobile_benchmarks_MainActivity_ndkConvolutionBenchmark(
+Java_space_sdrmaker_sdrmobile_benchmarks_MainActivity_ndkFloatConvolutionBenchmark(
         JNIEnv *env,
         jobject /* this */,
         jint filterLength,
         jint dataLength) {
 
-    // init FIR filter & data
+    // init FIRFloat filter & data
     vector<float> coefs(filterLength);
     for (int i = 0; i < filterLength; i++) {
         coefs[i] = static_cast<float> (rand()) / static_cast <float> (RAND_MAX);
@@ -55,7 +82,41 @@ Java_space_sdrmaker_sdrmobile_benchmarks_MainActivity_ndkConvolutionBenchmark(
         data[i] = static_cast<float> (rand()) / static_cast <float> (RAND_MAX);
     }
 
-    FIR *filter = new FIR(coefs);
+    FIRFloat *filter = new FIRFloat(coefs);
+
+    // time it
+    long int start = duration_cast<milliseconds>(
+            system_clock::now().time_since_epoch()
+    ).count();
+    for (int i = 0; i < dataLength; i++) {
+        filter->getOutputSample(data[i]);
+    }
+    long int end = duration_cast<milliseconds>(
+            system_clock::now().time_since_epoch()
+    ).count();
+
+    return end - start;
+}
+
+extern "C" JNIEXPORT jlong JNICALL
+Java_space_sdrmaker_sdrmobile_benchmarks_MainActivity_ndkShortConvolutionBenchmark(
+        JNIEnv *env,
+        jobject /* this */,
+        jint filterLength,
+        jint dataLength) {
+
+    // init FIR filter & data
+    vector<short> coefs(filterLength);
+    for (int i = 0; i < filterLength; i++) {
+        coefs[i] = static_cast<short> (rand()) / static_cast <short> (RAND_MAX);
+    }
+
+    vector<short> data(dataLength);
+    for (int i = 0; i < dataLength; i++) {
+        data[i] = static_cast<short> (rand()) / static_cast <short> (RAND_MAX);
+    }
+
+    FIRShort *filter = new FIRShort(coefs);
 
     // time it
     long int start = duration_cast<milliseconds>(
@@ -110,3 +171,4 @@ Java_space_sdrmaker_sdrmobile_benchmarks_MainActivity_ndkFFTBenchmark(
 
     return end - start;
 }
+

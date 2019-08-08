@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.SeekBar
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
+import kotlin.math.round
 
 
 class MainActivity : AppCompatActivity() {
@@ -64,16 +65,26 @@ class MainActivity : AppCompatActivity() {
 
     private fun onConvolutionButtonClick() {
         // perform JVM convolution benchmark
-        val jvmTotalTime = convolutionBenchmark(filterLength = convolutionFilterLength, dataLength = convolutionDataLength)
-        val jvmSamplesPerSecond = opsPerSecond(convolutionDataLength, jvmTotalTime)
-        val jvmResultLabel = "JVM total time: $jvmTotalTime ms\nJVM samples/s: $jvmSamplesPerSecond"
-        setConvolutionResult(jvmResultLabel)
+        val jvmFloatTotalTime = floatConvolutionBenchmark(filterLength = convolutionFilterLength, dataLength = convolutionDataLength)
+        val jvmFloatSamplesPerSecond = opsPerSecond(convolutionDataLength, jvmFloatTotalTime)
+        val jvmFloatResultLabel = "JVM Float total time: $jvmFloatTotalTime ms\nJVM Float samples/s: $jvmFloatSamplesPerSecond"
+        setConvolutionResult(jvmFloatResultLabel)
+
+        val jvmShortTotalTime = shortConvolutionBenchmark(filterLength = convolutionFilterLength, dataLength = convolutionDataLength)
+        val jvmShortSamplesPerSecond = opsPerSecond(convolutionDataLength, jvmShortTotalTime)
+        val jvmShortResultLabel = "JVM Short total time: $jvmShortTotalTime ms\nJVM Short samples/s: $jvmShortSamplesPerSecond"
+        setConvolutionResult("$jvmFloatResultLabel\n$jvmShortResultLabel")
 
         // perform NDK convolution benchmark
-        val ndkTotalTime = ndkConvolutionBenchmark(convolutionFilterLength, convolutionDataLength)
-        val ndkSamplesPerSecond = opsPerSecond(convolutionDataLength, ndkTotalTime)
-        val ndkResultLabel = "NDK total time: $ndkTotalTime ms\nNDK samples/s: $ndkSamplesPerSecond"
-        setConvolutionResult("$jvmResultLabel\n\n$ndkResultLabel")
+        val ndkFloatTotalTime = ndkFloatConvolutionBenchmark(convolutionFilterLength, convolutionDataLength)
+        val ndkFloatSamplesPerSecond = opsPerSecond(convolutionDataLength, ndkFloatTotalTime)
+        val ndkFloatResultLabel = "NDK Float total time: $ndkFloatTotalTime ms\nNDK Float samples/s: $ndkFloatSamplesPerSecond"
+        setConvolutionResult("$jvmFloatResultLabel\n$jvmShortResultLabel\n$ndkFloatResultLabel")
+
+        val ndkShortTotalTime = ndkShortConvolutionBenchmark(convolutionFilterLength, convolutionDataLength)
+        val ndkShortSamplesPerSecond = opsPerSecond(convolutionDataLength, ndkShortTotalTime)
+        val ndkShortResultLabel = "NDK Short total time: $ndkShortTotalTime ms\nNDK Short samples/s: $ndkShortSamplesPerSecond"
+        setConvolutionResult("$jvmFloatResultLabel\n$jvmShortResultLabel\n$ndkFloatResultLabel\n$ndkShortResultLabel")
     }
 
     private fun onFFTButtonClick() {
@@ -90,30 +101,30 @@ class MainActivity : AppCompatActivity() {
         setFFTResult("$jvmResultLabel\n\n$ndkResultLabel")
     }
 
-    private fun opsPerSecond(totalOps: Int, totalTimeMS: Long): Double {
-        return if(totalTimeMS > 0) totalOps.toDouble() * 1000 / totalTimeMS else totalOps.toDouble() * 1000
+    private fun opsPerSecond(totalOps: Int, totalTimeMS: Long): Long {
+        return round(if(totalTimeMS > 0) totalOps.toDouble() * 1000 / totalTimeMS else totalOps.toDouble() * 1000).toLong()
     }
 
     private fun onBatchBenchmarkButtonClick() {
         // perform convolution benchmarks
         val filterLengths = mutableListOf<Int>()
-        val jvmConvolutionResults = mutableListOf<Double>()
-        val ndkConvolutionResults = mutableListOf<Double>()
+        val jvmConvolutionResults = mutableListOf<Long>()
+        val ndkConvolutionResults = mutableListOf<Long>()
         val batchConvolutionFilterLengthMax = 1000
         for (batchConvolutionFilterLength in 10..batchConvolutionFilterLengthMax step 10) {
             if (batchConvolutionFilterLength.rem(100) == 0)
                 println("Convolution progress $batchConvolutionFilterLength / $batchConvolutionFilterLengthMax")
             filterLengths.add(batchConvolutionFilterLength)
-            val jvmTotalTime = convolutionBenchmark(batchConvolutionFilterLength, convolutionDataLength)
+            val jvmTotalTime = floatConvolutionBenchmark(batchConvolutionFilterLength, convolutionDataLength)
             jvmConvolutionResults.add(opsPerSecond(convolutionDataLength, jvmTotalTime))
-            val ndkTotalTime = ndkConvolutionBenchmark(batchConvolutionFilterLength, convolutionDataLength)
+            val ndkTotalTime = ndkFloatConvolutionBenchmark(batchConvolutionFilterLength, convolutionDataLength)
             ndkConvolutionResults.add(opsPerSecond(convolutionDataLength, ndkTotalTime))
         }
 
         // perform FFT benchmarks
         val fftWidths = mutableListOf<Int>()
-        val jvmFFTResults = mutableListOf<Double>()
-        val ndkFFTResults = mutableListOf<Double>()
+        val jvmFFTResults = mutableListOf<Long>()
+        val ndkFFTResults = mutableListOf<Long>()
         val batchFFTWidthMax = 1024 * 50
         for (batchFFTWidth in 1024..batchFFTWidthMax step 1024) {
             println("FFT progress $batchFFTWidth / $batchFFTWidthMax")
@@ -171,7 +182,8 @@ class MainActivity : AppCompatActivity() {
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-    external fun ndkConvolutionBenchmark(filterLength: Int, dataLength: Int): Long
+    external fun ndkFloatConvolutionBenchmark(filterLength: Int, dataLength: Int): Long
+    external fun ndkShortConvolutionBenchmark(filterLength: Int, dataLength: Int): Long
     external fun ndkFFTBenchmark(fftWidth: Int, dataLength: Int): Long
 
     companion object {
