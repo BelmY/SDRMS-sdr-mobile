@@ -6,9 +6,6 @@
 #include <sstream>
 
 #include <fftw3.h>
-#include <android/log.h>
-
-#define APPNAME "BENCHMARK"
 
 using namespace std;
 using namespace std::chrono;
@@ -94,7 +91,6 @@ Java_space_sdrmaker_sdrmobile_benchmarks_MainActivity_ndkFFTBenchmark(
     long int initEnd = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
     ).count();
-    __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "FFT data init took %ldms", initEnd - initStart);
 
     // run FFT & time it
     long int start = duration_cast<milliseconds>(
@@ -108,6 +104,7 @@ Java_space_sdrmaker_sdrmobile_benchmarks_MainActivity_ndkFFTBenchmark(
             system_clock::now().time_since_epoch()
     ).count();
 
+    // free up resources
     fftw_destroy_plan(plan);
     fftw_free(in);
 

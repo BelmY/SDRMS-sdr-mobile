@@ -99,9 +99,10 @@ class MainActivity : AppCompatActivity() {
         val filterLengths = mutableListOf<Int>()
         val jvmConvolutionResults = mutableListOf<Double>()
         val ndkConvolutionResults = mutableListOf<Double>()
-        for (batchConvolutionFilterLength in 1 until 100 step 10) {
+        val batchConvolutionFilterLengthMax = 1000
+        for (batchConvolutionFilterLength in 10..batchConvolutionFilterLengthMax step 10) {
             if (batchConvolutionFilterLength.rem(100) == 0)
-                println("Convolution progress $batchConvolutionFilterLength / 10000")
+                println("Convolution progress $batchConvolutionFilterLength / $batchConvolutionFilterLengthMax")
             filterLengths.add(batchConvolutionFilterLength)
             val jvmTotalTime = convolutionBenchmark(batchConvolutionFilterLength, convolutionDataLength)
             jvmConvolutionResults.add(opsPerSecond(convolutionDataLength, jvmTotalTime))
@@ -113,16 +114,17 @@ class MainActivity : AppCompatActivity() {
         val fftWidths = mutableListOf<Int>()
         val jvmFFTResults = mutableListOf<Double>()
         val ndkFFTResults = mutableListOf<Double>()
-        for (batchFFTWidth in 1024 until 1024 * 100 step 1024) {
-            println("FFT progress $batchFFTWidth / ${1024 * 100}")
+        val batchFFTWidthMax = 1024 * 50
+        for (batchFFTWidth in 1024..batchFFTWidthMax step 1024) {
+            println("FFT progress $batchFFTWidth / $batchFFTWidthMax")
             fftWidths.add(batchFFTWidth)
-            val jvmTotalTime = fftBenchmark(batchFFTWidth, fftDataLength)
+            val jvmTotalTime = fftBenchmark(batchFFTWidth, fftDataLength * batchFFTWidth)
             jvmFFTResults.add(opsPerSecond(fftDataLength, jvmTotalTime))
-            val ndkTotalTime = ndkConvolutionBenchmark(batchFFTWidth, fftDataLength)
+            val ndkTotalTime = ndkFFTBenchmark(batchFFTWidth, fftDataLength * batchFFTWidth)
             ndkFFTResults.add(opsPerSecond(fftDataLength, ndkTotalTime))
         }
 
-        // dump results to csv file
+        // dump results to csv files
         val timestamp = System.currentTimeMillis()
         var path = "${getExternalFilesDir(null)}/convolution_benchmark_$timestamp.csv"
         println("Saving benchmark results to ${getExternalFilesDir(null)}")
