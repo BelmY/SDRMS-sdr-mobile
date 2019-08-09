@@ -142,16 +142,10 @@ Java_space_sdrmaker_sdrmobile_benchmarks_MainActivity_ndkFFTBenchmark(
     fftw_complex *in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * dataLength);
 
     // initialize input with random data
-    long int initStart = duration_cast<milliseconds>(
-            system_clock::now().time_since_epoch()
-    ).count();
     for (int i = 0; i < dataLength; i++) {
-        in[i][0] = static_cast<float> (rand()) / static_cast <float> (RAND_MAX);
-        in[i][1] = static_cast<float> (rand()) / static_cast <float> (RAND_MAX);
+        in[i][0] = static_cast<double> (rand()) / static_cast <double> (RAND_MAX);
+        in[i][1] = static_cast<double> (rand()) / static_cast <double> (RAND_MAX);
     }
-    long int initEnd = duration_cast<milliseconds>(
-            system_clock::now().time_since_epoch()
-    ).count();
 
     // run FFT & time it
     long int start = duration_cast<milliseconds>(
