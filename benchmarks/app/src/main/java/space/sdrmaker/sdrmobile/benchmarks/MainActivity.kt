@@ -118,31 +118,46 @@ class MainActivity : AppCompatActivity() {
     private fun onBatchBenchmarkButtonClick() {
         // perform convolution benchmarks
         val filterLengths = mutableListOf<Int>()
-        val jvmConvolutionResults = mutableListOf<Long>()
-        val ndkConvolutionResults = mutableListOf<Long>()
+        val jvmFloatConvolutionResults = mutableListOf<Long>()
+        val ndkFloatConvolutionResults = mutableListOf<Long>()
+        val jvmShortConvolutionResults = mutableListOf<Long>()
+        val ndkShortConvolutionResults = mutableListOf<Long>()
         val batchConvolutionFilterLengthMax = 1000
         for (batchConvolutionFilterLength in 10..batchConvolutionFilterLengthMax step 10) {
             if (batchConvolutionFilterLength.rem(100) == 0)
                 println("Convolution progress $batchConvolutionFilterLength / $batchConvolutionFilterLengthMax")
             filterLengths.add(batchConvolutionFilterLength)
-            val jvmTotalTime = floatConvolutionBenchmark(batchConvolutionFilterLength, convolutionDataLength)
-            jvmConvolutionResults.add(opsPerSecond(convolutionDataLength, jvmTotalTime))
-            val ndkTotalTime = ndkFloatConvolutionBenchmark(batchConvolutionFilterLength, convolutionDataLength)
-            ndkConvolutionResults.add(opsPerSecond(convolutionDataLength, ndkTotalTime))
+
+            val jvmFloatTotalTime = floatConvolutionBenchmark(batchConvolutionFilterLength, convolutionDataLength)
+            jvmFloatConvolutionResults.add(opsPerSecond(convolutionDataLength, jvmFloatTotalTime))
+            val jvmShortTotalTime = shortConvolutionBenchmark(batchConvolutionFilterLength, convolutionDataLength)
+            jvmShortConvolutionResults.add(opsPerSecond(convolutionDataLength, jvmShortTotalTime))
+
+            val ndkFloatTotalTime = ndkFloatConvolutionBenchmark(batchConvolutionFilterLength, convolutionDataLength)
+            ndkFloatConvolutionResults.add(opsPerSecond(convolutionDataLength, ndkFloatTotalTime))
+            val ndkShortTotalTime = ndkShortConvolutionBenchmark(batchConvolutionFilterLength, convolutionDataLength)
+            ndkShortConvolutionResults.add(opsPerSecond(convolutionDataLength, ndkShortTotalTime))
         }
 
         // perform FFT benchmarks
         val fftWidths = mutableListOf<Int>()
-        val jvmFFTResults = mutableListOf<Long>()
-        val ndkFFTResults = mutableListOf<Long>()
+        val jvmComplexFFTResults = mutableListOf<Long>()
+        val ndkComplexFFTResults = mutableListOf<Long>()
+        val jvmRealFFTResults = mutableListOf<Long>()
+        val ndkRealFFTResults = mutableListOf<Long>()
         val batchFFTWidthMax = 1024 * 50
         for (batchFFTWidth in 1024..batchFFTWidthMax step 1024) {
             println("FFT progress $batchFFTWidth / $batchFFTWidthMax")
             fftWidths.add(batchFFTWidth)
-            val jvmTotalTime = fftComplexBenchmark(batchFFTWidth, fftDataLength * batchFFTWidth)
-            jvmFFTResults.add(opsPerSecond(fftDataLength, jvmTotalTime))
-            val ndkTotalTime = ndkComplexFFTBenchmark(batchFFTWidth, fftDataLength * batchFFTWidth)
-            ndkFFTResults.add(opsPerSecond(fftDataLength, ndkTotalTime))
+
+            val jvmComplexTotalTime = fftComplexBenchmark(batchFFTWidth, fftDataLength * batchFFTWidth)
+            jvmComplexFFTResults.add(opsPerSecond(fftDataLength, jvmComplexTotalTime))
+            val jvmRealTotalTime = fftRealBenchmark(batchFFTWidth, fftDataLength * batchFFTWidth)
+            jvmRealFFTResults.add(opsPerSecond(fftDataLength, jvmRealTotalTime))
+            val ndkComplexTotalTime = ndkComplexFFTBenchmark(batchFFTWidth, fftDataLength * batchFFTWidth)
+            ndkComplexFFTResults.add(opsPerSecond(fftDataLength, ndkComplexTotalTime))
+            val ndkRealTotalTime = ndkRealFFTBenchmark(batchFFTWidth, fftDataLength * batchFFTWidth)
+            ndkRealFFTResults.add(opsPerSecond(fftDataLength, ndkRealTotalTime))
         }
 
         // dump results to csv files
@@ -154,10 +169,14 @@ class MainActivity : AppCompatActivity() {
         file.printWriter().use {out ->
             out.print("env,")
             out.println(filterLengths.joinToString(","))
-            out.print("jvm,")
-            out.println(jvmConvolutionResults.joinToString(","))
-            out.print("ndk,")
-            out.println(ndkConvolutionResults.joinToString(","))
+            out.print("jvm_float,")
+            out.println(jvmFloatConvolutionResults.joinToString(","))
+            out.print("jvm_short,")
+            out.println(jvmShortConvolutionResults.joinToString(","))
+            out.print("ndk_float,")
+            out.println(ndkFloatConvolutionResults.joinToString(","))
+            out.print("ndk_short,")
+            out.println(ndkShortConvolutionResults.joinToString(","))
         }
         path = "${getExternalFilesDir(null)}/fft_benchmark_$timestamp.csv"
         file = File(path)
@@ -165,10 +184,14 @@ class MainActivity : AppCompatActivity() {
         file.printWriter().use {out ->
             out.print("env,")
             out.println(fftWidths.joinToString(","))
-            out.print("jvm,")
-            out.println(jvmFFTResults.joinToString(","))
-            out.print("ndk,")
-            out.println(ndkFFTResults.joinToString(","))
+            out.print("jvm_complex,")
+            out.println(jvmComplexFFTResults.joinToString(","))
+            out.print("jvm_real,")
+            out.println(jvmRealFFTResults.joinToString(","))
+            out.print("ndk_complex,")
+            out.println(ndkComplexFFTResults.joinToString(","))
+            out.print("ndk_real,")
+            out.println(ndkRealFFTResults.joinToString(","))
         }
     }
 
