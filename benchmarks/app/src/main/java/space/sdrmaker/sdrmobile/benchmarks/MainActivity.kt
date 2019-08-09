@@ -95,10 +95,16 @@ class MainActivity : AppCompatActivity() {
         setFFTResult(jvmResultLabel)
 
         // perform NDK FFT benchmark
-        val ndkTotalTime = ndkFFTBenchmark(fftWidth, fftDataLength * fftWidth)
-        val ndkFFTsPerSecond = opsPerSecond(fftDataLength, ndkTotalTime)
-        val ndkResultLabel = "NDK total time: $ndkTotalTime ms\nNDK FFTs/s: $ndkFFTsPerSecond"
-        setFFTResult("$jvmResultLabel\n\n$ndkResultLabel")
+        val ndkComplexTotalTime = ndkComplexFFTBenchmark(fftWidth, fftDataLength * fftWidth)
+        val ndkComplexFFTsPerSecond = opsPerSecond(fftDataLength, ndkComplexTotalTime)
+        val ndkComplexResultLabel = "NDK Complex total time: $ndkComplexTotalTime ms\nNDK Complex FFTs/s: $ndkComplexFFTsPerSecond"
+        setFFTResult("$jvmResultLabel\n$ndkComplexResultLabel")
+
+        val ndkRealTotalTime = ndkRealFFTBenchmark(fftWidth, fftDataLength * fftWidth)
+        val ndkRealFFTsPerSecond = opsPerSecond(fftDataLength, ndkRealTotalTime)
+        val ndkRealResultLabel = "NDK Real total time: $ndkRealTotalTime ms\nNDK Real FFTs/s: $ndkRealFFTsPerSecond"
+        setFFTResult("$jvmResultLabel\n$ndkComplexResultLabel\n$ndkRealResultLabel")
+
     }
 
     private fun opsPerSecond(totalOps: Int, totalTimeMS: Long): Long {
@@ -131,7 +137,7 @@ class MainActivity : AppCompatActivity() {
             fftWidths.add(batchFFTWidth)
             val jvmTotalTime = fftBenchmark(batchFFTWidth, fftDataLength * batchFFTWidth)
             jvmFFTResults.add(opsPerSecond(fftDataLength, jvmTotalTime))
-            val ndkTotalTime = ndkFFTBenchmark(batchFFTWidth, fftDataLength * batchFFTWidth)
+            val ndkTotalTime = ndkComplexFFTBenchmark(batchFFTWidth, fftDataLength * batchFFTWidth)
             ndkFFTResults.add(opsPerSecond(fftDataLength, ndkTotalTime))
         }
 
@@ -184,7 +190,8 @@ class MainActivity : AppCompatActivity() {
      */
     external fun ndkFloatConvolutionBenchmark(filterLength: Int, dataLength: Int): Long
     external fun ndkShortConvolutionBenchmark(filterLength: Int, dataLength: Int): Long
-    external fun ndkFFTBenchmark(fftWidth: Int, dataLength: Int): Long
+    external fun ndkComplexFFTBenchmark(fftWidth: Int, dataLength: Int): Long
+    external fun ndkRealFFTBenchmark(fftWidth: Int, dataLength: Int): Long
 
     companion object {
 

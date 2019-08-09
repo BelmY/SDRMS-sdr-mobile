@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
+#include <math.h>
 
 #include <fftw3.h>
 
@@ -133,7 +134,7 @@ Java_space_sdrmaker_sdrmobile_benchmarks_MainActivity_ndkShortConvolutionBenchma
 }
 
 extern "C" JNIEXPORT jlong JNICALL
-Java_space_sdrmaker_sdrmobile_benchmarks_MainActivity_ndkFFTBenchmark(
+Java_space_sdrmaker_sdrmobile_benchmarks_MainActivity_ndkComplexFFTBenchmark(
         JNIEnv *env,
         jobject /* this */,
         jint fftWidth,
@@ -154,6 +155,40 @@ Java_space_sdrmaker_sdrmobile_benchmarks_MainActivity_ndkFFTBenchmark(
     fftw_plan plan = fftw_plan_dft_1d(fftWidth, in, in, FFTW_FORWARD, FFTW_ESTIMATE);
     for (int i = 0; i <= dataLength / fftWidth; i++) {
         fftw_execute_dft(plan, &in[i * fftWidth], &in[i * fftWidth]);
+    }
+    long int end = duration_cast<milliseconds>(
+            system_clock::now().time_since_epoch()
+    ).count();
+
+    // free up resources
+    fftw_destroy_plan(plan);
+    fftw_free(in);
+
+    return end - start;
+}
+
+extern "C" JNIEXPORT jlong JNICALL
+Java_space_sdrmaker_sdrmobile_benchmarks_MainActivity_ndkRealFFTBenchmark(
+        JNIEnv *env,
+        jobject /* this */,
+        jint fftWidth,
+        jint dataLength) {
+
+    double *in = (double*) fftw_malloc(sizeof(double) * dataLength);
+    fftw_complex *out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (floor(fftWidth / 2) + 1));
+
+    // initialize input with random data
+    for (int i = 0; i < dataLength; i++) {
+        in[i] = static_cast<double> (rand()) / static_cast <double> (RAND_MAX);
+    }
+
+    // run FFT & time it
+    long int start = duration_cast<milliseconds>(
+            system_clock::now().time_since_epoch()
+    ).count();
+    fftw_plan plan = fftw_plan_dft_r2c_1d(fftWidth, in, out, FFTW_ESTIMATE);
+    for (int i = 0; i <= dataLength / fftWidth; i++) {
+        fftw_execute_dft_r2c(plan, &in[i * fftWidth], out);
     }
     long int end = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
