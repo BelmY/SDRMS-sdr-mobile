@@ -67,44 +67,48 @@ class MainActivity : AppCompatActivity() {
         // perform JVM convolution benchmark
         val jvmFloatTotalTime = floatConvolutionBenchmark(filterLength = convolutionFilterLength, dataLength = convolutionDataLength)
         val jvmFloatSamplesPerSecond = opsPerSecond(convolutionDataLength, jvmFloatTotalTime)
-        val jvmFloatResultLabel = "JVM Float total time: $jvmFloatTotalTime ms\nJVM Float samples/s: $jvmFloatSamplesPerSecond"
+        val jvmFloatResultLabel = "JVM float total time: $jvmFloatTotalTime ms\nJVM float samples/s: $jvmFloatSamplesPerSecond"
         setConvolutionResult(jvmFloatResultLabel)
 
         val jvmShortTotalTime = shortConvolutionBenchmark(filterLength = convolutionFilterLength, dataLength = convolutionDataLength)
         val jvmShortSamplesPerSecond = opsPerSecond(convolutionDataLength, jvmShortTotalTime)
-        val jvmShortResultLabel = "JVM Short total time: $jvmShortTotalTime ms\nJVM Short samples/s: $jvmShortSamplesPerSecond"
+        val jvmShortResultLabel = "JVM short total time: $jvmShortTotalTime ms\nJVM short samples/s: $jvmShortSamplesPerSecond"
         setConvolutionResult("$jvmFloatResultLabel\n$jvmShortResultLabel")
 
         // perform NDK convolution benchmark
         val ndkFloatTotalTime = ndkFloatConvolutionBenchmark(convolutionFilterLength, convolutionDataLength)
         val ndkFloatSamplesPerSecond = opsPerSecond(convolutionDataLength, ndkFloatTotalTime)
-        val ndkFloatResultLabel = "NDK Float total time: $ndkFloatTotalTime ms\nNDK Float samples/s: $ndkFloatSamplesPerSecond"
+        val ndkFloatResultLabel = "NDK float total time: $ndkFloatTotalTime ms\nNDK float samples/s: $ndkFloatSamplesPerSecond"
         setConvolutionResult("$jvmFloatResultLabel\n$jvmShortResultLabel\n$ndkFloatResultLabel")
 
         val ndkShortTotalTime = ndkShortConvolutionBenchmark(convolutionFilterLength, convolutionDataLength)
         val ndkShortSamplesPerSecond = opsPerSecond(convolutionDataLength, ndkShortTotalTime)
-        val ndkShortResultLabel = "NDK Short total time: $ndkShortTotalTime ms\nNDK Short samples/s: $ndkShortSamplesPerSecond"
+        val ndkShortResultLabel = "NDK short total time: $ndkShortTotalTime ms\nNDK short samples/s: $ndkShortSamplesPerSecond"
         setConvolutionResult("$jvmFloatResultLabel\n$jvmShortResultLabel\n$ndkFloatResultLabel\n$ndkShortResultLabel")
     }
 
     private fun onFFTButtonClick() {
         // perform JVM FFT benchmark
-        val jvmTotalTime = fftBenchmark(fftWidth, fftDataLength * fftWidth)
-        val jvmFFTsPerSecond = opsPerSecond(fftDataLength, jvmTotalTime)
-        val jvmResultLabel = "JVM total time: $jvmTotalTime ms\nJVM FFTs/s: $jvmFFTsPerSecond"
-        setFFTResult(jvmResultLabel)
+        val jvmComplexTotalTime = fftComplexBenchmark(fftWidth, fftDataLength * fftWidth)
+        val jvmComplexFFTsPerSecond = opsPerSecond(fftDataLength, jvmComplexTotalTime)
+        val jvmComplexResultLabel = "JVM complex total time: $jvmComplexTotalTime ms\nJVM complex FFTs/s: $jvmComplexFFTsPerSecond"
+        setFFTResult(jvmComplexResultLabel)
+
+        val jvmRealTotalTime = fftRealBenchmark(fftWidth, fftDataLength * fftWidth)
+        val jvmRealFFTsPerSecond = opsPerSecond(fftDataLength, jvmRealTotalTime)
+        val jvmRealResultLabel = "JVM real total time: $jvmRealTotalTime ms\nJVM real FFTs/s: $jvmRealFFTsPerSecond"
+        setFFTResult("$jvmComplexResultLabel\n$jvmRealResultLabel")
 
         // perform NDK FFT benchmark
         val ndkComplexTotalTime = ndkComplexFFTBenchmark(fftWidth, fftDataLength * fftWidth)
         val ndkComplexFFTsPerSecond = opsPerSecond(fftDataLength, ndkComplexTotalTime)
-        val ndkComplexResultLabel = "NDK Complex total time: $ndkComplexTotalTime ms\nNDK Complex FFTs/s: $ndkComplexFFTsPerSecond"
-        setFFTResult("$jvmResultLabel\n$ndkComplexResultLabel")
+        val ndkComplexResultLabel = "NDK complex total time: $ndkComplexTotalTime ms\nNDK complex FFTs/s: $ndkComplexFFTsPerSecond"
+        setFFTResult("$jvmComplexResultLabel\n$jvmRealResultLabel\n$ndkComplexResultLabel")
 
         val ndkRealTotalTime = ndkRealFFTBenchmark(fftWidth, fftDataLength * fftWidth)
         val ndkRealFFTsPerSecond = opsPerSecond(fftDataLength, ndkRealTotalTime)
-        val ndkRealResultLabel = "NDK Real total time: $ndkRealTotalTime ms\nNDK Real FFTs/s: $ndkRealFFTsPerSecond"
-        setFFTResult("$jvmResultLabel\n$ndkComplexResultLabel\n$ndkRealResultLabel")
-
+        val ndkRealResultLabel = "NDK real total time: $ndkRealTotalTime ms\nNDK real FFTs/s: $ndkRealFFTsPerSecond"
+        setFFTResult("$jvmComplexResultLabel\n$jvmRealResultLabel\n$ndkComplexResultLabel\n$ndkRealResultLabel")
     }
 
     private fun opsPerSecond(totalOps: Int, totalTimeMS: Long): Long {
@@ -135,7 +139,7 @@ class MainActivity : AppCompatActivity() {
         for (batchFFTWidth in 1024..batchFFTWidthMax step 1024) {
             println("FFT progress $batchFFTWidth / $batchFFTWidthMax")
             fftWidths.add(batchFFTWidth)
-            val jvmTotalTime = fftBenchmark(batchFFTWidth, fftDataLength * batchFFTWidth)
+            val jvmTotalTime = fftComplexBenchmark(batchFFTWidth, fftDataLength * batchFFTWidth)
             jvmFFTResults.add(opsPerSecond(fftDataLength, jvmTotalTime))
             val ndkTotalTime = ndkComplexFFTBenchmark(batchFFTWidth, fftDataLength * batchFFTWidth)
             ndkFFTResults.add(opsPerSecond(fftDataLength, ndkTotalTime))

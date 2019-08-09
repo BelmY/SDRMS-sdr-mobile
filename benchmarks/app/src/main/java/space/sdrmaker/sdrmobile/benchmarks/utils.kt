@@ -1,6 +1,7 @@
 package space.sdrmaker.sdrmobile.benchmarks
 
 import org.jtransforms.fft.DoubleFFT_1D
+import kotlin.math.floor
 import kotlin.random.Random
 
 internal class FIRFloat(private val coefs: FloatArray) {
@@ -71,14 +72,28 @@ fun shortConvolutionBenchmark(filterLength: Int = 10, dataLength: Int = 50000): 
     return end - start
 }
 
-fun fftBenchmark(fftWidth: Int, dataLength: Int): Long {
+fun fftComplexBenchmark(fftWidth: Int, dataLength: Int): Long {
     val randomizer = Random(42)
     val data = DoubleArray(dataLength * 2) {randomizer.nextDouble()}
     val fft = DoubleFFT_1D(fftWidth.toLong())
 
     val start = System.currentTimeMillis()
-    for(i in 0 until (dataLength - 1) / fftWidth) {
+    for(i in 0 until floor(dataLength.toFloat() / fftWidth).toInt()) {
         fft.complexForward(data, i * 2 * fftWidth)
+    }
+    val end = System.currentTimeMillis()
+
+    return end - start
+}
+
+fun fftRealBenchmark(fftWidth: Int, dataLength: Int): Long {
+    val randomizer = Random(42)
+    val data = DoubleArray(dataLength) {randomizer.nextDouble()}
+    val fft = DoubleFFT_1D(fftWidth.toLong())
+
+    val start = System.currentTimeMillis()
+    for(i in 0 until floor(dataLength.toFloat() / fftWidth).toInt()) {
+        fft.realForward(data, i * fftWidth)
     }
     val end = System.currentTimeMillis()
 
