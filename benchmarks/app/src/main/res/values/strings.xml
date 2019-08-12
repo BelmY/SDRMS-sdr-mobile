@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">SDR Benchmarks</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_1_title">Convolution</string>
+    <string name="tab_2_title">FFT</string>
+    <string name="tab_3_title">Conversions</string>
+    <string name="tab_4_title">Batch</string>
 </resources>

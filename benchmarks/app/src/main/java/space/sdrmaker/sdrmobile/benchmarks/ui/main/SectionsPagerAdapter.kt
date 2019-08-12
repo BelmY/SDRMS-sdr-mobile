@@ -7,8 +7,10 @@ import androidx.fragment.app.FragmentPagerAdapter
 import space.sdrmaker.sdrmobile.benchmarks.R
 
 private val TAB_TITLES = arrayOf(
-    R.string.tab_text_1,
-    R.string.tab_text_2
+    R.string.tab_1_title,
+    R.string.tab_2_title,
+    R.string.tab_3_title,
+    R.string.tab_4_title
 )
 
 /**
