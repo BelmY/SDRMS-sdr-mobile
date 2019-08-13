@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.SeekBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import space.sdrmaker.sdrmobile.benchmarks.NativeUtils
@@ -21,9 +20,7 @@ class BatchFragment : Fragment() {
 
     private lateinit var root: View
 
-    private var convolutionFilterLength = 10
     private var convolutionDataLength = 50000
-    private var fftWidth = 1024
     private var fftDataLength = 100
 
     override fun onCreateView(
@@ -126,7 +123,8 @@ class BatchFragment : Fragment() {
     }
 
     private fun setBatchResult() {
-        root.findViewById<TextView>(R.id.batchResultText).text = "Benchmark results saved to ${context!!.getExternalFilesDir(null)}"
+        root.findViewById<TextView>(R.id.batchResultText).text =
+            "Benchmark results saved to ${context!!.getExternalFilesDir(null)}"
     }
 
 }

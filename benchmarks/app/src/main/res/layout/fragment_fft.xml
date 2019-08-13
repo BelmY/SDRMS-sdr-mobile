@@ -9,13 +9,13 @@
 
     <TextView
             android:layout_width="275dp"
-            android:layout_height="150dp"
+            android:layout_height="510dp"
             android:id="@+id/fftResultText" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginLeft="8dp" android:layout_marginStart="8dp" android:layout_marginTop="8dp"
             app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.669"
-    />
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.039"
+            app:layout_constraintHorizontal_bias="0.491"/>
     <TextView
             android:layout_width="275dp"
             android:layout_height="25dp"
@@ -36,7 +36,7 @@
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.817"
     />
     <Button
-            android:text="FFT"
+            android:text="Start"
             android:layout_width="275dp"
             android:layout_height="45dp"
             android:id="@+id/fftButton"
@@ -45,16 +45,6 @@
             android:layout_marginEnd="8dp" android:layout_marginRight="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp" android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.889"/>
-    <Button
-            android:text="Batch Benchmark"
-            android:layout_width="275dp"
-            android:layout_height="45dp"
-            android:id="@+id/batchBenchmarkButton" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp" android:layout_marginRight="8dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp" app:layout_constraintVertical_bias="0.988"/>
+            app:layout_constraintVertical_bias="0.928" app:layout_constraintHorizontal_bias="0.508"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -65,20 +65,18 @@ class ConvolutionFragment : Fragment() {
         val jvmShortSamplesPerSecond = opsPerSecond(convolutionDataLength, jvmShortTotalTime)
         val jvmShortResultLabel =
             "JVM short total time: $jvmShortTotalTime ms\nJVM short samples/s: $jvmShortSamplesPerSecond"
-        setConvolutionResult("$jvmFloatResultLabel\n$jvmShortResultLabel")
 
         // perform NDK convolution benchmark
         val ndkFloatTotalTime = NativeUtils.ndkFloatConvolutionBenchmark(convolutionFilterLength, convolutionDataLength)
         val ndkFloatSamplesPerSecond = opsPerSecond(convolutionDataLength, ndkFloatTotalTime)
         val ndkFloatResultLabel =
             "NDK float total time: $ndkFloatTotalTime ms\nNDK float samples/s: $ndkFloatSamplesPerSecond"
-        setConvolutionResult("$jvmFloatResultLabel\n$jvmShortResultLabel\n$ndkFloatResultLabel")
 
         val ndkShortTotalTime = NativeUtils.ndkShortConvolutionBenchmark(convolutionFilterLength, convolutionDataLength)
         val ndkShortSamplesPerSecond = opsPerSecond(convolutionDataLength, ndkShortTotalTime)
         val ndkShortResultLabel =
             "NDK short total time: $ndkShortTotalTime ms\nNDK short samples/s: $ndkShortSamplesPerSecond"
-        setConvolutionResult("$jvmFloatResultLabel\n$jvmShortResultLabel\n$ndkFloatResultLabel\n$ndkShortResultLabel")
+        setConvolutionResult("$jvmFloatResultLabel\n\n$jvmShortResultLabel\n\n$ndkFloatResultLabel\n\n$ndkShortResultLabel")
     }
 
     private fun opsPerSecond(totalOps: Int, totalTimeMS: Long): Long {

@@ -57,24 +57,21 @@ class FFTFragment : Fragment() {
         val jvmComplexFFTsPerSecond = opsPerSecond(fftDataLength, jvmComplexTotalTime)
         val jvmComplexResultLabel =
             "JVM complex total time: $jvmComplexTotalTime ms\nJVM complex FFTs/s: $jvmComplexFFTsPerSecond"
-        setFFTResult(jvmComplexResultLabel)
 
         val jvmRealTotalTime = fftRealBenchmark(fftWidth, fftDataLength * fftWidth)
         val jvmRealFFTsPerSecond = opsPerSecond(fftDataLength, jvmRealTotalTime)
         val jvmRealResultLabel = "JVM real total time: $jvmRealTotalTime ms\nJVM real FFTs/s: $jvmRealFFTsPerSecond"
-        setFFTResult("$jvmComplexResultLabel\n$jvmRealResultLabel")
 
         // perform NDK FFT benchmark
         val ndkComplexTotalTime = NativeUtils.ndkComplexFFTBenchmark(fftWidth, fftDataLength * fftWidth)
         val ndkComplexFFTsPerSecond = opsPerSecond(fftDataLength, ndkComplexTotalTime)
         val ndkComplexResultLabel =
             "NDK complex total time: $ndkComplexTotalTime ms\nNDK complex FFTs/s: $ndkComplexFFTsPerSecond"
-        setFFTResult("$jvmComplexResultLabel\n$jvmRealResultLabel\n$ndkComplexResultLabel")
 
         val ndkRealTotalTime = NativeUtils.ndkRealFFTBenchmark(fftWidth, fftDataLength * fftWidth)
         val ndkRealFFTsPerSecond = opsPerSecond(fftDataLength, ndkRealTotalTime)
         val ndkRealResultLabel = "NDK real total time: $ndkRealTotalTime ms\nNDK real FFTs/s: $ndkRealFFTsPerSecond"
-        setFFTResult("$jvmComplexResultLabel\n$jvmRealResultLabel\n$ndkComplexResultLabel\n$ndkRealResultLabel")
+        setFFTResult("$jvmComplexResultLabel\n\n$jvmRealResultLabel\n\n$ndkComplexResultLabel\n\n$ndkRealResultLabel")
     }
 
     private fun opsPerSecond(totalOps: Int, totalTimeMS: Long): Long {
