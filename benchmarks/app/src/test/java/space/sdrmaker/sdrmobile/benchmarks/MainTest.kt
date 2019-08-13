@@ -3,6 +3,8 @@ package space.sdrmaker.sdrmobile.benchmarks
 import org.junit.Test
 
 import org.junit.Assert.*
+import space.sdrmaker.sdrmobile.benchmarks.utils.FIRFloat
+import space.sdrmaker.sdrmobile.benchmarks.utils.FIRShort
 
 class MainTest {
     @Test
