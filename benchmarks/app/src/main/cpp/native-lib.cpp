@@ -66,9 +66,9 @@ public:
 };
 
 extern "C" JNIEXPORT jlong JNICALL
-Java_space_sdrmaker_sdrmobile_benchmarks_ui_main_ConvolutionFragment_ndkFloatConvolutionBenchmark(
+Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkFloatConvolutionBenchmark(
         JNIEnv *env,
-        jobject /* this */,
+        jclass,
         jint filterLength,
         jint dataLength) {
 
@@ -100,9 +100,9 @@ Java_space_sdrmaker_sdrmobile_benchmarks_ui_main_ConvolutionFragment_ndkFloatCon
 }
 
 extern "C" JNIEXPORT jlong JNICALL
-Java_space_sdrmaker_sdrmobile_benchmarks_ui_main_ConvolutionFragment_ndkShortConvolutionBenchmark(
+Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkShortConvolutionBenchmark(
         JNIEnv *env,
-        jobject /* this */,
+        jclass,
         jint filterLength,
         jint dataLength) {
 
@@ -134,9 +134,9 @@ Java_space_sdrmaker_sdrmobile_benchmarks_ui_main_ConvolutionFragment_ndkShortCon
 }
 
 extern "C" JNIEXPORT jlong JNICALL
-Java_space_sdrmaker_sdrmobile_benchmarks_ui_main_ConvolutionFragment_ndkComplexFFTBenchmark(
+Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkComplexFFTBenchmark(
         JNIEnv *env,
-        jobject /* this */,
+        jclass,
         jint fftWidth,
         jint dataLength) {
 
@@ -168,9 +168,9 @@ Java_space_sdrmaker_sdrmobile_benchmarks_ui_main_ConvolutionFragment_ndkComplexF
 }
 
 extern "C" JNIEXPORT jlong JNICALL
-Java_space_sdrmaker_sdrmobile_benchmarks_ui_main_ConvolutionFragment_ndkRealFFTBenchmark(
+Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkRealFFTBenchmark(
         JNIEnv *env,
-        jobject /* this */,
+        jclass,
         jint fftWidth,
         jint dataLength) {
 

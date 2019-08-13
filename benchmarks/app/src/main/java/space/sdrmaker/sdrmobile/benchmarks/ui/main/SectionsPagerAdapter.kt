@@ -24,8 +24,9 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
         // Return appropriate Fragment (defined as a static inner class below).
         return when(position) {
             0 -> ConvolutionFragment()
-            // TODO: other tabs
-            1 -> ConvolutionFragment()
+            1 -> FFTFragment()
+            2 -> FFTFragment()
+            3 -> BatchFragment()
             else -> ConvolutionFragment()
         }
     }
@@ -36,6 +37,6 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
 
     override fun getCount(): Int {
         // Show 2 total pages.
-        return 2
+        return 4
     }
 }
