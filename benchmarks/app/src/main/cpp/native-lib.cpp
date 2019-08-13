@@ -5,8 +5,10 @@
 #include <vector>
 #include <sstream>
 #include <math.h>
+#include <cmath>
 
 #include <fftw3.h>
+#include <complex>
 
 using namespace std;
 using namespace std::chrono;
@@ -109,12 +111,12 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkShortConvolutionBenchmar
     // init FIR filter & data
     vector<short> coefs(filterLength);
     for (int i = 0; i < filterLength; i++) {
-        coefs[i] = static_cast<short> (rand()) / static_cast <short> (RAND_MAX);
+        coefs[i] = static_cast<short> (rand());
     }
 
     vector<short> data(dataLength);
     for (int i = 0; i < dataLength; i++) {
-        data[i] = static_cast<short> (rand()) / static_cast <short> (RAND_MAX);
+        data[i] = static_cast<short> (rand());
     }
 
     FIRShort *filter = new FIRShort(coefs);
@@ -201,13 +203,126 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkRealFFTBenchmark(
     return end - start;
 }
 
+const float dacRange = pow(2, 13) - 1;
+
 extern "C" JNIEXPORT jlong JNICALL
-Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkConversionsBenchmark(
+Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkShortFloatConversionBenchmark(
         JNIEnv *env,
         jclass,
         jint conversionsToPerform) {
-// TODO: short -> float
-// TODO: float -> short
-// TODO: short -> complex
-// TODO: complex -> short
+
+    // time empty for loop
+    long int start = duration_cast<milliseconds>(
+            system_clock::now().time_since_epoch()
+    ).count();
+    for (int i = 0; i < conversionsToPerform; i++) {
+        // ¯\_(ツ)_/¯
+    }
+    long int end = duration_cast<milliseconds>(
+            system_clock::now().time_since_epoch()
+    ).count();
+    long forLoopTime = end - start;
+
+    // benchmark short -> float conversions
+    vector<short> shortData(conversionsToPerform);
+    for (int i = 0; i < conversionsToPerform; i++) {
+        shortData[i] = static_cast<short> (rand());
+    }
+    start = duration_cast<milliseconds>(
+            system_clock::now().time_since_epoch()
+    ).count();
+    for (int i = 0; i < conversionsToPerform; i++) {
+        float floatVal = (float) shortData[i] / dacRange;
+    }
+    end = duration_cast<milliseconds>(
+            system_clock::now().time_since_epoch()
+    ).count();
+    long shortFloatTime = end - start - forLoopTime;
+
+    return shortFloatTime;
+}
+
+extern "C" JNIEXPORT jlong JNICALL
+Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkFloatShortConversionBenchmark(
+        JNIEnv *env,
+        jclass,
+        jint conversionsToPerform) {
+
+    // time empty for loop
+    long int start = duration_cast<milliseconds>(
+            system_clock::now().time_since_epoch()
+    ).count();
+    for (int i = 0; i < conversionsToPerform; i++) {
+        // ¯\_(ツ)_/¯
+    }
+    long int end = duration_cast<milliseconds>(
+            system_clock::now().time_since_epoch()
+    ).count();
+    long forLoopTime = end - start;
+
+    // benchmark float -> short conversions
+    vector<float> floatData(conversionsToPerform);
+    for (int i = 0; i < conversionsToPerform; i++) {
+        floatData[i] = static_cast<float> (rand()) / static_cast <float> (RAND_MAX);
+    }
+    start = duration_cast<milliseconds>(
+            system_clock::now().time_since_epoch()
+    ).count();
+    for (int i = 0; i < conversionsToPerform; i++) {
+        float scaled = floatData[i] * dacRange;
+        short shortVal;
+        if (scaled > SHRT_MAX)
+            shortVal = SHRT_MAX;
+        else if (scaled < SHRT_MIN)
+            shortVal = SHRT_MIN;
+        else
+            shortVal = (short) scaled;
+
+    }
+    end = duration_cast<milliseconds>(
+            system_clock::now().time_since_epoch()
+    ).count();
+    long floatShortTime = end - start - forLoopTime;
+
+    return floatShortTime;
+}
+
+extern "C" JNIEXPORT jlong JNICALL
+Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkShortComplexConversionBenchmark(
+        JNIEnv *env,
+        jclass,
+        jint conversionsToPerform) {
+
+    // time empty for loop
+    long int start = duration_cast<milliseconds>(
+            system_clock::now().time_since_epoch()
+    ).count();
+    for (int i = 0; i < conversionsToPerform; i++) {
+        // ¯\_(ツ)_/¯
+    }
+    long int end = duration_cast<milliseconds>(
+            system_clock::now().time_since_epoch()
+    ).count();
+    long forLoopTime = end - start;
+
+    // benchmark short -> complex conversions
+    vector<short> shortComplexData(conversionsToPerform * 2);
+    for (int i = 0; i < conversionsToPerform * 2 - 1; i++) {
+        shortComplexData[i] = static_cast<short> (rand());
+    }
+    start = duration_cast<milliseconds>(
+            system_clock::now().time_since_epoch()
+    ).count();
+    for (int i = 0; i < conversionsToPerform * 2 - 1; i += 2) {
+        complex<float> complexVal = complex<float>(
+                (float) shortComplexData[i] / dacRange,
+                (float) shortComplexData[i+1] / dacRange);
+
+    }
+    end = duration_cast<milliseconds>(
+            system_clock::now().time_since_epoch()
+    ).count();
+    long shortComplexTime = end - start - forLoopTime;
+
+    return shortComplexTime;
 }
