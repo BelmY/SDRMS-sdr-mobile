@@ -9,12 +9,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import space.sdrmaker.sdrmobile.benchmarks.NativeUtils
 import space.sdrmaker.sdrmobile.benchmarks.R
-import space.sdrmaker.sdrmobile.benchmarks.utils.fftComplexBenchmark
-import space.sdrmaker.sdrmobile.benchmarks.utils.fftRealBenchmark
-import space.sdrmaker.sdrmobile.benchmarks.utils.floatConvolutionBenchmark
-import space.sdrmaker.sdrmobile.benchmarks.utils.shortConvolutionBenchmark
+import space.sdrmaker.sdrmobile.benchmarks.utils.*
 import java.io.File
-import kotlin.math.round
 
 class BatchFragment : Fragment() {
 
@@ -35,10 +31,6 @@ class BatchFragment : Fragment() {
         }
 
         return root
-    }
-
-    private fun opsPerSecond(totalOps: Int, totalTimeMS: Long): Long {
-        return round(if (totalTimeMS > 0) totalOps.toDouble() * 1000 / totalTimeMS else totalOps.toDouble() * 1000).toLong()
     }
 
     private fun onBatchBenchmarkButtonClick() {

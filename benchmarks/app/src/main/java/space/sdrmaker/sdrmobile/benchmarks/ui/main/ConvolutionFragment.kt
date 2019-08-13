@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment
 import space.sdrmaker.sdrmobile.benchmarks.NativeUtils
 import space.sdrmaker.sdrmobile.benchmarks.R
 import space.sdrmaker.sdrmobile.benchmarks.utils.floatConvolutionBenchmark
+import space.sdrmaker.sdrmobile.benchmarks.utils.opsPerSecond
 import space.sdrmaker.sdrmobile.benchmarks.utils.shortConvolutionBenchmark
-import kotlin.math.round
 
 class ConvolutionFragment : Fragment() {
 
@@ -77,10 +77,6 @@ class ConvolutionFragment : Fragment() {
         val ndkShortResultLabel =
             "NDK short total time: $ndkShortTotalTime ms\nNDK short samples/s: $ndkShortSamplesPerSecond"
         setConvolutionResult("$jvmFloatResultLabel\n\n$jvmShortResultLabel\n\n$ndkFloatResultLabel\n\n$ndkShortResultLabel")
-    }
-
-    private fun opsPerSecond(totalOps: Int, totalTimeMS: Long): Long {
-        return round(if (totalTimeMS > 0) totalOps.toDouble() * 1000 / totalTimeMS else totalOps.toDouble() * 1000).toLong()
     }
 
     private fun setConvolutionResult(result: String) {

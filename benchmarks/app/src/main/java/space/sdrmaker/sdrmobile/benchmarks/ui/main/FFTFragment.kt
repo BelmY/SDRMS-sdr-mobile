@@ -12,7 +12,7 @@ import space.sdrmaker.sdrmobile.benchmarks.NativeUtils
 import space.sdrmaker.sdrmobile.benchmarks.R
 import space.sdrmaker.sdrmobile.benchmarks.utils.fftComplexBenchmark
 import space.sdrmaker.sdrmobile.benchmarks.utils.fftRealBenchmark
-import kotlin.math.round
+import space.sdrmaker.sdrmobile.benchmarks.utils.opsPerSecond
 
 class FFTFragment : Fragment() {
 
@@ -72,10 +72,6 @@ class FFTFragment : Fragment() {
         val ndkRealFFTsPerSecond = opsPerSecond(fftDataLength, ndkRealTotalTime)
         val ndkRealResultLabel = "NDK real total time: $ndkRealTotalTime ms\nNDK real FFTs/s: $ndkRealFFTsPerSecond"
         setFFTResult("$jvmComplexResultLabel\n\n$jvmRealResultLabel\n\n$ndkComplexResultLabel\n\n$ndkRealResultLabel")
-    }
-
-    private fun opsPerSecond(totalOps: Int, totalTimeMS: Long): Long {
-        return round(if (totalTimeMS > 0) totalOps.toDouble() * 1000 / totalTimeMS else totalOps.toDouble() * 1000).toLong()
     }
 
     private fun setFFTResult(result: String) {

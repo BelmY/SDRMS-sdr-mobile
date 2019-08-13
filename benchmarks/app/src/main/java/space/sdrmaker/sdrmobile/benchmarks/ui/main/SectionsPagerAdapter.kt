@@ -25,7 +25,7 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
         return when(position) {
             0 -> ConvolutionFragment()
             1 -> FFTFragment()
-            2 -> FFTFragment()  // TODO: conversions
+            2 -> ConversionsFragment()
             3 -> BatchFragment()
             else -> ConvolutionFragment()
         }

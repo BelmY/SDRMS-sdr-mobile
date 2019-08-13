@@ -1,7 +1,10 @@
 package space.sdrmaker.sdrmobile.benchmarks.utils
 
+import org.apache.commons.math3.complex.Complex
 import org.jtransforms.fft.DoubleFFT_1D
 import kotlin.math.floor
+import kotlin.math.pow
+import kotlin.math.round
 import kotlin.random.Random
 
 internal class FIRFloat(private val coefs: FloatArray) {
@@ -98,4 +101,58 @@ fun fftRealBenchmark(fftWidth: Int, dataLength: Int): Long {
     val end = System.currentTimeMillis()
 
     return end - start
+}
+
+fun conversionsBenchmark(conversionsToPerform: Int) : LongArray {
+
+    val dacRange = 2.0.pow(13.0) - 1
+    val randomizer = Random(42)
+
+    // time empty for loop
+    var start = System.currentTimeMillis()
+    for (i in 0 until conversionsToPerform) {
+        // ¯\_(ツ)_/¯
+    }
+    var forLoopTime = System.currentTimeMillis() - start
+
+    // benchmark short -> float conversions
+    val shortData = ShortArray(conversionsToPerform) {randomizer.nextInt().toShort()}
+    start = System.currentTimeMillis()
+    for (i in 0 until conversionsToPerform) {
+        val floatVal = shortData[i].toFloat() / dacRange
+    }
+    var end = System.currentTimeMillis()
+    val shortFloatTime = end - start - forLoopTime
+
+    // benchmark float -> short conversions
+    val floatData = FloatArray(conversionsToPerform) {randomizer.nextFloat()}
+    start = System.currentTimeMillis()
+    for (i in 0 until conversionsToPerform) {
+        val scaled = floatData[i] * dacRange
+        var shortVal = when {
+            scaled > Short.MAX_VALUE -> Short.MAX_VALUE
+            scaled < Short.MIN_VALUE -> Short.MIN_VALUE
+            else -> scaled.toShort()
+        }
+    }
+    end = System.currentTimeMillis()
+    val floatShortTime = end - start - forLoopTime
+
+    // benchmark short -> complex conversions
+    val shortComplexData = ShortArray(conversionsToPerform * 2) {randomizer.nextInt().toShort()}
+    start = System.currentTimeMillis()
+    for (i in 0 until conversionsToPerform * 2 - 1 step 2) {
+        val complexVal = Complex(
+            shortComplexData[i].toFloat() / dacRange,
+            shortComplexData[i+1].toFloat() / dacRange
+        )
+    }
+    end = System.currentTimeMillis()
+    val shortComplexTime = end - start - forLoopTime
+
+    return longArrayOf(shortFloatTime, floatShortTime, shortComplexTime)
+}
+
+fun opsPerSecond(totalOps: Int, totalTimeMS: Long): Long {
+    return round(if (totalTimeMS > 0) totalOps.toDouble() * 1000 / totalTimeMS else totalOps.toDouble() * 1000).toLong()
 }

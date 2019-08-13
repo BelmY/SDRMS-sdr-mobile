@@ -140,7 +140,7 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkComplexFFTBenchmark(
         jint fftWidth,
         jint dataLength) {
 
-    fftw_complex *in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * dataLength);
+    fftw_complex *in = (fftw_complex *) fftw_malloc(sizeof(fftw_complex) * dataLength);
 
     // initialize input with random data
     for (int i = 0; i < dataLength; i++) {
@@ -174,8 +174,8 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkRealFFTBenchmark(
         jint fftWidth,
         jint dataLength) {
 
-    double *in = (double*) fftw_malloc(sizeof(double) * dataLength);
-    fftw_complex *out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (floor(fftWidth / 2) + 1));
+    double *in = (double *) fftw_malloc(sizeof(double) * dataLength);
+    fftw_complex *out = (fftw_complex *) fftw_malloc(sizeof(fftw_complex) * (floor(fftWidth / 2) + 1));
 
     // initialize input with random data
     for (int i = 0; i < dataLength; i++) {
@@ -201,3 +201,13 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkRealFFTBenchmark(
     return end - start;
 }
 
+extern "C" JNIEXPORT jlong JNICALL
+Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkConversionsBenchmark(
+        JNIEnv *env,
+        jclass,
+        jint conversionsToPerform) {
+// TODO: short -> float
+// TODO: float -> short
+// TODO: short -> complex
+// TODO: complex -> short
+}
