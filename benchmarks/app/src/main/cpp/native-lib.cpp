@@ -14,16 +14,16 @@ using namespace std;
 using namespace std::chrono;
 
 class FIRFloat {
-    vector<float> coefs;
+    float *coefs;
     int length;
-    vector<float> delayLine;
+    float *delayLine;
     int count = 0;
 
 public:
-    FIRFloat(vector<float> coefs) {
+    FIRFloat(float *coefs, int length) {
         this->coefs = coefs;
-        this->length = coefs.size();
-        this->delayLine = vector<float>(this->length);
+        this->length = length;
+        this->delayLine = new float[length];
     }
 
     float getOutputSample(float inputSample) {
@@ -41,16 +41,16 @@ public:
 };
 
 class FIRShort {
-    vector<short> coefs;
+    short *coefs;
     int length;
-    vector<short> delayLine;
+    short *delayLine;
     int count = 0;
 
 public:
-    FIRShort(vector<short> coefs) {
+    FIRShort(short *coefs, int length) {
         this->coefs = coefs;
-        this->length = coefs.size();
-        this->delayLine = vector<short>(this->length);
+        this->length = length;
+        this->delayLine = new short[length];
     }
 
     short getOutputSample(short inputSample) {
@@ -75,17 +75,17 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkFloatConvolutionBenchmar
         jint dataLength) {
 
     // init FIRFloat filter & data
-    vector<float> coefs(filterLength);
+    float coefs[filterLength];
     for (int i = 0; i < filterLength; i++) {
         coefs[i] = static_cast<float> (rand()) / static_cast <float> (RAND_MAX);
     }
 
-    vector<float> data(dataLength);
+    float data[dataLength];
     for (int i = 0; i < dataLength; i++) {
         data[i] = static_cast<float> (rand()) / static_cast <float> (RAND_MAX);
     }
 
-    FIRFloat *filter = new FIRFloat(coefs);
+    FIRFloat *filter = new FIRFloat(coefs, filterLength);
 
     // time it
     long int start = duration_cast<milliseconds>(
@@ -109,17 +109,17 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkShortConvolutionBenchmar
         jint dataLength) {
 
     // init FIR filter & data
-    vector<short> coefs(filterLength);
+    short coefs[filterLength];
     for (int i = 0; i < filterLength; i++) {
         coefs[i] = static_cast<short> (rand());
     }
 
-    vector<short> data(dataLength);
+    short data[dataLength];
     for (int i = 0; i < dataLength; i++) {
         data[i] = static_cast<short> (rand());
     }
 
-    FIRShort *filter = new FIRShort(coefs);
+    FIRShort *filter = new FIRShort(coefs, filterLength);
 
     // time it
     long int start = duration_cast<milliseconds>(
@@ -316,7 +316,7 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkShortComplexConversionBe
     for (int i = 0; i < conversionsToPerform * 2 - 1; i += 2) {
         complex<float> complexVal = complex<float>(
                 (float) shortComplexData[i] / dacRange,
-                (float) shortComplexData[i+1] / dacRange);
+                (float) shortComplexData[i + 1] / dacRange);
 
     }
     end = duration_cast<milliseconds>(
