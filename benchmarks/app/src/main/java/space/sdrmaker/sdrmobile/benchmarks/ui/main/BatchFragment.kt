@@ -18,6 +18,8 @@ class BatchFragment : Fragment() {
 
     private var convolutionDataLength = 50000
     private var fftDataLength = 100
+    private var conversions = 50
+    private var conversionsToPerform = 2000000
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,7 +65,7 @@ class BatchFragment : Fragment() {
         val ndkComplexFFTResults = mutableListOf<Long>()
         val jvmRealFFTResults = mutableListOf<Long>()
         val ndkRealFFTResults = mutableListOf<Long>()
-        val batchFFTWidthMax = 1024 * 50
+        val batchFFTWidthMax = 1024 * 20
         for (batchFFTWidth in 1024..batchFFTWidthMax step 1024) {
             println("FFT progress $batchFFTWidth / $batchFFTWidthMax")
             fftWidths.add(batchFFTWidth)
@@ -76,6 +78,31 @@ class BatchFragment : Fragment() {
             ndkComplexFFTResults.add(opsPerSecond(fftDataLength, ndkComplexTotalTime))
             val ndkRealTotalTime = NativeUtils.ndkRealFFTBenchmark(batchFFTWidth, fftDataLength * batchFFTWidth)
             ndkRealFFTResults.add(opsPerSecond(fftDataLength, ndkRealTotalTime))
+        }
+
+        // perform conversion benchmarks
+        val jvmShortFloatConversionResults = mutableListOf<Long>()
+        val jvmFloatShortConversionResults = mutableListOf<Long>()
+        val jvmShortComplexConversionResults = mutableListOf<Long>()
+
+        val ndkShortFloatConversionResults = mutableListOf<Long>()
+        val ndkFloatShortConversionResults = mutableListOf<Long>()
+        val ndkShortComplexConversionResults = mutableListOf<Long>()
+        for (i in 0 until conversions) {
+            println("Conversions progress $i / $conversions")
+
+            val jvmTotalTime = conversionsBenchmark(conversionsToPerform)
+            println("${jvmTotalTime[0]} ${jvmTotalTime[1]} ${jvmTotalTime[2]}")
+            jvmShortFloatConversionResults.add(opsPerSecond(conversionsToPerform, jvmTotalTime[0]))
+            jvmFloatShortConversionResults.add(opsPerSecond(conversionsToPerform, jvmTotalTime[1]))
+            jvmShortComplexConversionResults.add(opsPerSecond(conversionsToPerform, jvmTotalTime[2]))
+
+            ndkShortFloatConversionResults.add(
+                opsPerSecond(conversionsToPerform, NativeUtils.ndkShortFloatConversionBenchmark(conversionsToPerform)))
+            ndkFloatShortConversionResults.add(
+                opsPerSecond(conversionsToPerform, NativeUtils.ndkShortFloatConversionBenchmark(conversionsToPerform)))
+            ndkShortComplexConversionResults.add(
+                opsPerSecond(conversionsToPerform, NativeUtils.ndkShortFloatConversionBenchmark(conversionsToPerform)))
         }
 
         // dump results to csv files
@@ -110,6 +137,24 @@ class BatchFragment : Fragment() {
             out.println(ndkComplexFFTResults.joinToString(","))
             out.print("ndk_real,")
             out.println(ndkRealFFTResults.joinToString(","))
+        }
+        path = "${context!!.getExternalFilesDir(null)}/conversion_benchmark_$timestamp.csv"
+        file = File(path)
+        file.createNewFile()
+        file.printWriter().use { out ->
+            out.print("jvm_short_float,")
+            out.println(jvmShortFloatConversionResults.joinToString(","))
+            out.print("jvm_float_short,")
+            out.println(jvmFloatShortConversionResults.joinToString(","))
+            out.print("jvm_short_complex,")
+            out.println(jvmShortComplexConversionResults.joinToString(","))
+
+            out.print("ndk_short_float,")
+            out.println(ndkShortComplexConversionResults.joinToString(","))
+            out.print("ndk_float_short,")
+            out.println(ndkShortFloatConversionResults.joinToString(","))
+            out.print("ndk_short_complex,")
+            out.println(ndkShortComplexConversionResults.joinToString(","))
         }
         setBatchResult()
     }
