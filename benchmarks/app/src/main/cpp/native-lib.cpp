@@ -224,7 +224,7 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkShortFloatConversionBenc
     long forLoopTime = end - start;
 
     // benchmark short -> float conversions
-    vector<short> shortData(conversionsToPerform);
+    short shortData[conversionsToPerform];
     for (int i = 0; i < conversionsToPerform; i++) {
         shortData[i] = static_cast<short> (rand());
     }
@@ -261,7 +261,7 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkFloatShortConversionBenc
     long forLoopTime = end - start;
 
     // benchmark float -> short conversions
-    vector<float> floatData(conversionsToPerform);
+    float floatData[conversionsToPerform];
     for (int i = 0; i < conversionsToPerform; i++) {
         floatData[i] = static_cast<float> (rand()) / static_cast <float> (RAND_MAX);
     }
