@@ -211,33 +211,21 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkShortFloatConversionBenc
         jclass,
         jint conversionsToPerform) {
 
-    // time empty for loop
-    long int start = duration_cast<milliseconds>(
-            system_clock::now().time_since_epoch()
-    ).count();
-    for (int i = 0; i < conversionsToPerform; i++) {
-        // ¯\_(ツ)_/¯
-    }
-    long int end = duration_cast<milliseconds>(
-            system_clock::now().time_since_epoch()
-    ).count();
-    long forLoopTime = end - start;
-
     // benchmark short -> float conversions
     short shortData[conversionsToPerform];
     for (int i = 0; i < conversionsToPerform; i++) {
         shortData[i] = static_cast<short> (rand());
     }
-    start = duration_cast<milliseconds>(
+    long start = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
     ).count();
     for (int i = 0; i < conversionsToPerform; i++) {
         float floatVal = (float) shortData[i] / dacRange;
     }
-    end = duration_cast<milliseconds>(
+    long end = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
     ).count();
-    long shortFloatTime = end - start - forLoopTime;
+    long shortFloatTime = end - start;
 
     return shortFloatTime;
 }
@@ -248,24 +236,12 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkFloatShortConversionBenc
         jclass,
         jint conversionsToPerform) {
 
-    // time empty for loop
-    long int start = duration_cast<milliseconds>(
-            system_clock::now().time_since_epoch()
-    ).count();
-    for (int i = 0; i < conversionsToPerform; i++) {
-        // ¯\_(ツ)_/¯
-    }
-    long int end = duration_cast<milliseconds>(
-            system_clock::now().time_since_epoch()
-    ).count();
-    long forLoopTime = end - start;
-
     // benchmark float -> short conversions
     float floatData[conversionsToPerform];
     for (int i = 0; i < conversionsToPerform; i++) {
         floatData[i] = static_cast<float> (rand()) / static_cast <float> (RAND_MAX);
     }
-    start = duration_cast<milliseconds>(
+    long start = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
     ).count();
     for (int i = 0; i < conversionsToPerform; i++) {
@@ -279,10 +255,10 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkFloatShortConversionBenc
             shortVal = (short) scaled;
 
     }
-    end = duration_cast<milliseconds>(
+    long end = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
     ).count();
-    long floatShortTime = end - start - forLoopTime;
+    long floatShortTime = end - start;
 
     return floatShortTime;
 }
@@ -293,24 +269,12 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkShortComplexConversionBe
         jclass,
         jint conversionsToPerform) {
 
-    // time empty for loop
-    long int start = duration_cast<milliseconds>(
-            system_clock::now().time_since_epoch()
-    ).count();
-    for (int i = 0; i < conversionsToPerform; i++) {
-        // ¯\_(ツ)_/¯
-    }
-    long int end = duration_cast<milliseconds>(
-            system_clock::now().time_since_epoch()
-    ).count();
-    long forLoopTime = end - start;
-
     // benchmark short -> complex conversions
     vector<short> shortComplexData(conversionsToPerform * 2);
     for (int i = 0; i < conversionsToPerform * 2 - 1; i++) {
         shortComplexData[i] = static_cast<short> (rand());
     }
-    start = duration_cast<milliseconds>(
+    long start = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
     ).count();
     for (int i = 0; i < conversionsToPerform * 2 - 1; i += 2) {
@@ -319,10 +283,10 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkShortComplexConversionBe
                 (float) shortComplexData[i + 1] / dacRange);
 
     }
-    end = duration_cast<milliseconds>(
+    long end = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
     ).count();
-    long shortComplexTime = end - start - forLoopTime;
+    long shortComplexTime = end - start;
 
     return shortComplexTime;
 }

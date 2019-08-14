@@ -55,6 +55,7 @@ fun floatConvolutionBenchmark(filterLength: Int = 10, dataLength: Int = 50000): 
     val randomizer = Random(42)
     val filter = FIRFloat(FloatArray(filterLength) {randomizer.nextFloat()})
     val data = FloatArray(dataLength) {randomizer.nextFloat()}
+
     val start = System.currentTimeMillis()
     for(i in 0 until dataLength) {
         filter.getOutputSample(data[i])
@@ -108,47 +109,45 @@ fun conversionsBenchmark(conversionsToPerform: Int) : LongArray {
     val dacRange = 2.0.pow(13.0) - 1
     val randomizer = Random(42)
 
-    // time empty for loop
+    // benchmark short -> float conversions
+    var floatVal = 0.0
+    val shortData = ShortArray(conversionsToPerform) {randomizer.nextInt().toShort()}
     var start = System.currentTimeMillis()
     for (i in 0 until conversionsToPerform) {
-        // ¯\_(ツ)_/¯
-    }
-    var forLoopTime = System.currentTimeMillis() - start
-
-    // benchmark short -> float conversions
-    val shortData = ShortArray(conversionsToPerform) {randomizer.nextInt().toShort()}
-    start = System.currentTimeMillis()
-    for (i in 0 until conversionsToPerform) {
-        val floatVal = shortData[i].toFloat() / dacRange
+        floatVal = shortData[i].toFloat() / dacRange
     }
     var end = System.currentTimeMillis()
-    val shortFloatTime = end - start - forLoopTime
+    val shortFloatTime = end - start
+    println(floatVal)
 
     // benchmark float -> short conversions
+    var shortVal: Short = 0
     val floatData = FloatArray(conversionsToPerform) {randomizer.nextFloat()}
     start = System.currentTimeMillis()
     for (i in 0 until conversionsToPerform) {
         val scaled = floatData[i] * dacRange
-        var shortVal = when {
+        shortVal = when {
             scaled > Short.MAX_VALUE -> Short.MAX_VALUE
             scaled < Short.MIN_VALUE -> Short.MIN_VALUE
             else -> scaled.toShort()
         }
     }
     end = System.currentTimeMillis()
-    val floatShortTime = end - start - forLoopTime
-
+    val floatShortTime = end - start
+    println(shortVal)
+    var complexVal = Complex(0.0, 0.0)
     // benchmark short -> complex conversions
     val shortComplexData = ShortArray(conversionsToPerform * 2) {randomizer.nextInt().toShort()}
     start = System.currentTimeMillis()
     for (i in 0 until conversionsToPerform * 2 - 1 step 2) {
-        val complexVal = Complex(
+        complexVal = Complex(
             shortComplexData[i].toFloat() / dacRange,
             shortComplexData[i+1].toFloat() / dacRange
         )
     }
     end = System.currentTimeMillis()
-    val shortComplexTime = end - start - forLoopTime
+    val shortComplexTime = end - start
+    println(complexVal)
 
     return longArrayOf(shortFloatTime, floatShortTime, shortComplexTime)
 }

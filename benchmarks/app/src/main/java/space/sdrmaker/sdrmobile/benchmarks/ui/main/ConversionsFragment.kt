@@ -16,7 +16,7 @@ class ConversionsFragment : Fragment() {
 
     private lateinit var root: View
 
-    private var conversionsToPerform = 1000000
+    private var conversionsToPerform = 2000000
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
