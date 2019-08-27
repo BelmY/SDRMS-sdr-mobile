@@ -80,19 +80,20 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkFloatConvolutionBenchmar
         coefs[i] = static_cast<float> (rand()) / static_cast <float> (RAND_MAX);
     }
 
-    float data[dataLength];
+    std::vector<float> data(dataLength);
     for (int i = 0; i < dataLength; i++) {
         data[i] = static_cast<float> (rand()) / static_cast <float> (RAND_MAX);
     }
 
     FIRFloat *filter = new FIRFloat(coefs, filterLength);
-
+    // using volatile so that compiler won't optimize out the for loop
+    volatile float sample;
     // time it
     long int start = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
     ).count();
     for (int i = 0; i < dataLength; i++) {
-        filter->getOutputSample(data[i]);
+        sample = filter->getOutputSample(data[i]);
     }
     long int end = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
@@ -114,19 +115,20 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkShortConvolutionBenchmar
         coefs[i] = static_cast<short> (rand());
     }
 
-    short data[dataLength];
+    std::vector<short> data(dataLength);
     for (int i = 0; i < dataLength; i++) {
         data[i] = static_cast<short> (rand());
     }
 
     FIRShort *filter = new FIRShort(coefs, filterLength);
-
+    // using volatile so that compiler won't optimize out the for loop
+    volatile float sample;
     // time it
     long int start = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
     ).count();
     for (int i = 0; i < dataLength; i++) {
-        filter->getOutputSample(data[i]);
+        sample = filter->getOutputSample(data[i]);
     }
     long int end = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
@@ -212,15 +214,17 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkShortFloatConversionBenc
         jint conversionsToPerform) {
 
     // benchmark short -> float conversions
-    short shortData[conversionsToPerform];
+    std::vector<short> shortData(conversionsToPerform);
     for (int i = 0; i < conversionsToPerform; i++) {
         shortData[i] = static_cast<short> (rand());
     }
+    // using volatile so that compiler won't optimize out the for loop
+    volatile float floatVal;
     long start = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
     ).count();
     for (int i = 0; i < conversionsToPerform; i++) {
-        float floatVal = (float) shortData[i] / dacRange;
+        floatVal = (float) shortData[i] / dacRange;
     }
     long end = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
@@ -237,16 +241,17 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkFloatShortConversionBenc
         jint conversionsToPerform) {
 
     // benchmark float -> short conversions
-    float floatData[conversionsToPerform];
+    std::vector<float> floatData(conversionsToPerform);
     for (int i = 0; i < conversionsToPerform; i++) {
         floatData[i] = static_cast<float> (rand()) / static_cast <float> (RAND_MAX);
     }
+    // using volatile so that compiler won't optimize out the for loop
+    volatile short shortVal;
     long start = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
     ).count();
     for (int i = 0; i < conversionsToPerform; i++) {
         float scaled = floatData[i] * dacRange;
-        short shortVal;
         if (scaled > SHRT_MAX)
             shortVal = SHRT_MAX;
         else if (scaled < SHRT_MIN)
@@ -274,13 +279,15 @@ Java_space_sdrmaker_sdrmobile_benchmarks_NativeUtils_ndkShortComplexConversionBe
     for (int i = 0; i < conversionsToPerform * 2 - 1; i++) {
         shortComplexData[i] = static_cast<short> (rand());
     }
+    // using volatile so that compiler won't optimize out the for loop
+    volatile float complexVal;
     long start = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
     ).count();
     for (int i = 0; i < conversionsToPerform * 2 - 1; i += 2) {
-        complex<float> complexVal = complex<float>(
+        complexVal = complex<float>(
                 (float) shortComplexData[i] / dacRange,
-                (float) shortComplexData[i + 1] / dacRange);
+                (float) shortComplexData[i + 1] / dacRange).real();
 
     }
     long end = duration_cast<milliseconds>(
