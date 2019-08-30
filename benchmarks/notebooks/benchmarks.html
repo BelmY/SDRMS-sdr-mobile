@@ -13120,7 +13120,7 @@ div#notebook {
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[47]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -13148,9 +13148,9 @@ div#notebook {
 <span class="p">}</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">set_palette</span><span class="p">(</span><span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="n">colors</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
 
-<span class="n">convolution</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/convolution_benchmark_1565782392505.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;env&#39;</span><span class="p">)</span>
-<span class="n">fft</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/fft_benchmark_1565782392505.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;env&#39;</span><span class="p">)</span>
-<span class="n">conversion</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/conversion_benchmark_1565782392505.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">convolution</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/convolution_benchmark_1566902061275.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;env&#39;</span><span class="p">)</span>
+<span class="n">fft</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/fft_benchmark_1566902061275.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;env&#39;</span><span class="p">)</span>
+<span class="n">conversion</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/conversion_benchmark_1566902061275.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13232,7 +13232,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">iplot</span><span class="p">({</span>
@@ -13267,20 +13267,20 @@ div#notebook {
 <div>
         
         
-            <div id="6408d896-6397-4ccb-a16c-bd75f48b37a6" class="plotly-graph-div" style="height:525px; width:100%;"></div>
+            <div id="a1cbe88c-4ae9-4922-8933-00834d1a33c3" class="plotly-graph-div" style="height:525px; width:100%;"></div>
             <script type="text/javascript">
                 require(["plotly"], function(Plotly) {
                     window.PLOTLYENV=window.PLOTLYENV || {};
                     
-                if (document.getElementById("6408d896-6397-4ccb-a16c-bd75f48b37a6")) {
+                if (document.getElementById("a1cbe88c-4ae9-4922-8933-00834d1a33c3")) {
                     Plotly.newPlot(
-                        '6408d896-6397-4ccb-a16c-bd75f48b37a6',
-                        [{"marker": {"color": "#CB43E1"}, "mode": "lines", "name": "JVM_FLOAT", "type": "scatter", "x": ["10", "20", "30", "40", "50", "60", "70", "80", "90", "100", "110", "120", "130", "140", "150", "160", "170", "180", "190", "200", "210", "220", "230", "240", "250", "260", "270", "280", "290", "300", "310", "320", "330", "340", "350", "360", "370", "380", "390", "400", "410", "420", "430", "440", "450", "460", "470", "480", "490", "500", "510", "520", "530", "540", "550", "560", "570", "580", "590", "600", "610", "620", "630", "640", "650", "660", "670", "680", "690", "700", "710", "720", "730", "740", "750", "760", "770", "780", "790", "800", "810", "820", "830", "840", "850", "860", "870", "880", "890", "900", "910", "920", "930", "940", "950", "960", "970", "980", "990", "1000"], "y": [8333333, 8333333, 5000000, 7142857, 5555556, 4545455, 5555556, 4166667, 2941176, 3846154, 2500000, 2941176, 3125000, 1923077, 1851852, 2000000, 1923077, 1515152, 1562500, 1388889, 1315789, 1282051, 1219512, 1162791, 1111111, 1086957, 1612903, 1000000, 943396, 1428571, 892857, 1111111, 862069, 833333, 806452, 781250, 806452, 746269, 724638, 925926, 909091, 961538, 657895, 649351, 632911, 909091, 641026, 588235, 581395, 877193, 561798, 549451, 531915, 526316, 806452, 505051, 495050, 490196, 757576, 704225, 617284, 458716, 446429, 442478, 438596, 431034, 427350, 416667, 409836, 531915, 403226, 396825, 520833, 531915, 381679, 375940, 373134, 434783, 574713, 561798, 349650, 549451, 344828, 362319, 335570, 331126, 400000, 328947, 320513, 314465, 458716, 446429, 359712, 409836, 301205, 471698, 292398, 290698, 287356, 431034]}, {"marker": {"color": "#556DFF"}, "mode": "lines", "name": "JVM_SHORT", "type": "scatter", "x": ["10", "20", "30", "40", "50", "60", "70", "80", "90", "100", "110", "120", "130", "140", "150", "160", "170", "180", "190", "200", "210", "220", "230", "240", "250", "260", "270", "280", "290", "300", "310", "320", "330", "340", "350", "360", "370", "380", "390", "400", "410", "420", "430", "440", "450", "460", "470", "480", "490", "500", "510", "520", "530", "540", "550", "560", "570", "580", "590", "600", "610", "620", "630", "640", "650", "660", "670", "680", "690", "700", "710", "720", "730", "740", "750", "760", "770", "780", "790", "800", "810", "820", "830", "840", "850", "860", "870", "880", "890", "900", "910", "920", "930", "940", "950", "960", "970", "980", "990", "1000"], "y": [8333333, 10000000, 5000000, 6250000, 7142857, 6250000, 5000000, 4545455, 2941176, 4166667, 2941176, 3125000, 2173913, 2000000, 1851852, 1724138, 1612903, 1515152, 1515152, 1388889, 1315789, 1282051, 1250000, 1162791, 1111111, 1111111, 1136364, 1111111, 961538, 1388889, 980392, 909091, 862069, 819672, 819672, 819672, 769231, 746269, 746269, 704225, 724638, 793651, 657895, 641026, 632911, 641026, 609756, 632911, 574713, 561798, 555556, 632911, 617284, 526316, 515464, 500000, 500000, 490196, 515464, 471698, 467290, 526316, 450450, 442478, 442478, 431034, 427350, 420168, 409836, 403226, 403226, 416667, 390625, 387597, 381679, 375940, 370370, 370370, 384615, 387597, 344828, 349650, 375940, 354610, 337838, 328947, 326797, 324675, 318471, 373134, 320513, 324675, 312500, 304878, 297619, 312500, 294118, 290698, 287356, 328947]}, {"marker": {"color": "#00C677"}, "mode": "lines", "name": "NDK_FLOAT", "type": "scatter", "x": ["10", "20", "30", "40", "50", "60", "70", "80", "90", "100", "110", "120", "130", "140", "150", "160", "170", "180", "190", "200", "210", "220", "230", "240", "250", "260", "270", "280", "290", "300", "310", "320", "330", "340", "350", "360", "370", "380", "390", "400", "410", "420", "430", "440", "450", "460", "470", "480", "490", "500", "510", "520", "530", "540", "550", "560", "570", "580", "590", "600", "610", "620", "630", "640", "650", "660", "670", "680", "690", "700", "710", "720", "730", "740", "750", "760", "770", "780", "790", "800", "810", "820", "830", "840", "850", "860", "870", "880", "890", "900", "910", "920", "930", "940", "950", "960", "970", "980", "990", "1000"], "y": [5555556, 2941176, 2380952, 2631579, 2272727, 1923077, 1666667, 1351351, 1351351, 1162791, 1111111, 1020408, 943396, 877193, 793651, 757576, 714286, 675676, 641026, 617284, 581395, 561798, 531915, 510204, 490196, 462963, 442478, 434783, 416667, 409836, 393701, 373134, 373134, 362319, 340136, 352113, 328947, 318471, 308642, 306748, 294118, 292398, 284091, 273224, 270270, 260417, 256410, 250000, 250000, 241546, 240385, 235849, 230415, 222222, 220264, 215517, 209205, 209205, 204082, 204918, 196850, 196078, 193798, 187266, 184502, 181818, 181818, 174216, 179211, 174216, 171233, 168919, 167785, 166113, 158730, 161290, 154799, 157729, 155280, 147493, 147929, 148368, 142045, 141643, 136612, 136240, 136612, 136240, 135870, 132979, 132275, 130548, 129534, 127877, 124688, 125945, 125945, 122850, 70522, 121359]}, {"marker": {"color": "#008894"}, "mode": "lines", "name": "NDK_SHORT", "type": "scatter", "x": ["10", "20", "30", "40", "50", "60", "70", "80", "90", "100", "110", "120", "130", "140", "150", "160", "170", "180", "190", "200", "210", "220", "230", "240", "250", "260", "270", "280", "290", "300", "310", "320", "330", "340", "350", "360", "370", "380", "390", "400", "410", "420", "430", "440", "450", "460", "470", "480", "490", "500", "510", "520", "530", "540", "550", "560", "570", "580", "590", "600", "610", "620", "630", "640", "650", "660", "670", "680", "690", "700", "710", "720", "730", "740", "750", "760", "770", "780", "790", "800", "810", "820", "830", "840", "850", "860", "870", "880", "890", "900", "910", "920", "930", "940", "950", "960", "970", "980", "990", "1000"], "y": [5555556, 3333333, 2777778, 2631579, 2000000, 1612903, 1388889, 1315789, 1136364, 1000000, 943396, 862069, 757576, 757576, 684932, 657895, 617284, 581395, 543478, 495050, 471698, 454545, 450450, 434783, 413223, 390625, 387597, 367647, 362319, 349650, 335570, 314465, 303030, 295858, 290698, 289017, 270270, 270270, 267380, 260417, 246305, 246305, 241546, 232558, 227273, 225225, 218341, 210970, 213675, 208333, 198413, 201613, 196850, 190840, 190114, 185185, 180505, 174825, 169492, 168919, 171233, 168919, 158730, 163399, 159744, 157233, 155280, 153846, 151515, 149254, 142045, 138889, 136986, 139665, 138504, 131579, 134771, 129534, 129870, 125628, 125313, 127226, 123762, 120773, 121655, 117925, 119617, 118765, 117096, 116009, 113122, 111857, 111607, 111111, 109170, 108460, 104167, 104822, 102249, 102881]}],
+                        'a1cbe88c-4ae9-4922-8933-00834d1a33c3',
+                        [{"marker": {"color": "#CB43E1"}, "mode": "lines", "name": "JVM_FLOAT", "type": "scatter", "x": ["10", "20", "30", "40", "50", "60", "70", "80", "90", "100", "110", "120", "130", "140", "150", "160", "170", "180", "190", "200", "210", "220", "230", "240", "250", "260", "270", "280", "290", "300", "310", "320", "330", "340", "350", "360", "370", "380", "390", "400", "410", "420", "430", "440", "450", "460", "470", "480", "490", "500", "510", "520", "530", "540", "550", "560", "570", "580", "590", "600", "610", "620", "630", "640", "650", "660", "670", "680", "690", "700", "710", "720", "730", "740", "750", "760", "770", "780", "790", "800", "810", "820", "830", "840", "850", "860", "870", "880", "890", "900", "910", "920", "930", "940", "950", "960", "970", "980", "990", "1000"], "y": [12500000, 7142857, 5000000, 5000000, 5555556, 4545455, 4545455, 4166667, 2941176, 2777778, 2500000, 2272727, 2173913, 2272727, 1923077, 1851852, 2083333, 1851852, 1785714, 2083333, 1388889, 1351351, 1428571, 1562500, 1428571, 1315789, 1250000, 1020408, 1041667, 961538, 892857, 1162791, 862069, 909091, 925926, 833333, 781250, 757576, 724638, 1086957, 694444, 675676, 657895, 641026, 632911, 909091, 609756, 909091, 581395, 568182, 555556, 561798, 537634, 526316, 515464, 515464, 769231, 657895, 485437, 735294, 714286, 500000, 450450, 595238, 442478, 434783, 423729, 625000, 413223, 480769, 403226, 406504, 617284, 515464, 384615, 485437, 485437, 510204, 462963, 561798, 442478, 349650, 344828, 349650, 378788, 333333, 364964, 324675, 320513, 387597, 409836, 310559, 314465, 304878, 320513, 396825, 295858, 333333, 454545, 431034]}, {"marker": {"color": "#556DFF"}, "mode": "lines", "name": "JVM_SHORT", "type": "scatter", "x": ["10", "20", "30", "40", "50", "60", "70", "80", "90", "100", "110", "120", "130", "140", "150", "160", "170", "180", "190", "200", "210", "220", "230", "240", "250", "260", "270", "280", "290", "300", "310", "320", "330", "340", "350", "360", "370", "380", "390", "400", "410", "420", "430", "440", "450", "460", "470", "480", "490", "500", "510", "520", "530", "540", "550", "560", "570", "580", "590", "600", "610", "620", "630", "640", "650", "660", "670", "680", "690", "700", "710", "720", "730", "740", "750", "760", "770", "780", "790", "800", "810", "820", "830", "840", "850", "860", "870", "880", "890", "900", "910", "920", "930", "940", "950", "960", "970", "980", "990", "1000"], "y": [10000000, 10000000, 6250000, 5555556, 5555556, 5555556, 3846154, 3846154, 3333333, 3125000, 2941176, 2631579, 3333333, 3333333, 2083333, 2083333, 2380952, 1724138, 1724138, 1562500, 1515152, 1470588, 2173913, 1315789, 1724138, 1282051, 1388889, 1190476, 1351351, 1111111, 1020408, 1612903, 1041667, 1282051, 1250000, 1351351, 925926, 847458, 847458, 819672, 781250, 1315789, 757576, 735294, 943396, 714286, 1063830, 675676, 684932, 641026, 714286, 625000, 609756, 595238, 588235, 581395, 757576, 561798, 757576, 925926, 632911, 520833, 746269, 510204, 500000, 495050, 526316, 485437, 806452, 462963, 458716, 666667, 485437, 495050, 434783, 427350, 423729, 431034, 485437, 409836, 403226, 438596, 396825, 543478, 384615, 381679, 420168, 373134, 364964, 602410, 427350, 354610, 352113, 364964, 342466, 381679, 337838, 438596, 450450, 352113]}, {"marker": {"color": "#00C677"}, "mode": "lines", "name": "NDK_FLOAT", "type": "scatter", "x": ["10", "20", "30", "40", "50", "60", "70", "80", "90", "100", "110", "120", "130", "140", "150", "160", "170", "180", "190", "200", "210", "220", "230", "240", "250", "260", "270", "280", "290", "300", "310", "320", "330", "340", "350", "360", "370", "380", "390", "400", "410", "420", "430", "440", "450", "460", "470", "480", "490", "500", "510", "520", "530", "540", "550", "560", "570", "580", "590", "600", "610", "620", "630", "640", "650", "660", "670", "680", "690", "700", "710", "720", "730", "740", "750", "760", "770", "780", "790", "800", "810", "820", "830", "840", "850", "860", "870", "880", "890", "900", "910", "920", "930", "940", "950", "960", "970", "980", "990", "1000"], "y": [25000000, 16666667, 12500000, 12500000, 12500000, 8333333, 10000000, 7142857, 5555556, 5555556, 5555556, 5555556, 5000000, 4545455, 4166667, 3571429, 3333333, 3125000, 2941176, 2777778, 3333333, 2631579, 2631579, 2380952, 2272727, 2083333, 2380952, 2380952, 2083333, 2083333, 2083333, 2083333, 2000000, 2000000, 1851852, 1612903, 1562500, 1785714, 1666667, 1388889, 1666667, 1351351, 1612903, 1282051, 1515152, 1470588, 1428571, 1190476, 1388889, 1219512, 1136364, 1282051, 1063830, 1063830, 1041667, 1219512, 1190476, 1000000, 1136364, 943396, 1111111, 909091, 1063830, 892857, 925926, 877193, 961538, 833333, 943396, 877193, 909091, 943396, 892857, 909091, 769231, 757576, 735294, 819672, 862069, 819672, 704225, 694444, 819672, 714286, 735294, 746269, 793651, 757576, 641026, 641026, 684932, 694444, 735294, 714286, 724638, 714286, 675676, 588235, 684932, 684932]}, {"marker": {"color": "#008894"}, "mode": "lines", "name": "NDK_SHORT", "type": "scatter", "x": ["10", "20", "30", "40", "50", "60", "70", "80", "90", "100", "110", "120", "130", "140", "150", "160", "170", "180", "190", "200", "210", "220", "230", "240", "250", "260", "270", "280", "290", "300", "310", "320", "330", "340", "350", "360", "370", "380", "390", "400", "410", "420", "430", "440", "450", "460", "470", "480", "490", "500", "510", "520", "530", "540", "550", "560", "570", "580", "590", "600", "610", "620", "630", "640", "650", "660", "670", "680", "690", "700", "710", "720", "730", "740", "750", "760", "770", "780", "790", "800", "810", "820", "830", "840", "850", "860", "870", "880", "890", "900", "910", "920", "930", "940", "950", "960", "970", "980", "990", "1000"], "y": [25000000, 25000000, 16666667, 16666667, 16666667, 12500000, 10000000, 7142857, 8333333, 5555556, 5000000, 4545455, 4166667, 3846154, 5000000, 4545455, 3846154, 3846154, 3846154, 3333333, 3333333, 2631579, 2380952, 2777778, 2941176, 2777778, 2631579, 2083333, 1923077, 1851852, 2083333, 2380952, 1785714, 2173913, 1785714, 1562500, 1666667, 1515152, 1851852, 1428571, 1388889, 1351351, 1666667, 1724138, 1666667, 1612903, 1219512, 1562500, 1562500, 1250000, 1136364, 1162791, 1086957, 1041667, 1020408, 1315789, 1162791, 1315789, 961538, 1111111, 1250000, 1190476, 1190476, 892857, 877193, 1162791, 1020408, 1111111, 833333, 1086957, 1063830, 1020408, 1000000, 1020408, 769231, 1000000, 746269, 980392, 724638, 943396, 943396, 704225, 892857, 684932, 892857, 666667, 862069, 649351, 862069, 632911, 625000, 714286, 617284, 757576, 602410, 769231, 595238, 714286, 746269, 574713]}],
                         {"template": {"data": {"bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}}, "type": "bar"}], "barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}}, "type": "barpolar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "histogram": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "histogram"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "scatter": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "Convolution full benchmark results"}, "xaxis": {"title": {"text": "filter length"}}, "yaxis": {"title": {"text": "samples / s"}}},
                         {"responsive": true}
                     ).then(function(){
                             
-var gd = document.getElementById('6408d896-6397-4ccb-a16c-bd75f48b37a6');
+var gd = document.getElementById('a1cbe88c-4ae9-4922-8933-00834d1a33c3');
 var x = new MutationObserver(function (mutations, observer) {{
         var display = window.getComputedStyle(gd).display;
         if (!display || display === 'none') {{
@@ -13318,17 +13318,17 @@ if (outputEl) {{
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="JVM-/-NDK-speed-ratio">JVM / NDK speed ratio<a class="anchor-link" href="#JVM-/-NDK-speed-ratio">&#182;</a></h3>
+<h3 id="Convolution-NDK-/-JVM-speed-comparison">Convolution NDK / JVM speed comparison<a class="anchor-link" href="#Convolution-NDK-/-JVM-speed-comparison">&#182;</a></h3>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">floats</span> <span class="o">=</span> <span class="n">convolution</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="s1">&#39;jvm_float&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">convolution</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="s1">&#39;ndk_float&#39;</span><span class="p">]</span>
-<span class="n">shorts</span> <span class="o">=</span> <span class="n">convolution</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="s1">&#39;jvm_short&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">convolution</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="s1">&#39;ndk_short&#39;</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">floats</span> <span class="o">=</span> <span class="n">convolution</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="s1">&#39;ndk_float&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">convolution</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="s1">&#39;jvm_float&#39;</span><span class="p">]</span>
+<span class="n">shorts</span> <span class="o">=</span> <span class="n">convolution</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="s1">&#39;ndk_short&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">convolution</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="s1">&#39;jvm_short&#39;</span><span class="p">]</span>
 </pre></div>
 
     </div>
@@ -13338,51 +13338,11 @@ if (outputEl) {{
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">floats</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[14]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>count    100.000000
-mean       2.667887
-std        0.517203
-min        1.500000
-25%        2.330543
-50%        2.376907
-75%        3.060728
-max        4.074700
-dtype: float64</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">shorts</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># float NDK-to-JVM ratio</span>
+<span class="n">floats</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -13395,20 +13355,20 @@ dtype: float64</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[15]:</div>
+    <div class="prompt output_prompt">Out[6]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
 <pre>count    100.000000
-mean       2.862432
-std        0.334165
-min        1.500000
-25%        2.731795
-50%        2.792564
-75%        2.924134
-max        4.166667
+mean       1.977909
+std        0.333318
+min        1.277777
+25%        1.683433
+50%        2.000000
+75%        2.283211
+max        2.500000
 dtype: float64</pre>
 </div>
 
@@ -13420,10 +13380,52 @@ dtype: float64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;JVM / NDK (FLOAT)&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">floats</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;JVM / NDK (SHORT)&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">shorts</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># short NDK-to-JVM ratio</span>
+<span class="n">shorts</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[7]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>count    100.000000
+mean       1.902150
+std        0.421772
+min        1.027027
+25%        1.664180
+50%        1.794737
+75%        2.252017
+max        3.000000
+dtype: float64</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;NDK / JVM (FLOAT)&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">floats</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;NDK / JVM (SHORT)&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">shorts</span><span class="p">)</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span>
     <span class="n">x</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">floats</span><span class="p">,</span> <span class="n">shorts</span><span class="p">]),</span>
     <span class="n">y</span><span class="o">=</span><span class="n">y</span>
@@ -13441,7 +13443,7 @@ dtype: float64</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[22]:</div>
+    <div class="prompt output_prompt">Out[8]:</div>
 
 
 
@@ -13460,7 +13462,7 @@ dtype: float64</pre>
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
+<img src="data:image/png;base64,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
 "
 >
 </div>
@@ -13474,7 +13476,7 @@ dtype: float64</pre>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Summary">Summary<a class="anchor-link" href="#Summary">&#182;</a></h2><p>For some reason JVM implementation was much faster. On average floats JVM implementation was 2.7 times faster than NDK. JVM implementation using shorts was ~2.9 times faster than C++ shorts implementation.</p>
+<h2 id="Summary">Summary<a class="anchor-link" href="#Summary">&#182;</a></h2><p>On average NDK implementation of convolution was almost 2x faster than JVM implementation on both floats and shorts.</p>
 
 </div>
 </div>
@@ -13490,7 +13492,7 @@ dtype: float64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">iplot</span><span class="p">({</span>
@@ -13525,20 +13527,296 @@ dtype: float64</pre>
 <div>
         
         
-            <div id="9a87ef3a-cd0c-49f4-ab76-1d48b46d0120" class="plotly-graph-div" style="height:525px; width:100%;"></div>
+            <div id="444a4c65-0ede-4cd4-a259-d4203bd397d4" class="plotly-graph-div" style="height:525px; width:100%;"></div>
             <script type="text/javascript">
                 require(["plotly"], function(Plotly) {
                     window.PLOTLYENV=window.PLOTLYENV || {};
                     
-                if (document.getElementById("9a87ef3a-cd0c-49f4-ab76-1d48b46d0120")) {
+                if (document.getElementById("444a4c65-0ede-4cd4-a259-d4203bd397d4")) {
                     Plotly.newPlot(
-                        '9a87ef3a-cd0c-49f4-ab76-1d48b46d0120',
-                        [{"marker": {"color": "#CB43E1"}, "mode": "lines", "name": "JVM_COMPLEX", "type": "scatter", "x": ["1024", "2048", "3072", "4096", "5120", "6144", "7168", "8192", "9216", "10240", "11264", "12288", "13312", "14336", "15360", "16384", "17408", "18432", "19456", "20480"], "y": [2326, 3571, 3448, 1031, 2273, 1667, 1613, 429, 1724, 1515, 1064, 1205, 862, 885, 980, 69, 595, 813, 495, 680]}, {"marker": {"color": "#556DFF"}, "mode": "lines", "name": "JVM_REAL", "type": "scatter", "x": ["1024", "2048", "3072", "4096", "5120", "6144", "7168", "8192", "9216", "10240", "11264", "12288", "13312", "14336", "15360", "16384", "17408", "18432", "19456", "20480"], "y": [5000, 5263, 5000, 14286, 1786, 1316, 1351, 926, 2564, 2326, 1667, 1515, 1163, 1176, 1562, 270, 1031, 1266, 877, 1099]}, {"marker": {"color": "#00C677"}, "mode": "lines", "name": "NDK_COMPLEX", "type": "scatter", "x": ["1024", "2048", "3072", "4096", "5120", "6144", "7168", "8192", "9216", "10240", "11264", "12288", "13312", "14336", "15360", "16384", "17408", "18432", "19456", "20480"], "y": [25000, 12500, 8333, 5556, 4762, 4348, 3333, 3125, 2439, 2128, 1818, 1639, 1562, 1429, 1351, 1333, 935, 1136, 820, 971]}, {"marker": {"color": "#008894"}, "mode": "lines", "name": "NDK_REAL", "type": "scatter", "x": ["1024", "2048", "3072", "4096", "5120", "6144", "7168", "8192", "9216", "10240", "11264", "12288", "13312", "14336", "15360", "16384", "17408", "18432", "19456", "20480"], "y": [33333, 20000, 10000, 11111, 5556, 5882, 6250, 5556, 4545, 4000, 3704, 3030, 3030, 3030, 2273, 2632, 2000, 2273, 1724, 2128]}],
+                        '444a4c65-0ede-4cd4-a259-d4203bd397d4',
+                        [{"marker": {"color": "#CB43E1"}, "mode": "lines", "name": "JVM_COMPLEX", "type": "scatter", "x": ["1024", "2048", "3072", "4096", "5120", "6144", "7168", "8192", "9216", "10240", "11264", "12288", "13312", "14336", "15360", "16384", "17408", "18432", "19456", "20480"], "y": [2381, 14286, 1493, 709, 1923, 2128, 1176, 820, 1515, 1282, 1031, 980, 121, 130, 153, 175, 78, 124, 66, 106]}, {"marker": {"color": "#556DFF"}, "mode": "lines", "name": "JVM_REAL", "type": "scatter", "x": ["1024", "2048", "3072", "4096", "5120", "6144", "7168", "8192", "9216", "10240", "11264", "12288", "13312", "14336", "15360", "16384", "17408", "18432", "19456", "20480"], "y": [4762, 12500, 2941, 7692, 4348, 3704, 1786, 725, 2326, 2222, 1429, 1515, 306, 311, 375, 402, 213, 265, 176, 204]}, {"marker": {"color": "#00C677"}, "mode": "lines", "name": "NDK_COMPLEX", "type": "scatter", "x": ["1024", "2048", "3072", "4096", "5120", "6144", "7168", "8192", "9216", "10240", "11264", "12288", "13312", "14336", "15360", "16384", "17408", "18432", "19456", "20480"], "y": [14286, 12500, 8333, 5000, 4762, 4167, 3448, 2857, 2439, 2128, 1786, 362, 352, 291, 257, 229, 211, 238, 179, 211]}, {"marker": {"color": "#008894"}, "mode": "lines", "name": "NDK_REAL", "type": "scatter", "x": ["1024", "2048", "3072", "4096", "5120", "6144", "7168", "8192", "9216", "10240", "11264", "12288", "13312", "14336", "15360", "16384", "17408", "18432", "19456", "20480"], "y": [33333, 20000, 11111, 11111, 7143, 5882, 6250, 5556, 4167, 4000, 3125, 746, 909, 694, 526, 662, 395, 575, 334, 465]}],
                         {"template": {"data": {"bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}}, "type": "bar"}], "barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}}, "type": "barpolar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "histogram": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "histogram"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "scatter": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "FFT full benchmark results"}, "xaxis": {"title": {"text": "FFT width"}}, "yaxis": {"title": {"text": "FFTs / s"}}},
                         {"responsive": true}
                     ).then(function(){
                             
-var gd = document.getElementById('9a87ef3a-cd0c-49f4-ab76-1d48b46d0120');
+var gd = document.getElementById('444a4c65-0ede-4cd4-a259-d4203bd397d4');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })
+                };
+                });
+            </script>
+        </div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="FFT-NDK-/-JVM-speed-comparison">FFT NDK / JVM speed comparison<a class="anchor-link" href="#FFT-NDK-/-JVM-speed-comparison">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">complex</span> <span class="o">=</span> <span class="n">fft</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="s1">&#39;ndk_complex&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">fft</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="s1">&#39;jvm_complex&#39;</span><span class="p">]</span>
+<span class="n">real</span> <span class="o">=</span> <span class="n">fft</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="s1">&#39;ndk_real&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">fft</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="s1">&#39;jvm_real&#39;</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;NDK / JVM (COMPLEX)&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;NDK / JVM (REAL)&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">real</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># complex NDK-to-JVM ratio</span>
+<span class="nb">complex</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[12]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>count    20.000000
+mean      2.659685
+std       1.711970
+min       0.369388
+25%       1.674781
+50%       2.114514
+75%       2.914811
+max       7.052186
+dtype: float64</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># real NDK-to-JVM ratio stats</span>
+<span class="n">real</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[13]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>count    20.000000
+mean      2.546992
+std       1.795768
+min       0.492409
+25%       1.632118
+50%       1.876094
+75%       2.452206
+max       7.663448
+dtype: float64</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="nb">complex</span><span class="p">,</span> <span class="n">real</span><span class="p">]),</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y</span>
+<span class="p">)</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;FFT speed comparison&#39;</span><span class="p">)</span>
+<span class="s1">&#39;&#39;</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[14]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;&#39;</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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
+"
+>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Summary">Summary<a class="anchor-link" href="#Summary">&#182;</a></h2><p>NDK implementation using complex numbers was on average 2.7 times faster than analogous implementation on JVM. On real numbers NDK implementation is ~2.5 times faster. Long right tail means there's a few outliers where NDK implementation was over 7 times faster.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Type-conversions">Type conversions<a class="anchor-link" href="#Type-conversions">&#182;</a></h1><p>The following type conversions were benchmarked:</p>
+<ul>
+<li>short -&gt; float: assuming short value has to be scaled down using a constant representing DAC dynamic range</li>
+<li>float -&gt; short: assuming float value is normalized to &lt;-1, 1&gt; range and has to be scaled up by a constant representing DAC dynamic range</li>
+<li>short -&gt; complex: assuming an array of shorts is in interleaved format where array[k] represent real parts and array[k+1] represent imaginary parts. In C++ std::complex class was used to construct complex objects. In kotlin popular apache math-commons library was used.</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">conversion_means</span> <span class="o">=</span> <span class="n">conversion</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">iplot</span><span class="p">({</span>
+    <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="n">go</span><span class="o">.</span><span class="n">Bar</span><span class="p">(</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;short_float&#39;</span><span class="p">,</span> <span class="s1">&#39;float_short&#39;</span><span class="p">,</span> <span class="s1">&#39;short_complex&#39;</span><span class="p">],</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">conversion_means</span><span class="p">[</span><span class="n">series</span><span class="p">]</span> <span class="k">for</span> <span class="n">series</span> <span class="ow">in</span> <span class="p">[</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{env}</span><span class="s1">_short_float&#39;</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{env}</span><span class="s1">_float_short&#39;</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{env}</span><span class="s1">_short_complex&#39;</span><span class="p">]],</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+            <span class="n">marker_color</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">env</span><span class="p">]</span>
+        <span class="p">)</span> <span class="k">for</span> <span class="n">env</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;jvm&#39;</span><span class="p">,</span> <span class="s1">&#39;ndk&#39;</span><span class="p">]</span>
+    <span class="p">],</span>
+    <span class="s1">&#39;layout&#39;</span><span class="p">:</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="n">barmode</span><span class="o">=</span><span class="s1">&#39;group&#39;</span><span class="p">,</span> <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;conversions / s&#39;</span><span class="p">))</span>
+<span class="p">})</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<div>
+        
+        
+            <div id="6d8479a9-e070-4757-bf5e-94e3c6bb0631" class="plotly-graph-div" style="height:525px; width:100%;"></div>
+            <script type="text/javascript">
+                require(["plotly"], function(Plotly) {
+                    window.PLOTLYENV=window.PLOTLYENV || {};
+                    
+                if (document.getElementById("6d8479a9-e070-4757-bf5e-94e3c6bb0631")) {
+                    Plotly.newPlot(
+                        '6d8479a9-e070-4757-bf5e-94e3c6bb0631',
+                        [{"marker": {"color": "#556DFF"}, "name": "JVM", "type": "bar", "x": ["short_float", "float_short", "short_complex"], "y": [41448653.22, 44436264.78, 3957674.06]}, {"marker": {"color": "#008894"}, "name": "NDK", "type": "bar", "x": ["short_float", "float_short", "short_complex"], "y": [45672283.08, 46688320.12, 45672283.08]}],
+                        {"barmode": "group", "template": {"data": {"bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}}, "type": "bar"}], "barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}}, "type": "barpolar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "histogram": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "histogram"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "scatter": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "zerolinecolor": "white", "zerolinewidth": 2}}}, "yaxis": {"title": {"text": "conversions / s"}}},
+                        {"responsive": true}
+                    ).then(function(){
+                            
+var gd = document.getElementById('6d8479a9-e070-4757-bf5e-94e3c6bb0631');
 var x = new MutationObserver(function (mutations, observer) {{
         var display = window.getComputedStyle(gd).display;
         if (!display || display === 'none') {{
@@ -13582,286 +13860,12 @@ if (outputEl) {{
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">complex</span> <span class="o">=</span> <span class="n">fft</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="s1">&#39;ndk_complex&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">fft</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="s1">&#39;jvm_complex&#39;</span><span class="p">]</span>
-<span class="n">real</span> <span class="o">=</span> <span class="n">fft</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="s1">&#39;ndk_real&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">fft</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="s1">&#39;jvm_real&#39;</span><span class="p">]</span>
-<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;NDK / JVM (COMPLEX)&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;NDK / JVM (REAL)&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">real</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">complex</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[24]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>count    20.000000
-mean      3.608689
-std       4.411019
-min       1.360166
-25%       1.424639
-50%       1.760356
-75%       2.831314
-max      19.318841
-dtype: float64</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">real</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[25]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>count    20.000000
-mean      3.159399
-std       2.189892
-min       0.777754
-25%       1.901084
-50%       2.110978
-75%       3.967487
-max       9.748148
-dtype: float64</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span>
-    <span class="n">x</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="nb">complex</span><span class="p">,</span> <span class="n">real</span><span class="p">]),</span>
-    <span class="n">y</span><span class="o">=</span><span class="n">y</span>
-<span class="p">)</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;FFT speed comparison&#39;</span><span class="p">)</span>
-<span class="s1">&#39;&#39;</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[26]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&#39;&#39;</pre>
-</div>
-
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-"
->
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Summary">Summary<a class="anchor-link" href="#Summary">&#182;</a></h2><p>NDK implementation using complex numbers was on average 3.6 times faster than analogous implementation on JVM. On real numbers NDK implementation is ~3.2 times faster. Long right tail means there's a few outliers where NDK implementation was over 10 times faster.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Type-conversions">Type conversions<a class="anchor-link" href="#Type-conversions">&#182;</a></h1><p>The following type conversions were benchmarked:</p>
-<ul>
-<li>short -&gt; float: assuming short value has to be scaled down using a constant representing DAC dynamic range</li>
-<li>float -&gt; short: assuming float value is normalized to &lt;-1, 1&gt; range and has to be scaled up by a constant representing DAC dynamic range</li>
-<li>short -&gt; complex: assuming an array of shorts is in interleaved format where array[k] represent real parts and array[k+1] represent imaginary parts. In C++ std::complex class was used to construct complex objects. In kotlin popular apache math-commons library was used.</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[34]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">conversion_means</span> <span class="o">=</span> <span class="n">conversion</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[53]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">iplot</span><span class="p">({</span>
-    <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="n">go</span><span class="o">.</span><span class="n">Bar</span><span class="p">(</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;short_float&#39;</span><span class="p">,</span> <span class="s1">&#39;float_short&#39;</span><span class="p">,</span> <span class="s1">&#39;short_complex&#39;</span><span class="p">],</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">conversion_means</span><span class="p">[</span><span class="n">series</span><span class="p">]</span> <span class="k">for</span> <span class="n">series</span> <span class="ow">in</span> <span class="p">[</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{env}</span><span class="s1">_short_float&#39;</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{env}</span><span class="s1">_float_short&#39;</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{env}</span><span class="s1">_short_complex&#39;</span><span class="p">]],</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
-            <span class="n">marker_color</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">env</span><span class="p">]</span>
-        <span class="p">)</span> <span class="k">for</span> <span class="n">env</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;jvm&#39;</span><span class="p">,</span> <span class="s1">&#39;ndk&#39;</span><span class="p">]</span>
-    <span class="p">],</span>
-    <span class="s1">&#39;layout&#39;</span><span class="p">:</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="n">barmode</span><span class="o">=</span><span class="s1">&#39;group&#39;</span><span class="p">,</span> <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;conversions / s&#39;</span><span class="p">))</span>
-<span class="p">})</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-
-<div class="output_html rendered_html output_subarea ">
-<div>
-        
-        
-            <div id="60f462e0-47a9-408c-9148-d0f5bf9eaeb7" class="plotly-graph-div" style="height:525px; width:100%;"></div>
-            <script type="text/javascript">
-                require(["plotly"], function(Plotly) {
-                    window.PLOTLYENV=window.PLOTLYENV || {};
-                    
-                if (document.getElementById("60f462e0-47a9-408c-9148-d0f5bf9eaeb7")) {
-                    Plotly.newPlot(
-                        '60f462e0-47a9-408c-9148-d0f5bf9eaeb7',
-                        [{"marker": {"color": "#556DFF"}, "name": "JVM", "type": "bar", "x": ["short_float", "float_short", "short_complex"], "y": [130999999.76, 207858585.78, 12762324.0]}, {"marker": {"color": "#008894"}, "name": "NDK", "type": "bar", "x": ["short_float", "float_short", "short_complex"], "y": [61083334.7, 63512843.44, 61083334.7]}],
-                        {"barmode": "group", "template": {"data": {"bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}}, "type": "bar"}], "barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}}, "type": "barpolar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "histogram": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "histogram"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "scatter": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "zerolinecolor": "white", "zerolinewidth": 2}}}, "yaxis": {"title": {"text": "conversions / s"}}},
-                        {"responsive": true}
-                    ).then(function(){
-                            
-var gd = document.getElementById('60f462e0-47a9-408c-9148-d0f5bf9eaeb7');
-var x = new MutationObserver(function (mutations, observer) {{
-        var display = window.getComputedStyle(gd).display;
-        if (!display || display === 'none') {{
-            console.log([gd, 'removed!']);
-            Plotly.purge(gd);
-            observer.disconnect();
-        }}
-}});
-
-// Listen for the removal of the full notebook cells
-var notebookContainer = gd.closest('#notebook-container');
-if (notebookContainer) {{
-    x.observe(notebookContainer, {childList: true});
-}}
-
-// Listen for the clearing of the current output cell
-var outputEl = gd.closest('.output');
-if (outputEl) {{
-    x.observe(outputEl, {childList: true});
-}}
-
-                        })
-                };
-                });
-            </script>
-        </div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="JVM-/-NDK-speed-ratio">JVM / NDK speed ratio<a class="anchor-link" href="#JVM-/-NDK-speed-ratio">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[56]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">short_float</span> <span class="o">=</span> <span class="n">conversion_means</span><span class="p">[</span><span class="s1">&#39;jvm_short_float&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">conversion_means</span><span class="p">[</span><span class="s1">&#39;ndk_short_float&#39;</span><span class="p">]</span>
-<span class="n">float_short</span> <span class="o">=</span> <span class="n">conversion_means</span><span class="p">[</span><span class="s1">&#39;jvm_float_short&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">conversion_means</span><span class="p">[</span><span class="s1">&#39;ndk_float_short&#39;</span><span class="p">]</span>
-<span class="n">short_complex</span> <span class="o">=</span> <span class="n">conversion_means</span><span class="p">[</span><span class="s1">&#39;jvm_short_complex&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">conversion_means</span><span class="p">[</span><span class="s1">&#39;ndk_short_complex&#39;</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">short_float</span> <span class="o">=</span> <span class="n">conversion_means</span><span class="p">[</span><span class="s1">&#39;ndk_short_float&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">conversion_means</span><span class="p">[</span><span class="s1">&#39;jvm_short_float&#39;</span><span class="p">]</span>
+<span class="n">float_short</span> <span class="o">=</span> <span class="n">conversion_means</span><span class="p">[</span><span class="s1">&#39;ndk_float_short&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">conversion_means</span><span class="p">[</span><span class="s1">&#39;jvm_float_short&#39;</span><span class="p">]</span>
+<span class="n">short_complex</span> <span class="o">=</span> <span class="n">conversion_means</span><span class="p">[</span><span class="s1">&#39;ndk_short_complex&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">conversion_means</span><span class="p">[</span><span class="s1">&#39;jvm_short_complex&#39;</span><span class="p">]</span>
 
 <span class="n">short_float</span><span class="p">,</span> <span class="n">float_short</span><span class="p">,</span> <span class="n">short_complex</span>
 </pre></div>
@@ -13876,13 +13880,13 @@ if (outputEl) {{
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[56]:</div>
+    <div class="prompt output_prompt">Out[17]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(2.144611134990965, 3.272701622568073, 0.20893299396111717)</pre>
+<pre>(1.1019002918522331, 1.0506805725267352, 11.540183043774958)</pre>
 </div>
 
 </div>
@@ -13894,7 +13898,7 @@ if (outputEl) {{
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Summary">Summary<a class="anchor-link" href="#Summary">&#182;</a></h2><p>On average, JVM implementation was 2.1 times faster at short -&gt; float conversion, 3.3 times faster at float -&gt; short conversion and 5 times slower at short -&gt; complex conversion.</p>
+<h2 id="Summary">Summary<a class="anchor-link" href="#Summary">&#182;</a></h2><p>NDK implementation of short to float and float to short conversion was only slightly faster than JVM implementation. Short to complex NDK implementation was 11 times faster than JVM implementation which should be attributed to differences between library design in both environments.</p>
 
 </div>
 </div>
@@ -13905,8 +13909,7 @@ if (outputEl) {{
 <h1 id="Gotchas">Gotchas<a class="anchor-link" href="#Gotchas">&#182;</a></h1><p>Benchmarking C++ and JVM code is tricky. Here's a few gotchas we found:</p>
 <ul>
 <li>JVM needs warm-up. The first run is often slower than the following runs.</li>
-<li>JVM JIT can eliminate a for loop alltogether in some cases</li>
-<li>Using simple arrays instead of std::vector in C++ gave us considerable speed boost (~40%).</li>
+<li>for loops in both environments can be removed alltogether by compiler (JIT in case of JVM) if the variables modified inside the loop are not visible outside or the value can be calculated during compile-time.</li>
 </ul>
 
 </div>
