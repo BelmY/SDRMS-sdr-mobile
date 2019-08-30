@@ -6,3 +6,4 @@ build/
 local.properties
 /benchmark/captures
 .externalNativeBuild
+release/
