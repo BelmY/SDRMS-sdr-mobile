@@ -1,0 +1,2 @@
+include ':app', ':hackrf_android'
+rootProject.name='SDR Mobile'
