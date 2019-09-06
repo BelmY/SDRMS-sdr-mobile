@@ -9,8 +9,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 import com.mantz_it.hackrf_android.Hackrf
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
-import kotlin.reflect.typeOf
+import android.text.method.ScrollingMovementMethod
 
+
+enum class UIState {
+    STARTED, INITIALIZED, RECEIVING
+}
 
 class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
 
@@ -29,6 +33,8 @@ class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
     private var amp = false
     private var antennaPower = false
 
+    var stopRequested = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -40,33 +46,70 @@ class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
         }
         startButton = findViewById(R.id.startButton)
         startButton.setOnClickListener {
-            tvOutput.append("RX Start\n")
-            thread {this.receiveThread()}
+            startRX()
         }
-
+        tvOutput.movementMethod = ScrollingMovementMethod()
+        setUIState(UIState.STARTED)
         tvOutput.append("Ready...\n")
+    }
+
+    private fun startRX() {
+        tvOutput.append("RX Start\n")
+        thread {this.receiveThread()}
+    }
+
+    private fun stopRX() {
+        tvOutput.append("\nRX Stop\n")
+        stopRequested = true
     }
 
     private fun initHackrf() {
         val context = applicationContext
         val queueSize = samplingRate * 2    // buffer 1 second
         if(!Hackrf.initHackrf(context, this, queueSize)) {
-            val queueSize = samplingRate * 2    // buffer 1 second
+            tvOutput.append("HackRF initialization failed.\n")
+            setUIState(UIState.STARTED)
+        }
+    }
+
+    private fun setUIState(state: UIState) {
+        when (state) {
+            UIState.STARTED -> {
+                initButton.isEnabled = true
+                startButton.isEnabled = false
+                stopRequested = false
+            }
+            UIState.INITIALIZED -> {
+                initButton.isEnabled = false
+                startButton.isEnabled = true
+                stopRequested = false
+                startButton.text = "RX Start"
+                startButton.setOnClickListener { startRX() }
+            }
+            UIState.RECEIVING -> {
+                initButton.isEnabled = false
+                startButton.isEnabled = true
+                startButton.text = "RX Stop"
+                startButton.setOnClickListener {
+                    stopRX()
+                }
+            }
         }
     }
 
     override fun onHackrfReady(hackrf: Hackrf) {
         tvOutput.append("HackRF is ready!\n")
         this.hackrf = hackrf
-        // TODO: set appropriate UI state
+        setUIState(UIState.INITIALIZED)
     }
 
     override fun onHackrfError(message: String) {
         tvOutput.append("Error while opening HackRF: $message\n")  // FIXME: message not displayed
-        // TODO: set appropriate UI state
+        setUIState(UIState.STARTED)
     }
 
     private fun receiveThread() {
+        setUIState(UIState.RECEIVING)
         printOnScreen("Setting sample rate to $samplingRate sps ... ")
         hackrf.setSampleRate(samplingRate, 1)
         printOnScreen("ok.\nSetting center requency to $centerFreq Hz ... ")
@@ -74,7 +117,7 @@ class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
         printOnScreen("ok.\nSetting baseband filter bandwidth to $bandwidth Hz ... ")
         hackrf.setBasebandFilterBandwidth(bandwidth)
         printOnScreen("ok.\nSetting RX VGA Gain to $vgaGain ... ")
-        hackrf.setRxVGAGain(vgaGain);
+        hackrf.setRxVGAGain(vgaGain)
         printOnScreen("ok.\nSetting LNA Gain to $lnaGain ... ")
         hackrf.setRxLNAGain(lnaGain)
         printOnScreen("ok.\nSetting Amplifier to $amp ... ")
@@ -83,14 +126,14 @@ class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
         hackrf.setAntennaPower(antennaPower)
         printOnScreen("ok.\n\n")
 
-        printOnScreen("Start Receiving... \n")
+        printOnScreen("RX Started\n")
         val queue = hackrf.startRX()
 
         // Run until user hits the 'Stop' button
         var i = 0
         var lastTransceiverPacketCounter = 0L
         var lastTransceivingTime = 0L
-        while (true) {
+        while (!stopRequested) {
             i++    // only for statistics
 
             // Grab one packet from the top of the queue. Will block if queue is
@@ -119,7 +162,7 @@ class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
                 // IMPORTANT: After we used the receivedBytes buffer and don't need it any more,
                 // we should return it to the buffer pool of the hackrf! This will save a lot of
                 // allocation time and the garbage collector won't go off every second.
-                hackrf.returnBufferToBufferPool(receivedBytes);
+                hackrf.returnBufferToBufferPool(receivedBytes)
             } else {
                 printOnScreen("Error: buffer underrun, RX stopped\n")
                 // TODO: update UI state
@@ -144,6 +187,7 @@ class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
                 lastTransceivingTime = hackrf.transceivingTime
             }
         }
+        setUIState(UIState.INITIALIZED)
     }
 
     private fun printOnScreen(msg: String) {
