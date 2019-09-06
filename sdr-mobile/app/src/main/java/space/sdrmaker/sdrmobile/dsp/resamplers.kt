@@ -1,6 +1,6 @@
 package space.sdrmaker.sdrmobile.dsp
 
-class Upsampler (val input: Iterator<Float>, val factor: Int) : Iterator<Float> {
+class Upsampler (private val input: Iterator<Float>, val factor: Int) : Iterator<Float> {
     var state = -1
 
     override fun next(): Float {
