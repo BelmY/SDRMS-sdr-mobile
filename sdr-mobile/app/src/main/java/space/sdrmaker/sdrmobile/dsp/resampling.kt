@@ -14,3 +14,16 @@ class Upsampler (val input: Iterator<Float>, val factor: Int) : Iterator<Float> 
 
     override fun hasNext(): Boolean = input.hasNext()
 }
+
+class Downsampler (val input: Iterator<Float>, val factor: Int) : Iterator<Float> {
+
+    override fun next(): Float {
+        val out = input.next()
+        for (i in 1 until factor)
+            input.next()
+
+        return out
+    }
+
+    override fun hasNext(): Boolean = input.hasNext()
+}
