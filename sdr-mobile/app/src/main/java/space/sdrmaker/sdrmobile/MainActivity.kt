@@ -10,6 +10,7 @@ import com.mantz_it.hackrf_android.Hackrf
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 import android.text.method.ScrollingMovementMethod
+import space.sdrmaker.sdrmobile.dsp.IQFileReader
 
 
 enum class UIState {
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
     // UI
     private lateinit var initButton: Button
     private lateinit var startButton: Button
+    private lateinit var fileButton: Button
     private val handler = Handler()
 
     // SDR
@@ -48,6 +50,10 @@ class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
         startButton.setOnClickListener {
             startRX()
         }
+        fileButton = findViewById(R.id.fileButton)
+        fileButton.setOnClickListener {
+            readFile()
+        }
         tvOutput.movementMethod = ScrollingMovementMethod()
         setUIState(UIState.STARTED)
         tvOutput.append("Ready...\n")
@@ -61,6 +67,19 @@ class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
     private fun stopRX() {
         tvOutput.append("\nRX Stop\n")
         stopRequested = true
+    }
+
+    private fun readFile() {
+        thread {
+            var path = "${applicationContext!!.getExternalFilesDir(null)}/iqfile.iq"
+            val reader = IQFileReader(path)
+            while(reader.hasNext()) {
+                val iq = reader.next()
+                println("(${iq.first},${iq.second})\n")
+                printOnScreen("(${iq.first};${iq.second})\n")
+                Thread.sleep(300)
+            }
+        }
     }
 
     private fun initHackrf() {
