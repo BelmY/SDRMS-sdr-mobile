@@ -5,6 +5,7 @@ import org.junit.Test
 import org.junit.Assert.*
 import space.sdrmaker.sdrmobile.dsp.Downsampler
 import space.sdrmaker.sdrmobile.dsp.FIRFilter
+import space.sdrmaker.sdrmobile.dsp.IQFileReader
 import space.sdrmaker.sdrmobile.dsp.Upsampler
 
 class UnitTest {
@@ -46,5 +47,20 @@ class UnitTest {
 
         assertArrayEquals(expected, out, 0.1F)
         assertEquals(false, filter.hasNext())
+    }
+
+    @Test
+    fun test_IQFileReader() {
+        val path = this::class.java.classLoader!!.getResource("iqsample.iq").path
+        val reader = IQFileReader(path)
+        assertEquals(true, reader.hasNext())
+        val iq = reader.next()
+        assertArrayEquals(
+            floatArrayOf(iq.first, iq.second),
+            floatArrayOf(-2.21362957e-04f, -6.103702e-05f),
+            0.0001f
+        )
+        assertEquals(false, reader.hasNext())
+
     }
 }
