@@ -10,7 +10,9 @@ import com.mantz_it.hackrf_android.Hackrf
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 import android.text.method.ScrollingMovementMethod
+import space.sdrmaker.sdrmobile.dsp.ComplexResampler
 import space.sdrmaker.sdrmobile.dsp.IQFileReader
+import space.sdrmaker.sdrmobile.dsp.IQFileWriter
 
 
 enum class UIState {
@@ -23,6 +25,7 @@ class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
     private lateinit var initButton: Button
     private lateinit var startButton: Button
     private lateinit var fileButton: Button
+    private lateinit var resampleButton: Button
     private val handler = Handler()
 
     // SDR
@@ -54,6 +57,10 @@ class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
         fileButton.setOnClickListener {
             readFile()
         }
+        resampleButton = findViewById(R.id.resampleButton)
+        resampleButton.setOnClickListener {
+            resampleFile()
+        }
         tvOutput.movementMethod = ScrollingMovementMethod()
         setUIState(UIState.STARTED)
         tvOutput.append("Ready...\n")
@@ -61,7 +68,7 @@ class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
 
     private fun startRX() {
         tvOutput.append("RX Start\n")
-        thread {this.receiveThread()}
+        thread { this.receiveThread() }
     }
 
     private fun stopRX() {
@@ -73,7 +80,7 @@ class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
         thread {
             var path = "${applicationContext!!.getExternalFilesDir(null)}/iqfile.iq"
             val reader = IQFileReader(path)
-            while(reader.hasNext()) {
+            while (reader.hasNext()) {
                 val iq = reader.next()
                 println("(${iq.first},${iq.second})\n")
                 printOnScreen("(${iq.first};${iq.second})\n")
@@ -82,10 +89,25 @@ class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
         }
     }
 
+    private fun resampleFile() {
+        thread {
+            printOnScreen("Resampling started.\n")
+            var readPath = "${applicationContext!!.getExternalFilesDir(null)}/noaa_sample.iq"
+            var writePath =
+                "${applicationContext!!.getExternalFilesDir(null)}/noaa_sample_resampled.iq"
+            val reader = IQFileReader(readPath)
+            val resampler = ComplexResampler(reader, 2, 3)
+
+            val writer = IQFileWriter()
+            writer.write(resampler, writePath)
+            printOnScreen("Resampling finished.\n")
+        }
+    }
+
     private fun initHackrf() {
         val context = applicationContext
         val queueSize = samplingRate * 2    // buffer 1 second
-        if(!Hackrf.initHackrf(context, this, queueSize)) {
+        if (!Hackrf.initHackrf(context, this, queueSize)) {
             tvOutput.append("HackRF initialization failed.\n")
             setUIState(UIState.STARTED)
         }

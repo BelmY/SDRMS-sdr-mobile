@@ -1,13 +1,12 @@
 package space.sdrmaker.sdrmobile.dsp
 
 import java.io.File
-import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-class IQFileReader (path: String) : Iterator<Pair<Float, Float>> {
+class IQFileReader(path: String) : Iterator<Pair<Float, Float>> {
 
-    private var stream: FileInputStream = File(path).inputStream()
+    private var stream = File(path).inputStream().buffered()
     private lateinit var iq: Pair<Float, Float>
     private var closed = false
 
@@ -24,7 +23,7 @@ class IQFileReader (path: String) : Iterator<Pair<Float, Float>> {
     private fun readIQ() {
         val bytes = ByteArray(8)
         val read = stream.read(bytes)
-        if(read < 8) {
+        if (read < 8) {
             stream.close()
             closed = true
         }
@@ -35,4 +34,22 @@ class IQFileReader (path: String) : Iterator<Pair<Float, Float>> {
 
     override fun hasNext(): Boolean = !closed
 
+}
+
+class IQFileWriter {
+    fun write(input: Iterator<Pair<Float, Float>>, path: String) {
+        val stream = File(path).outputStream().buffered()
+        var count = 0
+        while (input.hasNext()) {
+            if (count++.rem(100) == 0) {
+                println(count - 1)
+            }
+            val next = input.next()
+            var bytes = ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putFloat(next.first)
+                .putFloat(4, next.second).array()
+            stream.write(bytes)
+        }
+        stream.flush()
+        stream.close()
+    }
 }
