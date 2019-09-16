@@ -9,7 +9,7 @@ of receiving, decoding and displaying satellite data. NOAA satellites are a good
 because of their signal strength and well-known encoding standards. 
 APT modulation scheme was chosen because of its low CPU demand and good signal quality.
 
-[SDR Mobile](docs/sdr-mobile.png)
+![SDR Mobile](docs/sdr-mobile.png)
 
 # Project structure
 
