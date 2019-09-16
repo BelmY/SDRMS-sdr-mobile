@@ -34,3 +34,9 @@ SDR Mobile application is the actual implementation of the NOAA decoder.
 
 Both applications were developed with Android Studio and are managed by gradle. They can be ran 
 either by using Android Studio or by downloading and installing the artifact from CI/CD pipeline.
+
+# License
+
+TODO: license
+
+&copy; 2019 [TEONITE](https://teonite.com)
