@@ -53,3 +53,21 @@ class IQFileWriter {
         stream.close()
     }
 }
+
+class RawFileWriter {
+    fun write(input: Iterator<Float>, path: String) {
+        val stream = File(path).outputStream().buffered()
+        var count = 0
+        while (input.hasNext()) {
+            if (count++.rem(100) == 0) {
+                println(count - 1)
+            }
+            val next = input.next()
+            var bytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN)
+                .putFloat(next).array()
+            stream.write(bytes)
+        }
+        stream.flush()
+        stream.close()
+    }
+}

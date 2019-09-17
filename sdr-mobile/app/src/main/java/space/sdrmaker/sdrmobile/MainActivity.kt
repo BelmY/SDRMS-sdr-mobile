@@ -10,9 +10,7 @@ import com.mantz_it.hackrf_android.Hackrf
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 import android.text.method.ScrollingMovementMethod
-import space.sdrmaker.sdrmobile.dsp.ComplexResampler
-import space.sdrmaker.sdrmobile.dsp.IQFileReader
-import space.sdrmaker.sdrmobile.dsp.IQFileWriter
+import space.sdrmaker.sdrmobile.dsp.*
 
 
 enum class UIState {
@@ -26,6 +24,7 @@ class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
     private lateinit var startButton: Button
     private lateinit var fileButton: Button
     private lateinit var resampleButton: Button
+    private lateinit var demodButton: Button
     private val handler = Handler()
 
     // SDR
@@ -61,6 +60,11 @@ class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
         resampleButton.setOnClickListener {
             resampleFile()
         }
+        demodButton = findViewById(R.id.demodButton)
+        demodButton.setOnClickListener {
+            demodulateFile()
+        }
+
         tvOutput.movementMethod = ScrollingMovementMethod()
         setUIState(UIState.STARTED)
         tvOutput.append("Ready...\n")
@@ -103,6 +107,22 @@ class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
             printOnScreen("Resampling finished.\n")
         }
     }
+
+    private fun demodulateFile() {
+        thread {
+            printOnScreen("FM demodulation started.\n")
+            var readPath = "${applicationContext!!.getExternalFilesDir(null)}/fm.iq"
+            var writePath =
+                "${applicationContext!!.getExternalFilesDir(null)}/fm-demod.raw"
+            val reader = IQFileReader(readPath)
+            val demodulator = FMDemodulator(reader, 75000, ModulationType.WFM)
+
+            val writer = RawFileWriter()
+            writer.write(demodulator, writePath)
+            printOnScreen("FM demodulation finished.\n")
+        }
+    }
+
 
     private fun initHackrf() {
         val context = applicationContext
