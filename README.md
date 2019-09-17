@@ -37,6 +37,6 @@ either by using Android Studio or by downloading and installing the artifact fro
 
 # License
 
-TODO: license
-
 &copy; 2019 [TEONITE](https://teonite.com)
+
+Licensed under the [Apache 2.0](LICENSE).
