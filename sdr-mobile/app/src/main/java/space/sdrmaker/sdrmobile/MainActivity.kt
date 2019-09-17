@@ -86,7 +86,6 @@ class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
             val reader = IQFileReader(path)
             while (reader.hasNext()) {
                 val iq = reader.next()
-                println("(${iq.first},${iq.second})\n")
                 printOnScreen("(${iq.first};${iq.second})\n")
                 Thread.sleep(300)
             }
