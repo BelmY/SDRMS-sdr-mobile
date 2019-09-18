@@ -39,7 +39,7 @@ class FIRFilter(private val input: Iterator<Float>, private val coefs: FloatArra
         return result
     }
 
-    override fun hasNext(): Boolean = input.hasNext()
+    override fun hasNext() = input.hasNext()
 }
 
 class ComplexFIRFilter(

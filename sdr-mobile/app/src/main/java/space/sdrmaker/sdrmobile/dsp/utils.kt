@@ -32,7 +32,7 @@ class IQFileReader(path: String) : Iterator<Pair<Float, Float>> {
         iq = Pair(buffer.float, buffer.float)
     }
 
-    override fun hasNext(): Boolean = !closed
+    override fun hasNext() = !closed
 
 }
 

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SDR Mobile</string>
+    <string name="tab_1_title">RX</string>
+    <string name="tab_2_title">FM Demod</string>
+    <string name="tab_3_title">Read File</string>
+    <string name="tab_4_title">Resampling</string>
 </resources>
