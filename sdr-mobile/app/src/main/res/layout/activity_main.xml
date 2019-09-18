@@ -42,7 +42,7 @@
         android:layout_height="55dp"
         android:text="Read File"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/resampleButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/startButton"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.795" />
@@ -51,12 +51,14 @@
         android:id="@+id/resampleButton"
         android:layout_width="85dp"
         android:layout_height="55dp"
+        android:layout_marginEnd="121dp"
+        android:layout_marginRight="121dp"
         android:text="Resamp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/fileButton"
+        app:layout_constraintEnd_toStartOf="@+id/demodButton"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.795" />
+        app:layout_constraintVertical_bias="0.921" />
 
     <Button
         android:id="@+id/startButton"
@@ -74,7 +76,10 @@
         android:layout_width="85dp"
         android:layout_height="55dp"
         android:text="FM Demod"
-        tools:layout_editor_absoluteX="12dp"
-        tools:layout_editor_absoluteY="611dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/resampleButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.921" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

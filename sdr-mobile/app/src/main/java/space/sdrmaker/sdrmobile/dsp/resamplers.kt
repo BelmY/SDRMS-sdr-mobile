@@ -1,25 +1,5 @@
 package space.sdrmaker.sdrmobile.dsp
 
-val FIR_COEFFS = floatArrayOf(
-    -7.383784e-03f,
-    -3.183046e-03f, 2.255039e-03f, 7.461166e-03f, 1.091908e-02f,
-    1.149109e-02f, 8.769802e-03f, 3.252932e-03f, -3.720606e-03f,
-    -1.027446e-02f, -1.447403e-02f, -1.486427e-02f, -1.092423e-02f,
-    -3.307958e-03f, 6.212477e-03f, 1.511364e-02f, 2.072873e-02f,
-    2.096037e-02f, 1.492345e-02f, 3.347624e-03f, -1.138407e-02f,
-    -2.560252e-02f, -3.507114e-02f, -3.591225e-02f, -2.553830e-02f,
-    -3.371569e-03f, 2.882645e-02f, 6.711368e-02f, 1.060042e-01f,
-    1.394643e-01f, 1.620650e-01f, 1.700462e-01f, 1.620650e-01f,
-    1.394643e-01f, 1.060042e-01f, 6.711368e-02f, 2.882645e-02f,
-    -3.371569e-03f, -2.553830e-02f, -3.591225e-02f, -3.507114e-02f,
-    -2.560252e-02f, -1.138407e-02f, 3.347624e-03f, 1.492345e-02f,
-    2.096037e-02f, 2.072873e-02f, 1.511364e-02f, 6.212477e-03f,
-    -3.307958e-03f, -1.092423e-02f, -1.486427e-02f, -1.447403e-02f,
-    -1.027446e-02f, -3.720606e-03f, 3.252932e-03f, 8.769802e-03f,
-    1.149109e-02f, 1.091908e-02f, 7.461166e-03f, 2.255039e-03f,
-    -3.183046e-03f, -7.383784e-03f
-)
-
 class Upsampler(private val input: Iterator<Float>, private val factor: Int) : Iterator<Float> {
     private var state = -1
 
@@ -76,24 +56,20 @@ class ComplexDownsampler(private val input: Iterator<Pair<Float, Float>>, privat
     override fun hasNext() = input.hasNext()
 }
 
-class Decimator(input: Iterator<Float>, factor: Int) : Iterator<Float> {
+class Decimator(input: Iterator<Float>, factor: Int, taps: FloatArray) : Iterator<Float> {
 
-    private val filter = FIRFilter(input, calculateFilterCoeffs())
+    private val filter = FIRFilter(input, taps)
     private val downsampler = Downsampler(filter, factor)
 
     override fun hasNext() = downsampler.hasNext()
 
-    override fun next(): Float {
-        return downsampler.next()
-    }
-
-    private fun calculateFilterCoeffs() = FIR_COEFFS
+    override fun next() = downsampler.next()
 }
 
-class ComplexDecimator(input: Iterator<Pair<Float, Float>>, factor: Int) :
+class ComplexDecimator(input: Iterator<Pair<Float, Float>>, factor: Int, taps: FloatArray) :
     Iterator<Pair<Float, Float>> {
 
-    private val filter = ComplexFIRFilter(input, calculateFilterCoeffs())
+    private val filter = ComplexFIRFilter(input, taps)
     private val downsampler = ComplexDownsampler(filter, factor)
 
     override fun next(): Pair<Float, Float> {
@@ -101,59 +77,63 @@ class ComplexDecimator(input: Iterator<Pair<Float, Float>>, factor: Int) :
     }
 
     override fun hasNext() = downsampler.hasNext()
-
-    private fun calculateFilterCoeffs() = FIR_COEFFS
 }
 
-class Interpolator(input: Iterator<Float>, factor: Int) : Iterator<Float> {
+class Interpolator(input: Iterator<Float>, factor: Int, taps: FloatArray) : Iterator<Float> {
 
     private val upsampler = Upsampler(input, factor)
-    private val filter = FIRFilter(upsampler, calculateFilterCoeffs())
+    private val filter = FIRFilter(upsampler, taps)
 
     override fun hasNext() = filter.hasNext()
 
     override fun next(): Float {
         return filter.next()
     }
-
-    private fun calculateFilterCoeffs() = FIR_COEFFS
 }
 
-class ComplexInterpolator(input: Iterator<Pair<Float, Float>>, factor: Int) :
+class ComplexInterpolator(input: Iterator<Pair<Float, Float>>, factor: Int, taps: FloatArray) :
     Iterator<Pair<Float, Float>> {
 
     private val upsampler = ComplexUpsampler(input, factor)
-    private val filter = ComplexFIRFilter(upsampler, calculateFilterCoeffs())
+    private val filter = ComplexFIRFilter(upsampler, taps)
 
     override fun hasNext() = filter.hasNext()
 
     override fun next(): Pair<Float, Float> {
         return filter.next()
     }
-
-    private fun calculateFilterCoeffs() = FIR_COEFFS
 }
 
 
-class Resampler(input: Iterator<Float>, interpolation: Int, decimation: Int) : Iterator<Float> {
+class Resampler(
+    input: Iterator<Float>,
+    interpolation: Int,
+    decimation: Int,
+    interpolatorTaps: FloatArray,
+    decimatorTaps: FloatArray
+) : Iterator<Float> {
 
-    private val interpolator = Interpolator(input, interpolation)
-    private val decimator = Decimator(interpolator, decimation)
+    private val interpolator = Interpolator(input, interpolation, interpolatorTaps)
+    private val decimator = Decimator(interpolator, decimation, decimatorTaps)
 
     override fun hasNext() = decimator.hasNext()
 
     override fun next() = decimator.next()
-
 }
 
-class ComplexResampler(input: Iterator<Pair<Float, Float>>, interpolation: Int, decimation: Int) :
+class ComplexResampler(
+    input: Iterator<Pair<Float, Float>>,
+    interpolation: Int,
+    decimation: Int,
+    interpolatorTaps: FloatArray,
+    decimatorTaps: FloatArray
+) :
     Iterator<Pair<Float, Float>> {
 
-    private val interpolator = ComplexInterpolator(input, interpolation)
-    private val decimator = ComplexDecimator(interpolator, decimation)
+    private val interpolator = ComplexInterpolator(input, interpolation, interpolatorTaps)
+    private val decimator = ComplexDecimator(interpolator, decimation, decimatorTaps)
 
     override fun hasNext() = decimator.hasNext()
 
     override fun next() = decimator.next()
-
 }

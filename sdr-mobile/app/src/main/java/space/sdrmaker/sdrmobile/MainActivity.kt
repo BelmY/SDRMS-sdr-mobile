@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity(), HackrfCallbackInterface {
             var writePath =
                 "${applicationContext!!.getExternalFilesDir(null)}/noaa_sample_resampled.iq"
             val reader = IQFileReader(readPath)
-            val resampler = ComplexResampler(reader, 2, 3)
+            val resampler = ComplexResampler(reader, 2, 3, NOAA_TAPS, NOAA_TAPS)
 
             val writer = IQFileWriter()
             writer.write(resampler, writePath)
