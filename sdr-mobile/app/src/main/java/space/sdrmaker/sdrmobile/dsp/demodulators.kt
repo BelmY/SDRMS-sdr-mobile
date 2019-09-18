@@ -11,7 +11,7 @@ enum class ModulationType {
 val QUADRATURE_RATE = mapOf(
     Pair(ModulationType.AM, 2 * AUDIO_RATE),
     Pair(ModulationType.NFM, 2 * AUDIO_RATE),
-    Pair(ModulationType.WFM, 8 * AUDIO_RATE),
+    Pair(ModulationType.WFM, 2 * AUDIO_RATE),
     Pair(ModulationType.LSB, 2 * AUDIO_RATE),
     Pair(ModulationType.USB, 2 * AUDIO_RATE)
 )
