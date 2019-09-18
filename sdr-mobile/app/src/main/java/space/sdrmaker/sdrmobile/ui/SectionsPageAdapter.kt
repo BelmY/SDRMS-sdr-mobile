@@ -25,6 +25,7 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
         return when(position) {
             0 -> RXFragment()
             1 -> ReadFileFragment()
+            2 -> ResamplingFragment()
             else -> RXFragment()
         }
     }
@@ -34,6 +35,6 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
     }
 
     override fun getCount(): Int {
-        return 2
+        return 3
     }
 }
