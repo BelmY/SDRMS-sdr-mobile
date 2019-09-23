@@ -3,6 +3,13 @@ package space.sdrmaker.sdrmobile.dsp
 import java.io.File
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import android.media.AudioTrack
+import android.media.AudioRecord.MetricsConstants.CHANNELS
+import android.media.AudioAttributes
+import android.media.AudioFormat
+import android.media.AudioTrack.WRITE_BLOCKING
+import kotlin.math.sin
+
 
 class IQFileReader(path: String) : Iterator<Pair<Float, Float>> {
 
@@ -62,4 +69,60 @@ class RawFileWriter {
         stream.flush()
         stream.close()
     }
+}
+
+const val AUDIO_SAMPLE_RATE = 44100
+
+class AudioSink {
+    fun write(input: Iterator<Float>, print: (String) -> Unit) {
+        var mBufferSize = AudioTrack.getMinBufferSize(
+            AUDIO_SAMPLE_RATE,
+            AudioFormat.CHANNEL_OUT_MONO,
+            AudioFormat.ENCODING_PCM_FLOAT
+        )
+        if (mBufferSize == AudioTrack.ERROR || mBufferSize == AudioTrack.ERROR_BAD_VALUE) {
+            mBufferSize = AUDIO_SAMPLE_RATE * CHANNELS.toInt() * 2
+        }
+
+        val audioTrack = AudioTrack.Builder()
+            .setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build()
+            )
+            .setAudioFormat(
+                AudioFormat.Builder()
+                    .setEncoding(AudioFormat.ENCODING_PCM_FLOAT)
+                    .setSampleRate(AUDIO_SAMPLE_RATE)
+                    .setChannelMask(AudioFormat.CHANNEL_OUT_MONO).build()
+            )
+            .setBufferSizeInBytes(mBufferSize)
+            .setTransferMode(AudioTrack.MODE_STREAM)
+            .build()
+        audioTrack.play()
+        val buffer = FloatArray(mBufferSize) { 0f }
+        var samplesToWrite = 0
+        while (input.hasNext()) {
+            for (i in 0 until mBufferSize) {
+                buffer[i] = input.next()
+                samplesToWrite = i
+                if (!input.hasNext())
+                    break
+            }
+            audioTrack.write(buffer, 0, samplesToWrite, WRITE_BLOCKING)
+        }
+    }
+}
+
+class SineWaveSource(private val frequency: Int) : Iterator<Float> {
+
+    private var t = 1
+
+    override fun hasNext() = t < AUDIO_RATE * 5
+
+    override fun next(): Float {
+        return sin(2 * Math.PI * frequency * t++ / AUDIO_RATE).toFloat()
+    }
+
 }

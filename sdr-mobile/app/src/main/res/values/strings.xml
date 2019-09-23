@@ -4,4 +4,6 @@
     <string name="tab_2_title">Read File</string>
     <string name="tab_3_title">Resampling</string>
     <string name="tab_4_title">FM Demod</string>
+    <string name="tab_5_title">Audio</string>
+    <string name="tab_6_title">FM Rcv</string>
 </resources>
