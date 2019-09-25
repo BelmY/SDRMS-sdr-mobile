@@ -74,7 +74,7 @@ class RawFileWriter {
 const val AUDIO_SAMPLE_RATE = 44100
 
 class AudioSink {
-    fun write(input: Iterator<Float>) {
+    fun write(input: Iterator<Float>, print: (String) -> Unit) {
         var mBufferSize = AudioTrack.getMinBufferSize(
             AUDIO_SAMPLE_RATE,
             AudioFormat.CHANNEL_OUT_MONO,
@@ -100,7 +100,6 @@ class AudioSink {
             .setBufferSizeInBytes(mBufferSize)
             .setTransferMode(AudioTrack.MODE_STREAM)
             .build()
-
         audioTrack.play()
         val buffer = FloatArray(mBufferSize) { 0f }
         var samplesToWrite = 0
@@ -113,7 +112,6 @@ class AudioSink {
             }
             audioTrack.write(buffer, 0, samplesToWrite, WRITE_BLOCKING)
         }
-        Thread.sleep(5000)
     }
 }
 
@@ -125,6 +123,19 @@ class SineWaveSource(private val frequency: Int) : Iterator<Float> {
 
     override fun next(): Float {
         return sin(2 * Math.PI * frequency * t++ / AUDIO_RATE).toFloat()
+    }
+
+}
+
+class ComplexSineWaveSource(private val frequency: Int) : Iterator<Pair<Float, Float>> {
+
+    private var t = 1
+
+    override fun hasNext() = t < AUDIO_RATE * 5
+
+    override fun next(): Pair<Float, Float> {
+        val value = sin(2 * Math.PI * frequency * t++ / AUDIO_RATE).toFloat()
+        return Pair(value, value)
     }
 
 }

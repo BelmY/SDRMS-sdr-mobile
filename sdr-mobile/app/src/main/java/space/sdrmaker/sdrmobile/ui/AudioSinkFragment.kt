@@ -53,7 +53,7 @@ class AudioSinkFragment: Fragment() {
 //            writer.write(demodulator, writePath)
             val sink = AudioSink()
             val sine = SineWaveSource(440)
-            sink.write(sine)
+//            sink.write(sine)
             printOnScreen("FM demodulation finished.\n")
         }
     }

@@ -25,9 +25,10 @@ class FMDemodulator(
 
     private val quadratureRate = (QUADRATURE_RATE[modulation] ?: 2 * AUDIO_RATE).toFloat()
     private val quadratureGain = (quadratureRate / (2 * Math.PI * maxDeviation)).toFloat()
-    private var previousSample = input.next()
+    private lateinit var previousSample: Pair<Float, Float>
 
     override fun next(): Float {
+        if (!this::previousSample.isInitialized) previousSample = input.next()
         val sample = input.next()
 
         // Quadrature demodulation

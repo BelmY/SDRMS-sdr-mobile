@@ -11,7 +11,8 @@ private val TAB_TITLES = arrayOf(
     R.string.tab_2_title,
     R.string.tab_3_title,
     R.string.tab_4_title,
-    R.string.tab_5_title
+    R.string.tab_5_title,
+    R.string.tab_6_title
 )
 
 /**
@@ -29,6 +30,7 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
             2 -> ResamplingFragment()
             3 -> FMDemodFragment()
             4 -> AudioSinkFragment()
+            5 -> FMRcvFragment()
             else -> RXFragment()
         }
     }
@@ -38,6 +40,6 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
     }
 
     override fun getCount(): Int {
-        return 5
+        return 6
     }
 }
