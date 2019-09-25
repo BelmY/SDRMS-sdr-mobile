@@ -126,16 +126,3 @@ class SineWaveSource(private val frequency: Int) : Iterator<Float> {
     }
 
 }
-
-class ComplexSineWaveSource(private val frequency: Int) : Iterator<Pair<Float, Float>> {
-
-    private var t = 1
-
-    override fun hasNext() = t < AUDIO_RATE * 5
-
-    override fun next(): Pair<Float, Float> {
-        val value = sin(2 * Math.PI * frequency * t++ / AUDIO_RATE).toFloat()
-        return Pair(value, value)
-    }
-
-}

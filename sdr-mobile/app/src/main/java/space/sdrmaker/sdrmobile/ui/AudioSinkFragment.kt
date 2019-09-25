@@ -26,12 +26,12 @@ class AudioSinkFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        root = inflater.inflate(R.layout.fragment_fmdemod, container, false)
+        root = inflater.inflate(R.layout.fragment_audio, container, false)
 
         // setup UI
-        playButton = root.findViewById(R.id.demodButton)
+        playButton = root.findViewById(R.id.playButton)
         playButton.setOnClickListener {
-            demodulateFile()
+            playSineWave()
         }
         tvOutput = root.findViewById<Button>(R.id.tvOutput)
         tvOutput.movementMethod = ScrollingMovementMethod()
@@ -40,21 +40,13 @@ class AudioSinkFragment: Fragment() {
         return root
     }
 
-    private fun demodulateFile() {
+    private fun playSineWave() {
         thread {
-            printOnScreen("FM demodulation started.\n")
-            var readPath = "${context!!.getExternalFilesDir(null)}/fm.iq"
-//            var writePath =
-//                "${context!!.getExternalFilesDir(null)}/fm-demod.raw"
-            val reader = IQFileReader(readPath)
-            val demodulator = FMDemodulator(reader, 75000, ModulationType.WFM)
-
-//            val writer = RawFileWriter()
-//            writer.write(demodulator, writePath)
+            printOnScreen("AudioSink test started.\n")
             val sink = AudioSink()
             val sine = SineWaveSource(440)
-//            sink.write(sine)
-            printOnScreen("FM demodulation finished.\n")
+            sink.write(sine) {msg -> println(msg)}
+            printOnScreen("AudioSink test finished.\n")
         }
     }
 
