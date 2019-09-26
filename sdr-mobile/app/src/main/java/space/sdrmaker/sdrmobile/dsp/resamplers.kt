@@ -52,7 +52,7 @@ class ComplexUpsampler(private val input: Iterator<FloatArray>, private val fact
         val iterator = nextArray.iterator()
         val result = FloatArray(nextArray.size * factor)
         var counter = 0
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             result[counter++] = iterator.next()
             result[counter++] = iterator.next()
             for (i in 0 until factor) {
@@ -67,7 +67,8 @@ class ComplexUpsampler(private val input: Iterator<FloatArray>, private val fact
     override fun hasNext() = input.hasNext()
 }
 
-class Downsampler(private val input: Iterator<Float>, private val factor: Int) : Iterator<Float> {
+class OldDownsampler(private val input: Iterator<Float>, private val factor: Int) :
+    Iterator<Float> {
 
     override fun next(): Float {
         val out = input.next()
@@ -75,6 +76,23 @@ class Downsampler(private val input: Iterator<Float>, private val factor: Int) :
             input.next()
 
         return out
+    }
+
+    override fun hasNext() = input.hasNext()
+}
+
+class Downsampler(private val input: Iterator<FloatArray>, private val factor: Int) :
+    Iterator<FloatArray> {
+
+    override fun next(): FloatArray {
+        val nextArray = input.next()
+        FloatArray(nextArray.size / factor) {index -> nextArray[index * factor]}
+//        while
+//        val out = input.next()
+//        for (i in 1 until factor)
+//            input.next()
+//
+//        return out
     }
 
     override fun hasNext() = input.hasNext()
