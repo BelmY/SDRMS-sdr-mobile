@@ -16,7 +16,7 @@ val QUADRATURE_RATE = mapOf(
     Pair(ModulationType.USB, 2 * AUDIO_RATE)
 )
 
-class FMDemodulator(
+class OldFMDemodulator(
     private val input: Iterator<Pair<Float, Float>>,
     maxDeviation: Int,
     modulation: ModulationType
@@ -37,6 +37,41 @@ class FMDemodulator(
 
         previousSample = sample
         return quadratureGain * atan2(imOut.toDouble(), reOut.toDouble()).toFloat()
+    }
+
+    override fun hasNext() = input.hasNext()
+
+}
+
+class FMDemodulator(
+    private val input: Iterator<FloatArray>,
+    maxDeviation: Int,
+    modulation: ModulationType
+) :
+    Iterator<FloatArray> {
+
+    private val quadratureRate = (QUADRATURE_RATE[modulation] ?: 2 * AUDIO_RATE).toFloat()
+    private val quadratureGain = (quadratureRate / (2 * Math.PI * maxDeviation)).toFloat()
+    private lateinit var previousSample: Pair<Float, Float>
+
+    override fun next(): FloatArray {
+        val nextArray = input.next()
+        val iterator = nextArray.iterator()
+        val result = FloatArray(nextArray.size / 2)
+        var counter = 0
+        while(iterator.hasNext()) {
+            if (!this::previousSample.isInitialized) previousSample =
+                Pair(iterator.next(), iterator.next())
+            val sample = Pair(iterator.next(), iterator.next())
+
+            // Quadrature demodulation
+            var reOut = sample.first * previousSample.first + sample.second * previousSample.second
+            var imOut = sample.second * previousSample.first - sample.first * previousSample.second
+
+            previousSample = sample
+            result[counter++] = quadratureGain * atan2(imOut.toDouble(), reOut.toDouble()).toFloat()
+        }
+        return result
     }
 
     override fun hasNext() = input.hasNext()
