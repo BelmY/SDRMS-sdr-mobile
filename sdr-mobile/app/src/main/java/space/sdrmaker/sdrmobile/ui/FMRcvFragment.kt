@@ -14,6 +14,9 @@ import com.mantz_it.hackrf_android.HackrfCallbackInterface
 import space.sdrmaker.sdrmobile.R
 import space.sdrmaker.sdrmobile.dsp.*
 import kotlin.concurrent.thread
+import java.io.PrintWriter
+import java.io.StringWriter
+
 
 class FMRcvFragment : Fragment(), HackrfCallbackInterface {
 
@@ -24,7 +27,9 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
     private lateinit var hackrf: Hackrf
     private var centerFreq = 95700000L
     private var bandwidth = 300000
-    private var samplingRate = 1102500
+//    private var samplingRate = 1102500
+    private var samplingRate = 220500
+//    private var samplingRate = 20000p
     private var lnaGain = 32
     private var vgaGain = 32
     private var amp = false
@@ -129,13 +134,29 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
         hackrf.setAntennaPower(antennaPower)
         printOnScreen("ok.\n\n")
 
+//        val hackRFSource = HackRFSignalSource(hackrf) {msg -> printOnScreen(msg)}
+//        val hackRFSource = ComplexSineWaveSource(440, samplingRate)
         val hackRFSource = HackRFSignalSource(hackrf) {msg -> printOnScreen(msg)}
+//        val hackRFSource = OldHackRFSignalSource(hackrf) {msg -> printOnScreen(msg)}
+//        val hackRFSource = ByteHackRFSignalSource(hackrf) {msg -> printOnScreen(msg)}
         printOnScreen("RX Started\n")
+//        val audioSink = OldAudioSink()
+        val audioSink = AudioSink()
         while (!stopRequested) {
-            val fmDemodulator = FMDemodulator(hackRFSource, 75000, ModulationType.WFM)
-            val resampler = Decimator(fmDemodulator, 25, FM_TAPS)
-            val audioSink = AudioSink()
-            audioSink.write(resampler) { msg -> printOnScreen(msg)}
+            try {
+//                val fmDemodulator = FMDemodulator(hackRFSource, 75000, ModulationType.WFM)
+//            val resampler = Decimator(fmDemodulator, 25, NOAA_TAPS)
+//                val resampler = Decimator(fmDemodulator, 5, NOAA_TAPS)
+//                val audioSink = OldAudioSink()
+//                audioSink.write(resampler) { msg -> printOnScreen(msg) }
+                audioSink.write(hackRFSource)
+            } catch (e: Exception) {
+                val sw = StringWriter()
+                val pw = PrintWriter(sw)
+                e.printStackTrace(pw)
+                printOnScreen(sw.toString())
+                Thread.sleep(5000)
+            }
         }
         setUIState(UIState.INITIALIZED)
     }
@@ -143,6 +164,5 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
     private fun printOnScreen(msg: String) {
         handler.post { tvOutput.append(msg) }
     }
-
 
 }

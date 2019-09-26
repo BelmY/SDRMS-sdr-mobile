@@ -74,7 +74,10 @@ class RawFileWriter {
 const val AUDIO_SAMPLE_RATE = 44100
 
 class AudioSink {
-    fun write(input: Iterator<Float>, print: (String) -> Unit) {
+
+    private val audioTrack: AudioTrack
+
+    init {
         var mBufferSize = AudioTrack.getMinBufferSize(
             AUDIO_SAMPLE_RATE,
             AudioFormat.CHANNEL_OUT_MONO,
@@ -84,7 +87,7 @@ class AudioSink {
             mBufferSize = AUDIO_SAMPLE_RATE * CHANNELS.toInt() * 2
         }
 
-        val audioTrack = AudioTrack.Builder()
+        audioTrack = AudioTrack.Builder()
             .setAudioAttributes(
                 AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_MEDIA)
@@ -101,16 +104,12 @@ class AudioSink {
             .setTransferMode(AudioTrack.MODE_STREAM)
             .build()
         audioTrack.play()
-        val buffer = FloatArray(mBufferSize) { 0f }
-        var samplesToWrite = 0
+    }
+
+    fun write(input: Iterator<FloatArray>) {
         while (input.hasNext()) {
-            for (i in 0 until mBufferSize) {
-                buffer[i] = input.next()
-                samplesToWrite = i
-                if (!input.hasNext())
-                    break
-            }
-            audioTrack.write(buffer, 0, samplesToWrite, WRITE_BLOCKING)
+            val nextBuf = input.next()
+            audioTrack.write(nextBuf, 0, nextBuf.size, WRITE_BLOCKING)
         }
     }
 }
