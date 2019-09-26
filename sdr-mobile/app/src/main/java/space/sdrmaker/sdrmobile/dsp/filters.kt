@@ -130,7 +130,7 @@ val FM_TAPS = floatArrayOf(
     0.04569721334034695f
 )
 
-class FIRFilter(private val input: Iterator<Float>, private val coefs: FloatArray) :
+class OldFIRFilter(private val input: Iterator<Float>, private val coefs: FloatArray) :
     Iterator<Float> {
     private val length: Int = coefs.size
     private val delayLine = FloatArray(length)
@@ -152,7 +152,33 @@ class FIRFilter(private val input: Iterator<Float>, private val coefs: FloatArra
     override fun hasNext() = input.hasNext()
 }
 
-class ComplexFIRFilter(
+class FIRFilter(private val input: Iterator<FloatArray>, private val coefs: FloatArray) :
+    Iterator<FloatArray> {
+    private val length: Int = coefs.size
+    private val delayLine = FloatArray(length)
+    private var count = 0
+
+    override fun next(): FloatArray {
+        val nextArray = input.next()
+        var result = FloatArray(nextArray.size) { 0f }
+        nextArray.forEachIndexed { arrayIndex, value ->
+            run {
+                delayLine[count] = value
+                var index = count
+                for (i in 0 until length) {
+                    result[arrayIndex] += coefs[i] * delayLine[index--]
+                    if (index < 0) index = length - 1
+                }
+                if (++count >= length) count = 0
+            }
+        }
+        return result
+    }
+
+    override fun hasNext() = input.hasNext()
+}
+
+class OldComplexFIRFilter(
     private val input: Iterator<Pair<Float, Float>>,
     private val coefs: FloatArray
 ) : Iterator<Pair<Float, Float>> {
@@ -176,6 +202,40 @@ class ComplexFIRFilter(
         }
         if (++count >= length) count = 0
         return Pair(reResult, imResult)
+    }
+
+    override fun hasNext() = input.hasNext()
+}
+
+class ComplexFIRFilter(
+    private val input: Iterator<FloatArray>,
+    private val coefs: FloatArray
+) : Iterator<FloatArray> {
+    private val length: Int = coefs.size
+    private val reDelayLine = FloatArray(length)
+    private val imDelayLine = FloatArray(length)
+    private var count = 0
+
+    override fun next(): FloatArray {
+        val nextArray = input.next()
+        val result = FloatArray(nextArray.size) { 0f }
+        val iterator = nextArray.iterator()
+        var resultCounter = 0
+        while (iterator.hasNext()) {
+            reDelayLine[count] = iterator.next()
+            imDelayLine[count] = iterator.next()
+            var index = count
+            for (i in 0 until length) {
+                result[resultCounter] += coefs[i] * reDelayLine[index]
+                result[resultCounter + 1] += coefs[i] * imDelayLine[index]
+                index--
+                if (index < 0) index = length - 1
+            }
+            if (++count >= length) count = 0
+            resultCounter += 2
+
+        }
+        return result
     }
 
     override fun hasNext() = input.hasNext()

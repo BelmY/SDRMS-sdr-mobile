@@ -1,6 +1,6 @@
 package space.sdrmaker.sdrmobile.dsp
 
-class Upsampler(private val input: Iterator<Float>, private val factor: Int) : Iterator<Float> {
+class OldUpsampler(private val input: Iterator<Float>, private val factor: Int) : Iterator<Float> {
     private var state = -1
 
     override fun next(): Float {
@@ -14,7 +14,21 @@ class Upsampler(private val input: Iterator<Float>, private val factor: Int) : I
     override fun hasNext() = input.hasNext()
 }
 
-class ComplexUpsampler(private val input: Iterator<Pair<Float, Float>>, private val factor: Int) :
+class Upsampler(private val input: Iterator<FloatArray>, private val factor: Int) :
+    Iterator<FloatArray> {
+
+    override fun next(): FloatArray {
+        val nextArray = input.next()
+        return FloatArray(nextArray.size * factor) { index -> if (index.rem(factor) == 0) nextArray[index / factor] else 0f }
+    }
+
+    override fun hasNext() = input.hasNext()
+}
+
+class OldComplexUpsampler(
+    private val input: Iterator<Pair<Float, Float>>,
+    private val factor: Int
+) :
     Iterator<Pair<Float, Float>> {
     private var state = -1
 
@@ -29,7 +43,32 @@ class ComplexUpsampler(private val input: Iterator<Pair<Float, Float>>, private 
     override fun hasNext() = input.hasNext()
 }
 
-class Downsampler(private val input: Iterator<Float>, private val factor: Int) : Iterator<Float> {
+class ComplexUpsampler(private val input: Iterator<FloatArray>, private val factor: Int) :
+    Iterator<FloatArray> {
+
+    override fun next(): FloatArray {
+
+        val nextArray = input.next()
+        val iterator = nextArray.iterator()
+        val result = FloatArray(nextArray.size * factor)
+        var counter = 0
+        while (iterator.hasNext()) {
+            result[counter++] = iterator.next()
+            result[counter++] = iterator.next()
+            for (i in 0 until factor) {
+                result[counter++] = 0f
+                result[counter++] = 0f
+            }
+        }
+
+        return result
+    }
+
+    override fun hasNext() = input.hasNext()
+}
+
+class OldDownsampler(private val input: Iterator<Float>, private val factor: Int) :
+    Iterator<Float> {
 
     override fun next(): Float {
         val out = input.next()
@@ -37,6 +76,23 @@ class Downsampler(private val input: Iterator<Float>, private val factor: Int) :
             input.next()
 
         return out
+    }
+
+    override fun hasNext() = input.hasNext()
+}
+
+class Downsampler(private val input: Iterator<FloatArray>, private val factor: Int) :
+    Iterator<FloatArray> {
+
+    override fun next(): FloatArray {
+        val nextArray = input.next()
+        FloatArray(nextArray.size / factor) {index -> nextArray[index * factor]}
+//        while
+//        val out = input.next()
+//        for (i in 1 until factor)
+//            input.next()
+//
+//        return out
     }
 
     override fun hasNext() = input.hasNext()

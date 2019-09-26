@@ -42,11 +42,11 @@ class AudioSinkFragment: Fragment() {
 
     private fun playSineWave() {
         thread {
-            printOnScreen("AudioSink test started.\n")
-            val sink = AudioSink()
-            val sine = SineWaveSource(440)
-            sink.write(sine) {msg -> println(msg)}
-            printOnScreen("AudioSink test finished.\n")
+            printOnScreen("OldAudioSink test started.\n")
+//            val sink = OldAudioSink()
+//            val sine = SineWaveSource(440)
+//            sink.write(sine) {msg -> println(msg)}
+            printOnScreen("OldAudioSink test finished.\n")
         }
     }
 
