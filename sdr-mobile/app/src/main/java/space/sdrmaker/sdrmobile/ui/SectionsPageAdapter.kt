@@ -7,12 +7,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import space.sdrmaker.sdrmobile.R
 
 private val TAB_TITLES = arrayOf(
-    R.string.tab_1_title,
-    R.string.tab_2_title,
-    R.string.tab_3_title,
-    R.string.tab_4_title,
-    R.string.tab_5_title,
-    R.string.tab_6_title
+    R.string.tab_1_title
 )
 
 /**
@@ -25,13 +20,8 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
         // getItem is called to instantiate the fragment for the given page.
         // Return appropriate Fragment (defined as a static inner class below).
         return when(position) {
-            0 -> RXFragment()
-            1 -> ReadFileFragment()
-            2 -> ResamplingFragment()
-            3 -> FMDemodFragment()
-            4 -> AudioSinkFragment()
-            5 -> FMRcvFragment()
-            else -> RXFragment()
+            0 -> FMRcvFragment()
+            else -> FMRcvFragment()
         }
     }
 
@@ -40,6 +30,6 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
     }
 
     override fun getCount(): Int {
-        return 6
+        return 1
     }
 }

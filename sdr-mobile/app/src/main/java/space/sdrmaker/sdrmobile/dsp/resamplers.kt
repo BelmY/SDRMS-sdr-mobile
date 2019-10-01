@@ -1,43 +1,11 @@
 package space.sdrmaker.sdrmobile.dsp
 
-class OldUpsampler(private val input: Iterator<Float>, private val factor: Int) : Iterator<Float> {
-    private var state = -1
-
-    override fun next(): Float {
-        state++
-        return if (state.rem(factor) == 0) {
-            state = 0
-            input.next()
-        } else 0F
-    }
-
-    override fun hasNext() = input.hasNext()
-}
-
 class Upsampler(private val input: Iterator<FloatArray>, private val factor: Int) :
     Iterator<FloatArray> {
 
     override fun next(): FloatArray {
         val nextArray = input.next()
         return FloatArray(nextArray.size * factor) { index -> if (index.rem(factor) == 0) nextArray[index / factor] else 0f }
-    }
-
-    override fun hasNext() = input.hasNext()
-}
-
-class OldComplexUpsampler(
-    private val input: Iterator<Pair<Float, Float>>,
-    private val factor: Int
-) :
-    Iterator<Pair<Float, Float>> {
-    private var state = -1
-
-    override fun next(): Pair<Float, Float> {
-        state++
-        return if (state.rem(factor) == 0) {
-            state = 0
-            input.next()
-        } else Pair(0F, 0F)
     }
 
     override fun hasNext() = input.hasNext()
@@ -67,52 +35,34 @@ class ComplexUpsampler(private val input: Iterator<FloatArray>, private val fact
     override fun hasNext() = input.hasNext()
 }
 
-class OldDownsampler(private val input: Iterator<Float>, private val factor: Int) :
-    Iterator<Float> {
-
-    override fun next(): Float {
-        val out = input.next()
-        for (i in 1 until factor)
-            input.next()
-
-        return out
-    }
-
-    override fun hasNext() = input.hasNext()
-}
-
 class Downsampler(private val input: Iterator<FloatArray>, private val factor: Int) :
     Iterator<FloatArray> {
 
     override fun next(): FloatArray {
         val nextArray = input.next()
-        FloatArray(nextArray.size / factor) {index -> nextArray[index * factor]}
-//        while
-//        val out = input.next()
-//        for (i in 1 until factor)
-//            input.next()
-//
-//        return out
+        return FloatArray(nextArray.size / factor) { index -> nextArray[index * factor] }
     }
 
     override fun hasNext() = input.hasNext()
 }
 
-class ComplexDownsampler(private val input: Iterator<Pair<Float, Float>>, private val factor: Int) :
-    Iterator<Pair<Float, Float>> {
+class ComplexDownsampler(private val input: Iterator<FloatArray>, private val factor: Int) :
+    Iterator<FloatArray> {
 
-    override fun next(): Pair<Float, Float> {
-        val out = input.next()
-        for (i in 1 until factor)
-            input.next()
-
-        return out
+    override fun next(): FloatArray {
+        val nextArray = input.next()
+        val result = FloatArray(nextArray.size / factor)
+        for (i in 0 until result.size - 1 step 2) {
+            result[i] = nextArray[i * factor]
+            result[i + 1] = nextArray[i * factor + 1]
+        }
+        return result
     }
 
     override fun hasNext() = input.hasNext()
 }
 
-class Decimator(input: Iterator<Float>, factor: Int, taps: FloatArray) : Iterator<Float> {
+class Decimator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray) : Iterator<FloatArray> {
 
     private val filter = FIRFilter(input, taps)
     private val downsampler = Downsampler(filter, factor)
@@ -122,52 +72,52 @@ class Decimator(input: Iterator<Float>, factor: Int, taps: FloatArray) : Iterato
     override fun next() = downsampler.next()
 }
 
-class ComplexDecimator(input: Iterator<Pair<Float, Float>>, factor: Int, taps: FloatArray) :
-    Iterator<Pair<Float, Float>> {
+class ComplexDecimator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray) :
+    Iterator<FloatArray> {
 
     private val filter = ComplexFIRFilter(input, taps)
     private val downsampler = ComplexDownsampler(filter, factor)
 
-    override fun next(): Pair<Float, Float> {
+    override fun next(): FloatArray {
         return downsampler.next()
     }
 
     override fun hasNext() = downsampler.hasNext()
 }
 
-class Interpolator(input: Iterator<Float>, factor: Int, taps: FloatArray) : Iterator<Float> {
+class Interpolator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray) :
+    Iterator<FloatArray> {
 
     private val upsampler = Upsampler(input, factor)
     private val filter = FIRFilter(upsampler, taps)
 
     override fun hasNext() = filter.hasNext()
 
-    override fun next(): Float {
+    override fun next(): FloatArray {
         return filter.next()
     }
 }
 
-class ComplexInterpolator(input: Iterator<Pair<Float, Float>>, factor: Int, taps: FloatArray) :
-    Iterator<Pair<Float, Float>> {
+class ComplexInterpolator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray) :
+    Iterator<FloatArray> {
 
     private val upsampler = ComplexUpsampler(input, factor)
     private val filter = ComplexFIRFilter(upsampler, taps)
 
     override fun hasNext() = filter.hasNext()
 
-    override fun next(): Pair<Float, Float> {
+    override fun next(): FloatArray {
         return filter.next()
     }
 }
 
-
 class Resampler(
-    input: Iterator<Float>,
+    input: Iterator<FloatArray>,
     interpolation: Int,
     decimation: Int,
     interpolatorTaps: FloatArray,
     decimatorTaps: FloatArray
-) : Iterator<Float> {
+) : Iterator<FloatArray> {
 
     private val interpolator = Interpolator(input, interpolation, interpolatorTaps)
     private val decimator = Decimator(interpolator, decimation, decimatorTaps)
@@ -178,13 +128,13 @@ class Resampler(
 }
 
 class ComplexResampler(
-    input: Iterator<Pair<Float, Float>>,
+    input: Iterator<FloatArray>,
     interpolation: Int,
     decimation: Int,
     interpolatorTaps: FloatArray,
     decimatorTaps: FloatArray
 ) :
-    Iterator<Pair<Float, Float>> {
+    Iterator<FloatArray> {
 
     private val interpolator = ComplexInterpolator(input, interpolation, interpolatorTaps)
     private val decimator = ComplexDecimator(interpolator, decimation, decimatorTaps)

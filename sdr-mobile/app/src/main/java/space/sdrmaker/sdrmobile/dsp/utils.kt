@@ -8,6 +8,7 @@ import android.media.AudioRecord.MetricsConstants.CHANNELS
 import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioTrack.WRITE_BLOCKING
+import kotlin.math.cos
 import kotlin.math.sin
 
 
@@ -106,22 +107,30 @@ class AudioSink {
         audioTrack.play()
     }
 
-    fun write(input: Iterator<FloatArray>) {
-        while (input.hasNext()) {
-            val nextBuf = input.next()
-            audioTrack.write(nextBuf, 0, nextBuf.size, WRITE_BLOCKING)
-        }
+    fun write(input: FloatArray) {
+        audioTrack.write(input, 0, input.size, WRITE_BLOCKING)
     }
 }
 
-class SineWaveSource(private val frequency: Int) : Iterator<Float> {
+class ComplexSineWaveSource(
+    private val frequency: Int,
+    private val rate: Int,
+    private val blockSize: Int,
+    private val gain: Int = 1
+) : Iterator<FloatArray> {
 
-    private var t = 1
+    private var t = 0
 
-    override fun hasNext() = t < AUDIO_RATE * 5
+    override fun hasNext() = true
 
-    override fun next(): Float {
-        return sin(2 * Math.PI * frequency * t++ / AUDIO_RATE).toFloat()
+    override fun next(): FloatArray {
+        val result = FloatArray(blockSize)
+        for (i in 0 until blockSize - 1 step 2) {
+            result[i] = gain * cos(2 * Math.PI * frequency * t / rate).toFloat()
+            result[i+1] = gain * sin(2 * Math.PI * frequency * t / rate).toFloat()
+        }
+        t++
+        return result
     }
 
 }
