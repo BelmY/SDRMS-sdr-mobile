@@ -85,18 +85,6 @@ class ComplexDecimator(input: Iterator<FloatArray>, factor: Int, taps: FloatArra
     override fun hasNext() = downsampler.hasNext()
 }
 
-//class OldInterpolator(input: Iterator<Float>, factor: Int, taps: FloatArray) : Iterator<Float> {
-//
-//    private val upsampler = Upsampler(input, factor)
-//    private val filter = FIRFilter(upsampler, taps)
-//
-//    override fun hasNext() = filter.hasNext()
-//
-//    override fun next(): Float {
-//        return filter.next()
-//    }
-//}
-
 class Interpolator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray) :
     Iterator<FloatArray> {
 
@@ -110,19 +98,6 @@ class Interpolator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray) :
     }
 }
 
-//class OldComplexInterpolator(input: Iterator<Pair<Float, Float>>, factor: Int, taps: FloatArray) :
-//    Iterator<Pair<Float, Float>> {
-//
-//    private val upsampler = ComplexUpsampler(input, factor)
-//    private val filter = ComplexFIRFilter(upsampler, taps)
-//
-//    override fun hasNext() = filter.hasNext()
-//
-//    override fun next(): Pair<Float, Float> {
-//        return filter.next()
-//    }
-//}
-
 class ComplexInterpolator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray) :
     Iterator<FloatArray> {
 
@@ -135,22 +110,6 @@ class ComplexInterpolator(input: Iterator<FloatArray>, factor: Int, taps: FloatA
         return filter.next()
     }
 }
-
-//class OldResampler(
-//    input: Iterator<Float>,
-//    interpolation: Int,
-//    decimation: Int,
-//    interpolatorTaps: FloatArray,
-//    decimatorTaps: FloatArray
-//) : Iterator<Float> {
-//
-//    private val interpolator = Interpolator(input, interpolation, interpolatorTaps)
-//    private val decimator = Decimator(interpolator, decimation, decimatorTaps)
-//
-//    override fun hasNext() = decimator.hasNext()
-//
-//    override fun next() = decimator.next()
-//}
 
 class Resampler(
     input: Iterator<FloatArray>,
@@ -167,24 +126,6 @@ class Resampler(
 
     override fun next() = decimator.next()
 }
-
-
-//class OldComplexResampler(
-//    input: Iterator<Pair<Float, Float>>,
-//    interpolation: Int,
-//    decimation: Int,
-//    interpolatorTaps: FloatArray,
-//    decimatorTaps: FloatArray
-//) :
-//    Iterator<Pair<Float, Float>> {
-//
-//    private val interpolator = ComplexInterpolator(input, interpolation, interpolatorTaps)
-//    private val decimator = ComplexDecimator(interpolator, decimation, decimatorTaps)
-//
-//    override fun hasNext() = decimator.hasNext()
-//
-//    override fun next() = decimator.next()
-//}
 
 class ComplexResampler(
     input: Iterator<FloatArray>,
