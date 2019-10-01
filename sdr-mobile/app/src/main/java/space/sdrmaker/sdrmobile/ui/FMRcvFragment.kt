@@ -25,11 +25,12 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
     private lateinit var initButton: Button
     private lateinit var startButton: Button
     private lateinit var hackrf: Hackrf
-    private var centerFreq = 95700000L
-    private var bandwidth = 300000
-//    private var samplingRate = 1102500
-    private var samplingRate = 220500
-//    private var samplingRate = 20000p
+    private var channelFreq = 95700000L
+    private var offset = 200000
+    private var centerFreq = channelFreq + offset
+    private var samplingRate = 882000
+    private var bandwidth = samplingRate
+    private val decimation = samplingRate / AUDIO_SAMPLE_RATE
     private var lnaGain = 32
     private var vgaGain = 32
     private var amp = false
@@ -43,7 +44,7 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        root = inflater.inflate(R.layout.fragment_rx, container, false)
+        root = inflater.inflate(R.layout.fragment_fmrcv, container, false)
 
         // setup UI
         initButton = root.findViewById(R.id.initButton)
@@ -121,6 +122,7 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
         printOnScreen("Setting sample rate to $samplingRate sps ... ")
         hackrf.setSampleRate(samplingRate, 1)
         printOnScreen("ok.\nSetting center requency to $centerFreq Hz ... ")
+//        hackrf.setFrequency(centerFreq)
         hackrf.setFrequency(centerFreq)
         printOnScreen("ok.\nSetting baseband filter bandwidth to $bandwidth Hz ... ")
         hackrf.setBasebandFilterBandwidth(bandwidth)
@@ -134,9 +136,15 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
         hackrf.setAntennaPower(antennaPower)
         printOnScreen("ok.\n\n")
 
-//        val hackRFSource = HackRFSignalSource(hackrf) {msg -> printOnScreen(msg)}
-//        val hackRFSource = ComplexSineWaveSource(440, samplingRate)
         val hackRFSource = HackRFSignalSource(hackrf) {msg -> printOnScreen(msg)}
+        val sine = ComplexSineWaveSource(offset, samplingRate, 16 * 1024)
+        val multiplier = Multiply(hackRFSource, sine)
+        val downsampler = Decimator(multiplier, decimation, FM_882k_BLACKMAN)
+        val fmDemodulator = FMDemodulator(downsampler, 75000, ModulationType.WFM)
+//        val fmFilter = ComplexFIRFilter(downsampler, FM_882k_BLACKMAN)
+//        val fmDemodulator = FMDemodulator(downsampler, 75000, ModulationType.WFM)
+        val audioFilter = FIRFilter(fmDemodulator, AUDIO_TAPS)
+//        val hackRFSource = ComplexSineWaveSource(440, samplingRate)
 //        val hackRFSource = OldHackRFSignalSource(hackrf) {msg -> printOnScreen(msg)}
 //        val hackRFSource = ByteHackRFSignalSource(hackrf) {msg -> printOnScreen(msg)}
         printOnScreen("RX Started\n")
@@ -144,12 +152,26 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
         val audioSink = AudioSink()
         while (!stopRequested) {
             try {
+//                val sine = ComplexSineWaveSource(offset, samplingRate, 16 * 1024)
+//                val multiplier = Multiply(hackRFSource, sine)
+//                val downsampler = ComplexDownsampler(multiplier, decimation)
+//                val downsampler = ComplexDownsampler(hackRFSource, decimation)
+//                val fmFilter = ComplexFIRFilter(downsampler, FM_882k_BLACKMAN)
+//                val downsampler = ComplexDecimator(multiplier, decimation, FM_882k_BLACKMAN)
 //                val fmDemodulator = FMDemodulator(hackRFSource, 75000, ModulationType.WFM)
+//                val fmDemodulator = FMDemodulator(downsampler, 75000, ModulationType.WFM)
+//                val fmDemodulator = FMDemodulator(fmFilter, 75000, ModulationType.WFM)
+//                val fmDemodulator = FMDemodulator(downsampler, 75000, ModulationType.WFM)
+//                val audioFilter = FIRFilter(fmDemodulator, AUDIO_TAPS)
 //            val resampler = Decimator(fmDemodulator, 25, NOAA_TAPS)
 //                val resampler = Decimator(fmDemodulator, 5, NOAA_TAPS)
 //                val audioSink = OldAudioSink()
 //                audioSink.write(resampler) { msg -> printOnScreen(msg) }
-                audioSink.write(hackRFSource)
+//                val downsampler = Downsampler(fmDemodulator, 5)
+//                audioSink.write(hackRFSource)
+//                audioSink.write(downsampler)
+//                audioSink.write(fmDemodulator)
+                audioSink.write(audioFilter)
             } catch (e: Exception) {
                 val sw = StringWriter()
                 val pw = PrintWriter(sw)

@@ -1,6 +1,7 @@
 package space.sdrmaker.sdrmobile.dsp
 
 import kotlin.math.atan2
+import kotlin.math.floor
 
 const val AUDIO_RATE = 48000
 
@@ -57,19 +58,21 @@ class FMDemodulator(
     override fun next(): FloatArray {
         val nextArray = input.next()
         val iterator = nextArray.iterator()
-        val result = FloatArray(nextArray.size / 2)
-        var counter = 0
+        val result = FloatArray(floor(nextArray.size.toFloat() / 2).toInt())
+        var resultCounter = 0
         while(iterator.hasNext()) {
             if (!this::previousSample.isInitialized) previousSample =
                 Pair(iterator.next(), iterator.next())
-            val sample = Pair(iterator.next(), iterator.next())
+            val re = iterator.next()
+            val im = if(iterator.hasNext()) iterator.next() else break
+            val sample = Pair(re, im)
 
             // Quadrature demodulation
             var reOut = sample.first * previousSample.first + sample.second * previousSample.second
             var imOut = sample.second * previousSample.first - sample.first * previousSample.second
 
             previousSample = sample
-            result[counter++] = quadratureGain * atan2(imOut.toDouble(), reOut.toDouble()).toFloat()
+            result[resultCounter++] = quadratureGain * atan2(imOut.toDouble(), reOut.toDouble()).toFloat()
         }
         return result
     }
