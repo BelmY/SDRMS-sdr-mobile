@@ -12,32 +12,26 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 
-class IQFileReader(path: String) : Iterator<Pair<Float, Float>> {
+class IQFileReader(path: String, private val blockSize: Int = 16 * 1024) : Iterator<FloatArray> {
 
     private var stream = File(path).inputStream().buffered()
-    private lateinit var iq: Pair<Float, Float>
     private var closed = false
 
-    init {
-        readIQ()
-    }
-
-    override fun next(): Pair<Float, Float> {
-        val result = iq
-        readIQ()
-        return result
-    }
-
-    private fun readIQ() {
-        val bytes = ByteArray(8)
+    override fun next() : FloatArray {
+        val bytes = ByteArray(blockSize)
+        val result = FloatArray(blockSize) {0f}
         val read = stream.read(bytes)
-        if (read < 8) {
+        if (read < blockSize) {
             stream.close()
             closed = true
         }
         val buffer = ByteBuffer.wrap(bytes)
         buffer.order(ByteOrder.LITTLE_ENDIAN)
-        iq = Pair(buffer.float, buffer.float)
+        for (i in 0 until blockSize - 1 step 2) {
+            result[i] = buffer.float
+            result[i+1] = buffer.float
+        }
+        return result
     }
 
     override fun hasNext() = !closed
