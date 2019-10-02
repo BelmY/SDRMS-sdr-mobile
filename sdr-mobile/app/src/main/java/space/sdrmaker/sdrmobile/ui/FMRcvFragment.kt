@@ -14,8 +14,6 @@ import com.mantz_it.hackrf_android.HackrfCallbackInterface
 import space.sdrmaker.sdrmobile.R
 import space.sdrmaker.sdrmobile.dsp.*
 import kotlin.concurrent.thread
-import java.io.PrintWriter
-import java.io.StringWriter
 
 
 class FMRcvFragment : Fragment(), HackrfCallbackInterface {
@@ -122,7 +120,6 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
         printOnScreen("Setting sample rate to $samplingRate sps ... ")
         hackrf.setSampleRate(samplingRate, 1)
         printOnScreen("ok.\nSetting center requency to $centerFreq Hz ... ")
-//        hackrf.setFrequency(centerFreq)
         hackrf.setFrequency(centerFreq)
         printOnScreen("ok.\nSetting baseband filter bandwidth to $bandwidth Hz ... ")
         hackrf.setBasebandFilterBandwidth(bandwidth)
@@ -139,46 +136,12 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
         val hackRFSource = HackRFSignalSource(hackrf) {msg -> printOnScreen(msg)}
         val sine = ComplexSineWaveSource(offset, samplingRate, 16 * 1024)
         val multiplier = Multiply(hackRFSource, sine)
-        val downsampler = Decimator(multiplier, decimation, FM_882k_BLACKMAN)
+        val downsampler = ComplexDecimator(multiplier, decimation, FM_882k_BLACKMAN)
         val fmDemodulator = FMDemodulator(downsampler, 75000, ModulationType.WFM)
-//        val fmFilter = ComplexFIRFilter(downsampler, FM_882k_BLACKMAN)
-//        val fmDemodulator = FMDemodulator(downsampler, 75000, ModulationType.WFM)
         val audioFilter = FIRFilter(fmDemodulator, AUDIO_TAPS)
-//        val hackRFSource = ComplexSineWaveSource(440, samplingRate)
-//        val hackRFSource = OldHackRFSignalSource(hackrf) {msg -> printOnScreen(msg)}
-//        val hackRFSource = ByteHackRFSignalSource(hackrf) {msg -> printOnScreen(msg)}
-        printOnScreen("RX Started\n")
-//        val audioSink = OldAudioSink()
         val audioSink = AudioSink()
-        while (!stopRequested) {
-            try {
-//                val sine = ComplexSineWaveSource(offset, samplingRate, 16 * 1024)
-//                val multiplier = Multiply(hackRFSource, sine)
-//                val downsampler = ComplexDownsampler(multiplier, decimation)
-//                val downsampler = ComplexDownsampler(hackRFSource, decimation)
-//                val fmFilter = ComplexFIRFilter(downsampler, FM_882k_BLACKMAN)
-//                val downsampler = ComplexDecimator(multiplier, decimation, FM_882k_BLACKMAN)
-//                val fmDemodulator = FMDemodulator(hackRFSource, 75000, ModulationType.WFM)
-//                val fmDemodulator = FMDemodulator(downsampler, 75000, ModulationType.WFM)
-//                val fmDemodulator = FMDemodulator(fmFilter, 75000, ModulationType.WFM)
-//                val fmDemodulator = FMDemodulator(downsampler, 75000, ModulationType.WFM)
-//                val audioFilter = FIRFilter(fmDemodulator, AUDIO_TAPS)
-//            val resampler = Decimator(fmDemodulator, 25, NOAA_TAPS)
-//                val resampler = Decimator(fmDemodulator, 5, NOAA_TAPS)
-//                val audioSink = OldAudioSink()
-//                audioSink.write(resampler) { msg -> printOnScreen(msg) }
-//                val downsampler = Downsampler(fmDemodulator, 5)
-//                audioSink.write(hackRFSource)
-//                audioSink.write(downsampler)
-//                audioSink.write(fmDemodulator)
-                audioSink.write(audioFilter)
-            } catch (e: Exception) {
-                val sw = StringWriter()
-                val pw = PrintWriter(sw)
-                e.printStackTrace(pw)
-                printOnScreen(sw.toString())
-                Thread.sleep(5000)
-            }
+        while (!stopRequested && audioFilter.hasNext()) {
+            audioSink.write(audioFilter.next())
         }
         setUIState(UIState.INITIALIZED)
     }

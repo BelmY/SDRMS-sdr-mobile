@@ -107,18 +107,16 @@ class AudioSink {
         audioTrack.play()
     }
 
-    fun write(input: Iterator<FloatArray>) {
-        while (input.hasNext()) {
-            val nextBuf = input.next()
-            audioTrack.write(nextBuf, 0, nextBuf.size, WRITE_BLOCKING)
-        }
+    fun write(input: FloatArray) {
+        audioTrack.write(input, 0, input.size, WRITE_BLOCKING)
     }
 }
 
 class ComplexSineWaveSource(
     private val frequency: Int,
     private val rate: Int,
-    private val blockSize: Int
+    private val blockSize: Int,
+    private val gain: Int = 1
 ) : Iterator<FloatArray> {
 
     private var t = 0
@@ -128,8 +126,8 @@ class ComplexSineWaveSource(
     override fun next(): FloatArray {
         val result = FloatArray(blockSize)
         for (i in 0 until blockSize - 1 step 2) {
-            result[i] = cos(2 * Math.PI * frequency * t / rate).toFloat()
-            result[i+1] = sin(2 * Math.PI * frequency * t / rate).toFloat()
+            result[i] = gain * cos(2 * Math.PI * frequency * t / rate).toFloat()
+            result[i+1] = gain * sin(2 * Math.PI * frequency * t / rate).toFloat()
         }
         t++
         return result

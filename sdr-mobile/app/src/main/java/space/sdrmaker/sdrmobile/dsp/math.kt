@@ -2,6 +2,7 @@ package space.sdrmaker.sdrmobile.dsp
 
 class Multiply(private val input1: Iterator<FloatArray>, private val input2: Iterator<FloatArray>) :
     Iterator<FloatArray> {
+
     override fun hasNext() = input1.hasNext() && input2.hasNext()
 
     override fun next(): FloatArray {
