@@ -13,6 +13,9 @@ import com.mantz_it.hackrf_android.Hackrf
 import com.mantz_it.hackrf_android.HackrfCallbackInterface
 import space.sdrmaker.sdrmobile.R
 import space.sdrmaker.sdrmobile.dsp.*
+import java.io.PrintWriter
+import java.io.StringWriter
+import java.lang.Exception
 import kotlin.concurrent.thread
 
 
@@ -138,10 +141,17 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
         val multiplier = Multiply(hackRFSource, sine)
         val downsampler = ComplexDecimator(multiplier, decimation, FM_882k_BLACKMAN)
         val fmDemodulator = FMDemodulator(downsampler, 75000, ModulationType.WFM)
-        val audioFilter = FIRFilter(fmDemodulator, AUDIO_TAPS)
+//        val audioFilter = FIRFilter(fmDemodulator, AUDIO_TAPS)
         val audioSink = AudioSink()
-        while (!stopRequested && audioFilter.hasNext()) {
-            audioSink.write(audioFilter.next())
+        while (!stopRequested && fmDemodulator.hasNext()) {
+            try {
+                audioSink.write(fmDemodulator.next())
+            } catch (e: Exception) {
+                val sw = StringWriter()
+                val pw = PrintWriter(sw)
+                e.printStackTrace(pw)
+                printOnScreen(sw.toString())
+            }
         }
         setUIState(UIState.INITIALIZED)
     }

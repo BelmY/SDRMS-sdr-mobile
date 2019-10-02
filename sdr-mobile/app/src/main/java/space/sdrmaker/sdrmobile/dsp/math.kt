@@ -12,7 +12,12 @@ class Multiply(private val input1: Iterator<FloatArray>, private val input2: Ite
         val size = array1.size
         val result = FloatArray(size)
         for(i in 0 until size - 1 step 2) {
-            val (re1, re2, im1, im2) = listOf(array1[i], array2[i], array1[i+1], array2[i+1])
+            val (re1, re2, im1, im2) = listOf(
+                array1[i],
+                array2[i],
+                array1[i+1],
+                array2[i+1]
+            )
             // real component
             result[i] = re1 * re2 - im1 * im2
             // imaginary component
