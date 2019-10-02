@@ -8,69 +8,91 @@ import android.media.AudioRecord.MetricsConstants.CHANNELS
 import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioTrack.WRITE_BLOCKING
+import android.media.AudioTrack.WRITE_NON_BLOCKING
 import kotlin.math.cos
 import kotlin.math.sin
 
 
-class IQFileReader(path: String) : Iterator<Pair<Float, Float>> {
+class FileReader(
+    path: String,
+    private val blockSize: Int = 16 * 1024
+) : Iterator<FloatArray> {
 
     private var stream = File(path).inputStream().buffered()
-    private lateinit var iq: Pair<Float, Float>
     private var closed = false
+//    private var timestamp = System.currentTimeMillis()
+//    private var counter = 0
 
-    init {
-        readIQ()
-    }
-
-    override fun next(): Pair<Float, Float> {
-        val result = iq
-        readIQ()
-        return result
-    }
-
-    private fun readIQ() {
-        val bytes = ByteArray(8)
+    override fun next(): FloatArray {
+//        if(counter++ == 1000) {
+//            println("Data rate: ${blockSize.toFloat() * 1000 * 1000 / (System.currentTimeMillis() - timestamp)}Sps")
+//            timestamp = System.currentTimeMillis()
+//            counter = 0
+//        }
+        val bytes = ByteArray(blockSize)
         val read = stream.read(bytes)
-        if (read < 8) {
+        if (read < blockSize) {
             stream.close()
             closed = true
         }
         val buffer = ByteBuffer.wrap(bytes)
         buffer.order(ByteOrder.LITTLE_ENDIAN)
-        iq = Pair(buffer.float, buffer.float)
+        val floatBuffer = buffer.asFloatBuffer()
+        return FloatArray(floatBuffer.capacity()) { index -> floatBuffer[index] }
     }
 
     override fun hasNext() = !closed
 
 }
 
-class IQFileWriter {
-    fun write(input: Iterator<Pair<Float, Float>>, path: String) {
+//class IQFileWriter {
+//    fun write(input: Iterator<Pair<Float, Float>>, path: String) {
+//        val stream = File(path).outputStream().buffered()
+//        while (input.hasNext()) {
+//            val next = input.next()
+//            var bytes = ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putFloat(next.first)
+//                .putFloat(4, next.second).array()
+//            stream.write(bytes)
+//        }
+//        stream.flush()
+//        stream.close()
+//    }
+//}
+
+class FileWriter {
+
+    private var counter = 0
+
+    fun write(input: Iterator<FloatArray>, path: String) {
         val stream = File(path).outputStream().buffered()
-        while (input.hasNext()) {
-            val next = input.next()
-            var bytes = ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putFloat(next.first)
-                .putFloat(4, next.second).array()
-            stream.write(bytes)
+        while (input.hasNext() && counter < 500) {
+            val nextArray = input.next()
+            val bytes = ByteBuffer.allocate(nextArray.size * 4).order(ByteOrder.LITTLE_ENDIAN)
+            for (value in nextArray) {
+                bytes.putFloat(value)
+            }
+            stream.write(bytes.array())
+            counter++
+            println(counter)
         }
         stream.flush()
         stream.close()
     }
 }
 
-class RawFileWriter {
-    fun write(input: Iterator<Float>, path: String) {
-        val stream = File(path).outputStream().buffered()
-        while (input.hasNext()) {
-            val next = input.next()
-            var bytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN)
-                .putFloat(next).array()
-            stream.write(bytes)
-        }
-        stream.flush()
-        stream.close()
-    }
-}
+//class RawFileWriter {
+//    fun write(input: Iterator<Float>, path: String) {
+//        val stream = File(path).outputStream().buffered()
+//        while (input.hasNext()) {
+//            val next = input.next()
+//            var bytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN)
+//                .putFloat(next).array()
+//            stream.write(bytes)
+//        }
+//        stream.flush()
+//        stream.close()
+//    }
+//}
 
 const val AUDIO_SAMPLE_RATE = 44100
 
@@ -108,7 +130,7 @@ class AudioSink {
     }
 
     fun write(input: FloatArray) {
-        audioTrack.write(input, 0, input.size, WRITE_BLOCKING)
+        audioTrack.write(input, 0, input.size, WRITE_NON_BLOCKING)
     }
 }
 
@@ -127,7 +149,7 @@ class ComplexSineWaveSource(
         val result = FloatArray(blockSize)
         for (i in 0 until blockSize - 1 step 2) {
             result[i] = gain * cos(2 * Math.PI * frequency * t / rate).toFloat()
-            result[i+1] = gain * sin(2 * Math.PI * frequency * t / rate).toFloat()
+            result[i + 1] = gain * sin(2 * Math.PI * frequency * t / rate).toFloat()
         }
         t++
         return result

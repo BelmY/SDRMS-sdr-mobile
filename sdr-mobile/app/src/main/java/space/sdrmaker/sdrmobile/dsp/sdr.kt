@@ -9,12 +9,11 @@ import kotlin.math.min
 import kotlin.math.max
 
 
-const val PACKET_QUEUE_SIZE = 1024
+const val PACKET_QUEUE_SIZE = 10
 
 
 class HackRFSignalSource(
-    private val hackrf: Hackrf,
-    private val logger: (String) -> Unit = { msg -> println(msg) }
+    private val hackrf: Hackrf
 ) :
     Iterator<FloatArray> {
 
@@ -28,7 +27,7 @@ class HackRFSignalSource(
         if (!this::queue.isInitialized) start()
         val packet = packets.poll(1000, TimeUnit.MILLISECONDS)
         return if (packet == null) {
-            logger("HackTF: compute thread buffer underrun\n")
+            println("HackTF: compute thread buffer underrun\n")
             FloatArray(2) { 0f }
         } else {
             val result = FloatArray(packet.size) { i -> normalize(packet[i].toFloat())}
@@ -45,18 +44,18 @@ class HackRFSignalSource(
     }
 
     private fun start() {
-        logger("HackRF start\n")
+        println("HackRF start\n")
         queue = hackrf.startRX()
         thread {
             while (true) {
                 val packet =
                     queue.poll(1000, TimeUnit.MILLISECONDS)
                 if (packet == null ) {
-                    logger("HackRF: receive thread buffer underrun\n")
+                    println("HackRF: receive thread buffer underrun\n")
                     continue
                 }
                 if (!packets.offer(packet)) {
-                    logger("HackRF: receive thread buffer overrun\n")
+                    println("HackRF: receive thread buffer overrun\n")
                 }
             }
         }

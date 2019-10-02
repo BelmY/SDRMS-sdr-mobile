@@ -15,7 +15,6 @@ class ComplexUpsampler(private val input: Iterator<FloatArray>, private val fact
     Iterator<FloatArray> {
 
     override fun next(): FloatArray {
-
         val nextArray = input.next()
         val iterator = nextArray.iterator()
         val result = FloatArray(nextArray.size * factor)
