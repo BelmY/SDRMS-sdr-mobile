@@ -647,7 +647,7 @@ class FIRFilter(private val input: Iterator<FloatArray>, private val coefs: Floa
                 delayLine[count] = value
                 var index = count
                 for (i in 0 until length) {
-                    result[arrayIndex] += coefs[i] * delayLine[index--]
+                    result[arrayIndex] += coefs[i] * delayLine[index--] / length
                     if (index < 0) index = length - 1
                 }
                 if (++count >= length) count = 0
@@ -670,7 +670,7 @@ class ComplexFIRFilter(
 
     override fun next(): FloatArray {
         val nextArray = input.next()
-        val result = FloatArray(nextArray.size)
+        val result = FloatArray(nextArray.size) {0f}
         val iterator = nextArray.iterator()
         var resultCounter = 0
         while (iterator.hasNext()) {
@@ -678,8 +678,8 @@ class ComplexFIRFilter(
             imDelayLine[count] = if(iterator.hasNext()) iterator.next() else break
             var index = count
             for (i in 0 until length) {
-                result[resultCounter] += coefs[i] * reDelayLine[index]
-                result[resultCounter + 1] += coefs[i] * imDelayLine[index]
+                result[resultCounter] += coefs[i] * reDelayLine[index] / length
+                result[resultCounter + 1] += coefs[i] * imDelayLine[index] / length
                 index--
                 if (index < 0) index = length - 1
             }
