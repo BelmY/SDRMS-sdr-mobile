@@ -8,7 +8,6 @@ import android.media.AudioRecord.MetricsConstants.CHANNELS
 import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioTrack.WRITE_BLOCKING
-import android.media.AudioTrack.WRITE_NON_BLOCKING
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -20,15 +19,8 @@ class FileReader(
 
     private var stream = File(path).inputStream().buffered()
     private var closed = false
-//    private var timestamp = System.currentTimeMillis()
-//    private var counter = 0
 
     override fun next(): FloatArray {
-//        if(counter++ == 1000) {
-//            println("Data rate: ${blockSize.toFloat() * 1000 * 1000 / (System.currentTimeMillis() - timestamp)}Sps")
-//            timestamp = System.currentTimeMillis()
-//            counter = 0
-//        }
         val bytes = ByteArray(blockSize)
         val read = stream.read(bytes)
         if (read < blockSize) {
@@ -47,7 +39,7 @@ class FileReader(
 
 class BufferedFileReader(
     path: String,
-    private val blockSize: Int = 16 * 1024
+    blockSize: Int = 16 * 1024
 ) : Iterator<FloatArray> {
 
     private var stream = File(path).inputStream().buffered()
@@ -78,20 +70,6 @@ class BufferedFileReader(
 }
 
 
-//class IQFileWriter {
-//    fun write(input: Iterator<Pair<Float, Float>>, path: String) {
-//        val stream = File(path).outputStream().buffered()
-//        while (input.hasNext()) {
-//            val next = input.next()
-//            var bytes = ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putFloat(next.first)
-//                .putFloat(4, next.second).array()
-//            stream.write(bytes)
-//        }
-//        stream.flush()
-//        stream.close()
-//    }
-//}
-
 class FileWriter {
 
     private var counter = 0
@@ -112,20 +90,6 @@ class FileWriter {
         stream.close()
     }
 }
-
-//class RawFileWriter {
-//    fun write(input: Iterator<Float>, path: String) {
-//        val stream = File(path).outputStream().buffered()
-//        while (input.hasNext()) {
-//            val next = input.next()
-//            var bytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN)
-//                .putFloat(next).array()
-//            stream.write(bytes)
-//        }
-//        stream.flush()
-//        stream.close()
-//    }
-//}
 
 const val AUDIO_SAMPLE_RATE = 44100
 
