@@ -150,5 +150,4 @@ class ComplexSineWaveSource(
         }
         return result
     }
-
 }
