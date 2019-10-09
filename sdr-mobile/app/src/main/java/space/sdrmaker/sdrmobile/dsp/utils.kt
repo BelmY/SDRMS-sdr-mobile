@@ -45,6 +45,39 @@ class FileReader(
 
 }
 
+class BufferedFileReader(
+    path: String,
+    private val blockSize: Int = 16 * 1024
+) : Iterator<FloatArray> {
+
+    private var stream = File(path).inputStream().buffered()
+    private var data = ArrayList<FloatArray>()
+    private var iterator: Iterator<FloatArray>
+
+    init {
+        var read = blockSize
+        while(read == blockSize) {
+            val bytes = ByteArray(blockSize)
+            read = stream.read(bytes)
+            if (read < blockSize) {
+                stream.close()
+            }
+            val buffer = ByteBuffer.wrap(bytes)
+            buffer.order(ByteOrder.LITTLE_ENDIAN)
+            val floatBuffer = buffer.asFloatBuffer()
+            data.add(FloatArray(floatBuffer.capacity()) { index -> floatBuffer[index] })
+        }
+        iterator = data.iterator()
+        println("Buffered, len: ${data.size}")
+    }
+
+    override fun next() = iterator.next()
+
+    override fun hasNext() = iterator.hasNext()
+
+}
+
+
 //class IQFileWriter {
 //    fun write(input: Iterator<Pair<Float, Float>>, path: String) {
 //        val stream = File(path).outputStream().buffered()
@@ -65,7 +98,7 @@ class FileWriter {
 
     fun write(input: Iterator<FloatArray>, path: String) {
         val stream = File(path).outputStream().buffered()
-        while (input.hasNext() && counter < 500) {
+        while (input.hasNext() && counter < 2001) {
             val nextArray = input.next()
             val bytes = ByteBuffer.allocate(nextArray.size * 4).order(ByteOrder.LITTLE_ENDIAN)
             for (value in nextArray) {
@@ -130,7 +163,7 @@ class AudioSink {
     }
 
     fun write(input: FloatArray) {
-        audioTrack.write(input, 0, input.size, WRITE_NON_BLOCKING)
+        audioTrack.write(input, 0, input.size, WRITE_BLOCKING)
     }
 }
 
@@ -150,8 +183,8 @@ class ComplexSineWaveSource(
         for (i in 0 until blockSize - 1 step 2) {
             result[i] = gain * cos(2 * Math.PI * frequency * t / rate).toFloat()
             result[i + 1] = gain * sin(2 * Math.PI * frequency * t / rate).toFloat()
+            t++
         }
-        t++
         return result
     }
 

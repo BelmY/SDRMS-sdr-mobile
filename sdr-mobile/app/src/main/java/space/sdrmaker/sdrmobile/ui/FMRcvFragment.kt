@@ -26,13 +26,14 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
     private lateinit var initButton: Button
     private lateinit var startButton: Button
     private lateinit var hackrf: Hackrf
-    private var channelFreq = 95700000L
+    private var channelFreq = 89800000L
     private var offset = 200000
     private var centerFreq = channelFreq + offset
     private var samplingRate = 882000
+//private var samplingRate = 1102500
     private var bandwidth = samplingRate
     private val decimation = samplingRate / AUDIO_SAMPLE_RATE / 10
-    private var lnaGain = 32
+    private var lnaGain = 50
     private var vgaGain = 32
     private var amp = false
     private var antennaPower = false
@@ -118,6 +119,34 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
         tvOutput.append("Error while opening HackRF: $message\n")  // FIXME: message not displayed
         setUIState(UIState.STARTED)
     }
+
+//    private fun receiveThread() {
+//        setUIState(UIState.RECEIVING)
+//        setupHackRF()
+//        val hackRFSignalSource = HackRFSignalSource(hackrf)
+//        var rfDecimator = ComplexFIRFilter(hackRFSignalSource, lp)
+//        rfDecimator = ComplexFIRFilter(rfDecimator, lp)
+//        val fmDemodulator = FMDemodulator(rfDecimator, 7500, ModulationType.WFM)
+//        val audioDecimator = FIRFilter(fmDemodulator, CUT20k_FREQ882000_HAMMING_321, 20)
+//        val audioSink = AudioSink()
+//        var counter = 0
+//        val blockSize = 16 * 1024
+//        var start = System.currentTimeMillis()
+//        while (!stopRequested && audioDecimator.hasNext()) {
+//            if (counter == 1000) {
+//                println("Data rate: ${blockSize.toFloat() * 1000000 / 2 / (System.currentTimeMillis() - start)}Sps")
+//                counter = 0
+//                start = System.currentTimeMillis()
+//            }
+//            audioSink.write(
+//                audioDecimator.next()
+//            )
+//            counter++
+//        }
+//        hackrf.stop()
+//        printOnScreen("RX Stopped.")
+//        setUIState(UIState.INITIALIZED)
+//    }
 
 //    private fun receiveThread() {
 ////        setUIState(UIState.RECEIVING)
@@ -227,7 +256,9 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
 //            e.printStackTrace(pw)
 //            printOnScreen(sw.toString())
 //        }
+//
 //        }
+//
 //        printOnScreen("RX Stopped.")
 //        setUIState(UIState.INITIALIZED)
 //    }
@@ -260,7 +291,7 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
 //        var readPath = "${context!!.getExternalFilesDir(null)}/fm_dump_resampler_decimation2.iq"
 //        val file = FileReader(readPath)
 //        val fmDemodulator = FMDemodulator(file, 7500, ModulationType.WFM)
-//        val decimator = Decimator(fmDemodulator, 10, CUT22k_FREQ441000)
+//        val decimator = Decimator(fmDemodulator, 10, CUT20k_FREQ882000_HAMMING_321)
 //        val audioSink = AudioSink()
 //
 //        while (!stopRequested && decimator.hasNext()) {
@@ -284,9 +315,10 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
 //        var readPath = "${context!!.getExternalFilesDir(null)}/fm_dump_multiply.iq"
 //        val file = FileReader(readPath)
 ////        val rfDecimator = ComplexDownsampler(file, 2)
-//        val rfDecimator = ComplexDecimator(file, 10, CUT200k_FREQ882000)
+////        val rfDecimator = ComplexDecimator(file, 2, CUT200k_FREQ882000)
+//        val rfDecimator = ComplexFIRFilter(file, CUT200k_FREQ882000, 2)
 //        val fmDemodulator = FMDemodulator(rfDecimator, 7500, ModulationType.WFM)
-//        val audioDecimator = Decimator(fmDemodulator, 2, CUT22k_FREQ441000)
+//        val audioDecimator = Decimator(fmDemodulator, 10, CUT20k_FREQ882000_HAMMING_321)
 ////        val audioDecimator = fmDemodulator
 //        val audioSink = AudioSink()
 //        var counter = 0
@@ -318,6 +350,144 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
 //        setUIState(UIState.INITIALIZED)
 //    }
 
+    // full pipeline from dump
+//    private fun receiveThread() {
+//        setUIState(UIState.RECEIVING)
+////        val hackRFSource = HackRFSignalSource(hackrf)
+//        var readPath = "${context!!.getExternalFilesDir(null)}/fm_dump.iq"
+//        val file = BufferedFileReader(readPath)
+//        val sine = ComplexSineWaveSource(offset, samplingRate, 16 * 1024)
+//        val multiplier = Multiply(file, sine)
+//        val rfDecimator = ComplexFIRFilter(multiplier, CUT200k_FREQ882000, 2)
+//        val fmDemodulator = FMDemodulator(rfDecimator, 7500, ModulationType.WFM)
+//        val audioDecimator = Decimator(fmDemodulator, 10, CUT20k_FREQ882000_HAMMING_321)
+//        val audioSink = AudioSink()
+//        var counter = 0
+//        val blockSize = 1024 * 16
+//        var timestamp = System.currentTimeMillis()
+//        while (!stopRequested && audioDecimator.hasNext()) {
+//            try {
+//                if (counter++ == 1000) {
+//                    val dataRate =
+//                        (blockSize.toFloat() / 2) * 10e6 / (System.currentTimeMillis() - timestamp)
+//                    println("Data rate: ${dataRate}Sps")
+//                    println((System.currentTimeMillis() - timestamp))
+//                    timestamp = System.currentTimeMillis()
+//                    counter = 0
+//                }
+//                val next = audioDecimator.next()
+//                audioSink.write(
+//                    next
+//                )
+//            } catch (e: Exception) {
+//                val sw = StringWriter()
+//                val pw = PrintWriter(sw)
+//                e.printStackTrace(pw)
+//                printOnScreen(sw.toString())
+//            }
+//        }
+//
+//        printOnScreen("RX Stopped.")
+//        setUIState(UIState.INITIALIZED)
+//    }
+
+//    private fun receiveThread() {
+//        setUIState(UIState.RECEIVING)
+////        val hackRFSource = HackRFSignalSource(hackrf)
+//        var readPath = "${context!!.getExternalFilesDir(null)}/fm_dump.iq"
+//        var writePath = "${context!!.getExternalFilesDir(null)}/fm_dump_mobile_multiply.iq"
+//        val file = BufferedFileReader(readPath)
+//        val sine = ComplexSineWaveSource(offset, samplingRate, 16 * 1024)
+//        val multiplier = Multiply(file, sine)
+//        val fileWriter = FileWriter()
+////        val rfDecimator = ComplexFIRFilter(multiplier, CUT200k_FREQ882000, 2)
+////        val fmDemodulator = FMDemodulator(rfDecimator, 7500, ModulationType.WFM)
+////        val audioDecimator = Decimator(fmDemodulator, 10, CUT20k_FREQ882000_HAMMING_321)
+////        val audioSink = AudioSink()
+////        var counter = 0
+////        val blockSize = 1024 * 16
+////        var timestamp = System.currentTimeMillis()
+////        while (!stopRequested) {
+////            try {
+//                fileWriter.write(multiplier, writePath)
+////            } catch (e: Exception) {
+////                val sw = StringWriter()
+////                val pw = PrintWriter(sw)
+////                e.printStackTrace(pw)
+////                printOnScreen(sw.toString())
+////                break
+////            }
+////        }
+//
+//        printOnScreen("RX Stopped.")
+//        setUIState(UIState.INITIALIZED)
+//    }
+
+//    private fun receiveThread() {
+//        setUIState(UIState.RECEIVING)
+////        val hackRFSource = HackRFSignalSource(hackrf)
+//        var readPath = "${context!!.getExternalFilesDir(null)}/fm_dump.iq"
+//        var writePath = "${context!!.getExternalFilesDir(null)}/fm_dump_mobile_multiply.iq"
+//        val file = BufferedFileReader(readPath)
+//        val sine = ComplexSineWaveSource(offset, samplingRate, 16 * 1024)
+//        val multiplier = Multiply(file, sine)
+//        val fileWriter = FileWriter()
+////        val rfDecimator = ComplexFIRFilter(multiplier, CUT200k_FREQ882000, 2)
+////        val fmDemodulator = FMDemodulator(rfDecimator, 7500, ModulationType.WFM)
+////        val audioDecimator = Decimator(fmDemodulator, 10, CUT20k_FREQ882000_HAMMING_321)
+////        val audioSink = AudioSink()
+////        var counter = 0
+////        val blockSize = 1024 * 16
+////        var timestamp = System.currentTimeMillis()
+////        while (!stopRequested) {
+////            try {
+//        fileWriter.write(multiplier, writePath)
+////            } catch (e: Exception) {
+////                val sw = StringWriter()
+////                val pw = PrintWriter(sw)
+////                e.printStackTrace(pw)
+////                printOnScreen(sw.toString())
+////                break
+////            }
+////        }
+//
+//        printOnScreen("RX Stopped.")
+//        setUIState(UIState.INITIALIZED)
+//    }
+
+//    private fun receiveThread() {
+//        setUIState(UIState.RECEIVING)
+//////        val hackRFSource = HackRFSignalSource(hackrf)
+////        var readPath = "${context!!.getExternalFilesDir(null)}/fm_dump.iq"
+//        var writePath = "${context!!.getExternalFilesDir(null)}/fm_dump_mobile_sine_fixedT.iq"
+////        val file = BufferedFileReader(readPath)
+//        val sine = ComplexSineWaveSource(offset, samplingRate, 16 * 1024)
+////        val multiplier = Multiply(file, sine)
+//        val fileWriter = FileWriter()
+////        val rfDecimator = ComplexFIRFilter(multiplier, CUT200k_FREQ882000, 2)
+////        val fmDemodulator = FMDemodulator(rfDecimator, 7500, ModulationType.WFM)
+////        val audioDecimator = Decimator(fmDemodulator, 10, CUT20k_FREQ882000_HAMMING_321)
+////        val audioSink = AudioSink()
+////        var counter = 0
+////        val blockSize = 1024 * 16
+////        var timestamp = System.currentTimeMillis()
+////        while (!stopRequested) {
+////            try {
+//        fileWriter.write(sine, writePath)
+////            } catch (e: Exception) {
+////                val sw = StringWriter()
+////                val pw = PrintWriter(sw)
+////                e.printStackTrace(pw)
+////                printOnScreen(sw.toString())
+////                break
+////            }
+////        }
+//
+//        printOnScreen("RX Stopped.")
+//        setUIState(UIState.INITIALIZED)
+//    }
+
+
     private fun setupHackRF() {
         printOnScreen("Setting sample rate to $samplingRate sps ... ")
         hackrf.setSampleRate(samplingRate, 1)
@@ -340,39 +510,58 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
         setUIState(UIState.RECEIVING)
         setupHackRF()
         val hackRFSignalSource = HackRFSignalSource(hackrf)
-//        val rfDecimator = ComplexDecimator(hackRFSignalSource, 2, CUT75k_FREQ882000)
-        val rfDecimator = ComplexFIRFilter(hackRFSignalSource, CUT75k_FREQ882000, 2)
+        val sineWaveSource = ComplexSineWaveSource(offset, samplingRate, 1024 * 16)
+        val multiply = Multiply(sineWaveSource, hackRFSignalSource)
+        val rfDecimator = ComplexFIRFilter(multiply, lp, 2)
         val fmDemodulator = FMDemodulator(rfDecimator, 7500, ModulationType.WFM)
-//        val audioDecimator = Decimator(fmDemodulator, 10, CUT22k_FREQ441000)
-        val audioDecimator = FIRFilter(fmDemodulator, CUT22k_FREQ441000, 10)
+        val audioDecimator = FIRFilter(fmDemodulator, CUT20k_FREQU441000_81, 10)
         val audioSink = AudioSink()
-        var counter = 0
-        val blockSize = 1024 * 16
-        var timestamp = System.currentTimeMillis()
+//        var counter = 0
+//        val blockSize = 16 * 1024
+//        var start = System.currentTimeMillis()
         while (!stopRequested && audioDecimator.hasNext()) {
-//            try {
-//                if (counter++ == 1000) {
-//                    val dataRate =
-//                        (blockSize.toFloat() / 2) * 10e6 / (System.currentTimeMillis() - timestamp)
-//                    println("Data rate: ${dataRate}Sps")
-//                    println((System.currentTimeMillis() - timestamp))
-//                    timestamp = System.currentTimeMillis()
-//                    counter = 0
-//                }
-                audioSink.write(
-                    audioDecimator.next()
-                )
-//            } catch (e: Exception) {
-//                val sw = StringWriter()
-//                val pw = PrintWriter(sw)
-//                e.printStackTrace(pw)
-//                printOnScreen(sw.toString())
+//            if (counter == 1000) {
+//                println("Data rate: ${blockSize.toFloat() * 1000000 / 2 / (System.currentTimeMillis() - start)}Sps")
+//                counter = 0
+//                start = System.currentTimeMillis()
 //            }
+            audioSink.write(
+                audioDecimator.next()
+            )
+//            counter++
         }
         hackrf.stop()
         printOnScreen("RX Stopped.")
         setUIState(UIState.INITIALIZED)
     }
+
+    // best one yet
+//    private fun receiveThread() {
+//        setUIState(UIState.RECEIVING)
+//        setupHackRF()
+//        val hackRFSignalSource = HackRFSignalSource(hackrf)
+//        val rfDecimator = ComplexFIRFilter(hackRFSignalSource, FM_882k_BLACKMAN, 2)
+//        val fmDemodulator = FMDemodulator(rfDecimator, 7500, ModulationType.WFM)
+//        val audioDecimator = FIRFilter(fmDemodulator, CUT22k_FREQ441000, 10)
+//        val audioSink = AudioSink()
+//        var counter = 0
+//        val blockSize = 16 * 1024
+//        var start = System.currentTimeMillis()
+//        while (!stopRequested && audioDecimator.hasNext()) {
+//            if (counter == 1000) {
+//                println("Data rate: ${blockSize.toFloat() * 1000000 / 2 / (System.currentTimeMillis() - start)}Sps")
+//                counter = 0
+//                start = System.currentTimeMillis()
+//            }
+//            audioSink.write(
+//                audioDecimator.next()
+//            )
+//            counter++
+//        }
+//        hackrf.stop()
+//        printOnScreen("RX Stopped.")
+//        setUIState(UIState.INITIALIZED)
+//    }
 
 //    private fun receiveThread() {
 //        setUIState(UIState.RECEIVING)
