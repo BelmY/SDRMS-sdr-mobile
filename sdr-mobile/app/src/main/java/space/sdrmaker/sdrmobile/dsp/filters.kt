@@ -5,7 +5,8 @@ import kotlin.math.ceil
 class FIRFilter(
     private val input: Iterator<FloatArray>,
     private val coefs: FloatArray,
-    private val decimation: Int = 1
+    private val decimation: Int = 1,
+    private val gain: Float = 1f
 ) :
     Iterator<FloatArray> {
     private val length: Int = coefs.size
@@ -24,6 +25,7 @@ class FIRFilter(
                         result[arrayIndex / decimation] += coefs[i] * delayLine[index--]
                         if (index < 0) index = length - 1
                     }
+                    result[arrayIndex / decimation] = result[arrayIndex / decimation] * gain / length
                 }
                 if (++count >= length) count = 0
             }
@@ -37,7 +39,8 @@ class FIRFilter(
 class ComplexFIRFilter(
     private val input: Iterator<FloatArray>,
     private val coefs: FloatArray,
-    private val decimation: Int = 1
+    private val decimation: Int = 1,
+    private val gain: Float = 1f
 ) : Iterator<FloatArray> {
     private val length: Int = coefs.size
     private val reDelayLine = FloatArray(length)
@@ -58,6 +61,8 @@ class ComplexFIRFilter(
                     index--
                     if (index < 0) index = length - 1
                 }
+                result[arrayIndex / decimation] = result[arrayIndex / decimation] * gain / length
+                result[arrayIndex / decimation + 1] = result[arrayIndex / decimation + 1] * gain / length
             }
             if (++count >= length) count = 0
 

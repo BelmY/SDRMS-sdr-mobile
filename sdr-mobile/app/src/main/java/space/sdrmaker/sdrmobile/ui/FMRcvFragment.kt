@@ -141,9 +141,9 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
         val hackRFSignalSource = HackRFSignalSource(hackrf)
         val sineWaveSource = ComplexSineWaveSource(offset, samplingRate, 1024 * 16)
         val multiply = Multiply(sineWaveSource, hackRFSignalSource)
-        val rfDecimator = ComplexFIRFilter(multiply, CUT75k_FREQ882000_45, lowpassDecimation)
+        val rfDecimator = ComplexFIRFilter(multiply, CUT75k_FREQ882000_45, lowpassDecimation, 4f)
         val fmDemodulator = FMDemodulator(rfDecimator, 7500, ModulationType.WFM)
-        val audioDecimator = FIRFilter(fmDemodulator, CUT20k_FREQ441000_81, audioDecimation)
+        val audioDecimator = FIRFilter(fmDemodulator, CUT20k_FREQ441000_81, audioDecimation, 10f)
         val audioSink = AudioSink()
         while (!stopRequested && audioDecimator.hasNext()) {
             audioSink.write(

@@ -18,7 +18,8 @@ val QUADRATURE_RATE = mapOf(
 class FMDemodulator(
     private val input: Iterator<FloatArray>,
     maxDeviation: Int,
-    modulation: ModulationType
+    modulation: ModulationType,
+    private val gain: Float = 1f
 ) :
     Iterator<FloatArray> {
 
@@ -43,7 +44,7 @@ class FMDemodulator(
             previousRe = re
             previousIm = im
             result[resultCounter++] =
-                quadratureGain * atan2(imOut.toDouble(), reOut.toDouble()).toFloat()
+                gain * quadratureGain * atan2(imOut.toDouble(), reOut.toDouble()).toFloat()
         }
         return result
     }
