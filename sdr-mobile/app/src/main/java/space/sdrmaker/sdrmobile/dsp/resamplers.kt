@@ -24,7 +24,7 @@ class ComplexUpsampler(private val input: Iterator<FloatArray>, private val fact
         while (iterator.hasNext()) {
             result[counter++] = iterator.next()
             result[counter++] = iterator.next()
-            for (i in 0 until factor) {
+            for (i in 0 until factor - 1) {
                 result[counter++] = 0f
                 result[counter++] = 0f
             }
