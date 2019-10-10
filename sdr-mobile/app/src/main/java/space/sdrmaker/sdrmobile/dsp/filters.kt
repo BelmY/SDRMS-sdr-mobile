@@ -49,7 +49,7 @@ class ComplexFIRFilter(
 
     override fun next(): FloatArray {
         val nextArray = input.next()
-        val result = FloatArray(ceil(nextArray.size.toFloat() / decimation + 1).toInt()) { 0f }
+        val result = FloatArray(ceil(nextArray.size.toFloat() / decimation).toInt()) { 0f }
         for (arrayIndex in 0 until nextArray.size - 1 step 2) {
             reDelayLine[count] = nextArray[arrayIndex]
             imDelayLine[count] = nextArray[arrayIndex + 1]
