@@ -52,8 +52,10 @@ class ComplexDownsampler(private val input: Iterator<FloatArray>, private val fa
 
     override fun next(): FloatArray {
         val nextArray = input.next()
-        val result = FloatArray(ceil(nextArray.size.toFloat() / factor).toInt())
-        for (i in 0 until result.size - 1 step 2) {
+        var resultSize = ceil(nextArray.size.toFloat() / factor).toInt()
+        resultSize = if (resultSize.rem(2) == 1) resultSize + 1 else resultSize
+        val result = FloatArray(resultSize)
+        for (i in 0 until resultSize - 1 step 2) {
             result[i] = nextArray[i * factor]
             result[i + 1] = nextArray[i * factor + 1]
         }
@@ -63,9 +65,9 @@ class ComplexDownsampler(private val input: Iterator<FloatArray>, private val fa
     override fun hasNext() = input.hasNext()
 }
 
-class Decimator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray) : Iterator<FloatArray> {
+class Decimator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray, gain: Float = 1f) : Iterator<FloatArray> {
 
-    private val filter = FIRFilter(input, taps)
+    private val filter = FIRFilter(input, taps, gain = gain)
     private val downsampler = Downsampler(filter, factor)
 
     override fun hasNext() = downsampler.hasNext()
@@ -73,10 +75,10 @@ class Decimator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray) : It
     override fun next() = downsampler.next()
 }
 
-class ComplexDecimator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray) :
+class ComplexDecimator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray, gain: Float = 1f) :
     Iterator<FloatArray> {
 
-    private val filter = ComplexFIRFilter(input, taps)
+    private val filter = ComplexFIRFilter(input, taps, gain = gain)
     private val downsampler = ComplexDownsampler(filter, factor)
 
     override fun next(): FloatArray {
