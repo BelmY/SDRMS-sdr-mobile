@@ -18,16 +18,14 @@ class ResamplersTest {
             floatArrayOf(1f, 0f, 0f, 2f, 0f, 0f, 3f, 0f, 0f),
             floatArrayOf(4f, 0f, 0f, 5f, 0f, 0f, 6f, 0f, 0f)
         )
-        assertArrayEquals(
-            expected[0],
-            out[0],
-            0.1f
-        )
-        assertArrayEquals(
-            expected[1],
-            out[1],
-            0.1f
-        )
+        assertEquals(expected.size, out.size)
+        for(i in 0 until expected.size) {
+            assertArrayEquals(
+                expected[i],
+                out[i],
+                0.1f
+            )
+        }
         assertEquals(false, upsampler.hasNext())
     }
 
@@ -44,52 +42,62 @@ class ResamplersTest {
             floatArrayOf(1f, 2f, 0f, 0f, 0f, 0f, 3f, 4f, 0f, 0f, 0f, 0f),
             floatArrayOf(5f, 6f, 0f, 0f, 0f, 0f, 7f, 8f, 0f, 0f, 0f, 0f)
         )
-        assertArrayEquals(
-            expected[0],
-            out[0],
-            0.1f
-        )
-        assertArrayEquals(
-            expected[1],
-            out[1],
-            0.1f
-        )
+        assertEquals(expected.size, out.size)
+        for(i in 0 until expected.size) {
+            assertArrayEquals(
+                expected[i],
+                out[i],
+                0.1f
+            )
+        }
         assertEquals(false, upsampler.hasNext())
     }
-//
-//    @Test
-//    fun test_Downsampler() {
-//        val data = FloatArray(9) { i -> i.toFloat() }
-//        val downsampler = Downsampler(data.iterator(), 3)
-//        val out = FloatArray(3) { downsampler.next() }
-//
-//        assertArrayEquals(
-//            floatArrayOf(0f, 3f, 6f),
-//            out,
-//            0.1f
-//        )
-//        assertEquals(false, downsampler.hasNext())
-//    }
-//
-//    @Test
-//    fun test_ComplexDownsampler() {
-//        val data = Array(9) { i -> Pair(i.toFloat(), i.toFloat()) }
-//        val downsampler = ComplexDownsampler(data.iterator(), 3)
-//        val out = Array(3) { downsampler.next() }
-//        val expected = floatArrayOf(0f, 3f, 6f)
-//
-//        assertArrayEquals(
-//            expected,
-//            out.map { p -> p.first }.toFloatArray(),
-//            0.1f
-//        )
-//        assertArrayEquals(
-//            expected,
-//            out.map { p -> p.second }.toFloatArray(),
-//            0.1f
-//        )
-//        assertEquals(false, downsampler.hasNext())
-//    }
+
+    @Test
+    fun test_Downsampler() {
+        val data = arrayListOf(
+            floatArrayOf(1f, 2f, 3f, 4f),
+            floatArrayOf(5f, 6f, 7f, 8f)
+        )
+        val downsampler = Downsampler(data.iterator(), 2)
+        val out = Array(data.size) { downsampler.next() }
+        val expected = arrayListOf(
+            floatArrayOf(1f, 3f),
+            floatArrayOf(5f, 7f)
+        )
+        assertEquals(expected.size, out.size)
+        for(i in 0 until expected.size) {
+            assertArrayEquals(
+                expected[i],
+                out[i],
+                0.1f
+            )
+        }
+        assertEquals(false, downsampler.hasNext())
+    }
+
+    @Test
+    fun test_ComplexDownsampler() {
+        val data = arrayListOf(
+            floatArrayOf(1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f),
+            floatArrayOf(5f, 6f, 7f, 8f, 1f, 2f, 3f, 4f)
+        )
+        val downsampler = ComplexDownsampler(data.iterator(), 2)
+        val out = Array(2) { downsampler.next() }
+        val expected = arrayListOf(
+            floatArrayOf(1f, 2f, 5f, 6f),
+            floatArrayOf(5f, 6f, 1f, 2f)
+        )
+        assertEquals(expected.size, out.size)
+        for(i in 0 until expected.size) {
+            assertArrayEquals(
+                expected[i],
+                out[i],
+                0.1f
+            )
+        }
+        assertEquals(false, downsampler.hasNext())
+    }
 //
 //    @Test
 //    fun test_FIRFilter() {
