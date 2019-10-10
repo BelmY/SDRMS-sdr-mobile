@@ -195,18 +195,4 @@ class ResamplersTest {
         assertEquals(false, decimator.hasNext())
     }
 
-//    @Test
-//    fun test_IQFileReader() {
-//        val path = this::class.java.classLoader!!.getResource("iqsample.iq").path
-//        val reader = FileReader(path)
-//        assertEquals(true, reader.hasNext())
-//        val iq = reader.next()
-//        assertArrayEquals(
-//            floatArrayOf(iq.first, iq.second),
-//            floatArrayOf(-2.21362957e-04f, -6.103702e-05f),
-//            0.0001f
-//        )
-//        assertEquals(false, reader.hasNext())
-//
-//    }
 }
