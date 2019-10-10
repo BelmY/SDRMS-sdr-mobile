@@ -88,11 +88,11 @@ class ComplexDecimator(input: Iterator<FloatArray>, factor: Int, taps: FloatArra
     override fun hasNext() = downsampler.hasNext()
 }
 
-class Interpolator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray) :
+class Interpolator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray, gain: Float = 1f) :
     Iterator<FloatArray> {
 
     private val upsampler = Upsampler(input, factor)
-    private val filter = FIRFilter(upsampler, taps)
+    private val filter = FIRFilter(upsampler, taps, gain = gain)
 
     override fun hasNext() = filter.hasNext()
 
@@ -101,11 +101,11 @@ class Interpolator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray) :
     }
 }
 
-class ComplexInterpolator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray) :
+class ComplexInterpolator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray, gain: Float = 1f) :
     Iterator<FloatArray> {
 
     private val upsampler = ComplexUpsampler(input, factor)
-    private val filter = ComplexFIRFilter(upsampler, taps)
+    private val filter = ComplexFIRFilter(upsampler, taps, gain = gain)
 
     override fun hasNext() = filter.hasNext()
 

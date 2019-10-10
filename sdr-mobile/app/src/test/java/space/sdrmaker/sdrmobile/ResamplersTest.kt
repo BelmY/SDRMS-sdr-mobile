@@ -54,6 +54,54 @@ class ResamplersTest {
     }
 
     @Test
+    fun test_Interpolator() {
+        val coeffs = floatArrayOf(1f, 2f, 3f)
+        val data = arrayListOf(
+            floatArrayOf(1f, 2f, 3f, 4f, 5f),
+            floatArrayOf(6f, 7f, 8f, 9f, 10f)
+        )
+        val interpolator = Interpolator(data.iterator(), 2, coeffs, gain = coeffs.size.toFloat())
+        val out = Array(data.size) { interpolator.next() }
+        val expected = arrayListOf(
+            floatArrayOf(1f, 2f, 5f, 4f, 9f, 6f, 13f, 8f, 17f, 10f),
+            floatArrayOf(21f, 12f, 25f, 14f, 29f, 16f, 33f, 18f, 37f, 20f)
+        )
+        assertEquals(expected.size, out.size)
+        for(i in 0 until expected.size) {
+            assertArrayEquals(
+                expected[i],
+                out[i],
+                0.1f
+            )
+        }
+        assertEquals(false, interpolator.hasNext())
+    }
+
+    @Test
+    fun test_ComplexInterpolator() {
+        val coeffs = floatArrayOf(1f, 2f, 3f)
+        val data = arrayListOf(
+            floatArrayOf(1f, 1f, 2f, 2f, 3f, 3f, 4f, 4f, 5f, 5f),
+            floatArrayOf(6f, 6f, 7f, 7f, 8f, 8f, 9f, 9f, 10f, 10f)
+        )
+        val intrpolator = ComplexInterpolator(data.iterator(), 2, coeffs, gain = coeffs.size.toFloat())
+        val expected = arrayListOf(
+            floatArrayOf(1f, 1f, 2f, 2f, 5f, 5f, 4f, 4f, 9f, 9f, 6f, 6f, 13f, 13f, 8f, 8f, 17f, 17f, 10f, 10f),
+            floatArrayOf(21f, 21f, 12f, 12f, 25f, 25f, 14f, 14f, 29f, 29f, 16f, 16f, 33f, 33f, 18f, 18f, 37f, 37f, 20f, 20f)
+        )
+        val out = Array(data.size) { intrpolator.next() }
+        assertEquals(expected.size, out.size)
+        for(i in 0 until expected.size) {
+            assertArrayEquals(
+                expected[i],
+                out[i],
+                0.1f
+            )
+        }
+        assertEquals(false, intrpolator.hasNext())
+    }
+
+    @Test
     fun test_Downsampler() {
         val data = arrayListOf(
             floatArrayOf(1f, 2f, 3f, 4f),
