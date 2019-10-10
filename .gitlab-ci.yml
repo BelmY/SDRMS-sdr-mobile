@@ -7,7 +7,7 @@ stages:
 benchmarks_lint_and_test:
   stage: lint_and_test
   script:
-    - apt update && apt install -y --no-install-recommends cmake ninja-build
+    - apt-get update && UCF_FORCE_CONFOLD=1 DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -qq --no-install-recommends install cmake ninja-build
     # FIXME: linter warnings don't stop the build
     - cd benchmarks  # && ./gradlew lint
     - ./gradlew test
@@ -15,7 +15,7 @@ benchmarks_lint_and_test:
 benchmarks_build:
   stage: build
   script:
-    - apt update && apt install -y --no-install-recommends cmake ninja-build
+    - apt-get update && UCF_FORCE_CONFOLD=1 DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -qq --no-install-recommends install cmake ninja-build
     - cd benchmarks
     - echo $KEYSTORE_FILE | base64 -d > my.keystore
     - ./gradlew assembleRelease
@@ -30,7 +30,7 @@ benchmarks_build:
 sdrm_lint_and_test:
   stage: lint_and_test
   script:
-    - apt update && apt install -y --no-install-recommends cmake ninja-build
+    - apt-get update && UCF_FORCE_CONFOLD=1 DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -qq --no-install-recommends install cmake ninja-build
     # FIXME: linter warnings don't stop the build
     - cd sdr-mobile  # && ./gradlew lint
     - ./gradlew test
@@ -38,7 +38,7 @@ sdrm_lint_and_test:
 sdrm_build:
   stage: build
   script:
-    - apt update && apt install -y --no-install-recommends cmake ninja-build
+    - apt-get update && UCF_FORCE_CONFOLD=1 DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -qq --no-install-recommends install cmake ninja-build
     - cd sdr-mobile
     - echo $KEYSTORE_FILE | base64 -d > my.keystore
     - ./gradlew assembleRelease
