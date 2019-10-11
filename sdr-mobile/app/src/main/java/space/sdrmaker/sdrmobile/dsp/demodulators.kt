@@ -2,28 +2,17 @@ package space.sdrmaker.sdrmobile.dsp
 
 import kotlin.math.atan2
 import kotlin.math.floor
-
-enum class ModulationType {
-    AM, NFM, WFM, LSB, USB
-}
-
-val QUADRATURE_RATE = mapOf(
-    Pair(ModulationType.AM, 2 * AUDIO_SAMPLE_RATE),
-    Pair(ModulationType.NFM, 2 * AUDIO_SAMPLE_RATE),
-    Pair(ModulationType.WFM, 2 * AUDIO_SAMPLE_RATE),
-    Pair(ModulationType.LSB, 2 * AUDIO_SAMPLE_RATE),
-    Pair(ModulationType.USB, 2 * AUDIO_SAMPLE_RATE)
-)
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 class FMDemodulator(
     private val input: Iterator<FloatArray>,
     maxDeviation: Int,
-    modulation: ModulationType,
     private val gain: Float = 1f
 ) :
     Iterator<FloatArray> {
 
-    private val quadratureRate = (QUADRATURE_RATE[modulation] ?: 2 * AUDIO_SAMPLE_RATE).toFloat()
+    private val quadratureRate = 2.toFloat() * AUDIO_SAMPLE_RATE
     private val quadratureGain = (quadratureRate / (2 * Math.PI * maxDeviation)).toFloat()
     private var previousRe = 1f
     private var previousIm = 1f
@@ -45,6 +34,30 @@ class FMDemodulator(
             previousIm = im
             result[resultCounter++] =
                 gain * quadratureGain * atan2(imOut.toDouble(), reOut.toDouble()).toFloat()
+        }
+        return result
+    }
+
+    override fun hasNext() = input.hasNext()
+
+}
+
+class AMDemodulator(
+    private val input: Iterator<FloatArray>,
+    private val gain: Float = 1f
+) :
+    Iterator<FloatArray> {
+
+    override fun next(): FloatArray {
+        val nextArray = input.next()
+        val iterator = nextArray.iterator()
+        val result = FloatArray(floor(nextArray.size.toFloat() / 2).toInt())
+        var resultCounter = 0
+        while (iterator.hasNext()) {
+            val re = iterator.next()
+            val im = if (iterator.hasNext()) iterator.next() else break
+            result[resultCounter++] =
+                gain * sqrt(re.pow(2) + im.pow(2))
         }
         return result
     }

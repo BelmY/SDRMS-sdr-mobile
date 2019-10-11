@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">SDR Mobile</string>
-    <string name="tab_1_title">FM Demodulation</string>
+    <string name="tab_1_title">FM</string>
+    <string name="tab_2_title">AM</string>
 </resources>

@@ -17,14 +17,14 @@ import space.sdrmaker.sdrmobile.dsp.taps.*
 import kotlin.concurrent.thread
 
 
-class FMRcvFragment : Fragment(), HackrfCallbackInterface {
+class AMRcvFragment : Fragment(), HackrfCallbackInterface {
 
     private lateinit var root: View
     private lateinit var tvOutput: TextView
     private lateinit var initButton: Button
     private lateinit var startButton: Button
     private lateinit var hackrf: Hackrf
-    private var channelFreq = 89800000L
+    private var channelFreq = 144900000L
     private var offset = 200000
     private var centerFreq = channelFreq + offset
     private var samplingRate = 882000
@@ -142,7 +142,7 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
         val sineWaveSource = ComplexSineWaveSource(offset, samplingRate, 1024 * 16)
         val multiply = Multiply(sineWaveSource, hackRFSignalSource)
         val rfDecimator = ComplexFIRFilter(multiply, CUT75k_FREQ882000_45, lowpassDecimation, 4f)
-        val fmDemodulator = FMDemodulator(rfDecimator, 7500)
+        val fmDemodulator = AMDemodulator(rfDecimator, gain = 100f)
         val audioDecimator = FIRFilter(fmDemodulator, CUT20k_FREQ441000_81, audioDecimation, 10f)
         val audioSink = AudioSink()
         while (!stopRequested && audioDecimator.hasNext()) {
