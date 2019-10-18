@@ -48,7 +48,7 @@ class HilbertTransform(
         nextArray.copyInto(dataFFT)
         fft.realForwardFull(dataFFT)
         val nyquist = floor(length / 2 + .5).toInt()
-        val hilbert = FloatArray(ceil(nextArray.size.toFloat() / 2).toInt()) { index -> if(index < nyquist) 2f else 0f}
+        val hilbert = FloatArray(length) { index -> if(index < nyquist) 2f else 0f}
         hilbert[0] = 1f
         hilbert[nyquist] = 1f
 
@@ -57,7 +57,7 @@ class HilbertTransform(
             dataFFT[2 * i + 1] *= hilbert[i]
         }
 
-        fft.complexInverse(dataFFT, false)
+        fft.complexInverse(dataFFT, true)
         return dataFFT
     }
 

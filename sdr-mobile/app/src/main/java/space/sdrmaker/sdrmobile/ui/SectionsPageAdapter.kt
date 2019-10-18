@@ -8,7 +8,8 @@ import space.sdrmaker.sdrmobile.R
 
 private val TAB_TITLES = arrayOf(
     R.string.tab_1_title,
-    R.string.tab_2_title
+    R.string.tab_2_title,
+    R.string.tab_3_title
 )
 
 /**
@@ -23,6 +24,7 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
         return when(position) {
             0 -> FMRcvFragment()
             1 -> AMRcvFragment()
+            2 -> HilbertTransformFragment()
             else -> FMRcvFragment()
         }
     }
@@ -32,6 +34,6 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
     }
 
     override fun getCount(): Int {
-        return 2
+        return 3
     }
 }
