@@ -1,7 +1,6 @@
 package space.sdrmaker.sdrmobile.dsp
 
 import org.jtransforms.fft.FloatFFT_1D
-import kotlin.math.ceil
 import kotlin.math.floor
 
 class Multiply(

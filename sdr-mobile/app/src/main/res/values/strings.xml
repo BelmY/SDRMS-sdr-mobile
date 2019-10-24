@@ -3,4 +3,5 @@
     <string name="tab_1_title">FM</string>
     <string name="tab_2_title">AM</string>
     <string name="tab_3_title">Hilbert</string>
+    <string name="tab_4_title">NOAA</string>
 </resources>
