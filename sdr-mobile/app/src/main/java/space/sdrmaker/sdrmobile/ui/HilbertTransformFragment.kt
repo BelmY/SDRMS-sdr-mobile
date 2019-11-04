@@ -49,10 +49,11 @@ class HilbertTransformFragment : Fragment() {
 
     private fun transformThread() {
         val sineWaveSource = SineWaveSource(offset, samplingRate, 1024 * 16)
-        val hilbert = HilbertTransform(sineWaveSource)
+        val dcFilter = DCFilterLong(sineWaveSource, 100)
+        val hilbert = HilbertTransform(dcFilter)
         val file = FileWriter()
-        var writePath = "${context!!.getExternalFilesDir(null)}/hilbert_scaled_dump.iq"
-        file.write(hilbert, writePath)
+        var writePath = "${context!!.getExternalFilesDir(null)}/hilbert_filtered_scaled_dump.iq"
+        file.write(hilbert, writePath, 2000)
         printOnScreen("Transform Finished.")
     }
 

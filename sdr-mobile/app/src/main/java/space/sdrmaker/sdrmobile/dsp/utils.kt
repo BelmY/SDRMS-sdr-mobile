@@ -72,15 +72,17 @@ class BufferedFileReader(
 
 class FileWriter {
 
-    fun write(input: Iterator<FloatArray>, path: String) {
+    fun write(input: Iterator<FloatArray>, path: String, limit: Int = 0) {
         val stream = File(path).outputStream().buffered()
-        while (input.hasNext()) {
+        var counter = 0
+        while (input.hasNext() && (counter < limit || limit == 0)) {
             val nextArray = input.next()
             val bytes = ByteBuffer.allocate(nextArray.size * 4).order(ByteOrder.LITTLE_ENDIAN)
             for (value in nextArray) {
                 bytes.putFloat(value)
             }
             stream.write(bytes.array())
+            counter++
         }
         stream.flush()
         stream.close()
