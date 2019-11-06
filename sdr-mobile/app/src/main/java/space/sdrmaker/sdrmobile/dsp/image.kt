@@ -3,7 +3,7 @@ package space.sdrmaker.sdrmobile.dsp
 import java.util.concurrent.LinkedBlockingDeque
 import kotlin.math.roundToInt
 
-class SyncedSample(val value: Float, val isSyncA: Boolean = false, isSyncB: Boolean = false)
+class SyncedSample(val value: Float, val isSyncA: Boolean = false, val isSyncB: Boolean = false)
 
 class NOAALineSyncer (private val input: Iterator<FloatArray>) : Iterator<Array<SyncedSample>> {
 
@@ -76,4 +76,43 @@ class NOAALineSyncer (private val input: Iterator<FloatArray>) : Iterator<Array<
 
     override fun hasNext() = input.hasNext()
 
+}
+
+class NOAAImageSink(private val input: Iterator<Array<SyncedSample>>) {
+
+    private val lineLenght = 2080
+    private var x = 0
+    private var y = 0
+    private var result = FloatArray(0)
+
+    fun write(): FloatArray {
+        for (samples in input) {
+            val newResult = FloatArray(result.size + samples.size)
+            System.arraycopy(result, 0, newResult, 0, result.size)
+            result = newResult
+            for (sample in samples) {
+                if (x.rem(50) == 0)
+                    println("Line $x")
+
+                if (y > lineLenght) {
+                    y = 0
+                    x++
+                }
+
+                if(sample.isSyncA) {
+                    println("${x*lineLenght + y} $x A")
+                    y = 0
+                }
+                else if(sample.isSyncB) {
+                    println("${x*lineLenght + y} $x B")
+                    y = lineLenght / 2
+                }
+
+                result[lineLenght * x + y] = sample.value
+                y++
+            }
+        }
+
+        return result
+    }
 }

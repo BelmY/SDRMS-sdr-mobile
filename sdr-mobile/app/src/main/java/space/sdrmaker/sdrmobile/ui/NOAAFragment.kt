@@ -45,29 +45,50 @@ class NOAAFragment : Fragment() {
         thread { this.transformThread() }
     }
 
+//    private fun transformThread() {
+//        printOnScreen("NOAA demodulation started.\n")
+//        val readPath = "${context!!.getExternalFilesDir(null)}/noaa_iq_sample_832k.iq"
+////        val writePath = "${context!!.getExternalFilesDir(null)}/noaa_sample_demoded.iq"
+//        val writePath = "${context!!.getExternalFilesDir(null)}/noaa_iq_sample_832k_fm_demoded.iq"
+//        val reader = FileReader(readPath)
+//
+////        val filter = ComplexFIRFilter(reader, NOAA)
+//        val fmDemodulator = FMDemodulator(reader, 7500)
+////        val hilbert = HilbertTransform(fmDemodulator)
+////        val amDemodulator = AMDemodulator(hilbert, gain = 4f)
+////        val decimator = Decimator(amDemodulator, 200, NOAA)
+////        val filter2 = FIRFilter(amDemodulator, NOAA)
+//
+//        val writer = FileWriter()
+////        writer.write(decimator, writePath)
+//        writer.write(fmDemodulator, writePath)
+////        val audioSink = AudioSink()
+////        while (decimator.hasNext())
+////            audioSink.write(amDemodulator.next())
+////            audioSink.write(decimator.next())
+////        writer.write(amDemodulator, writePath)
+//        printOnScreen("NOAA demodulation finished.\n")
+//    }
+
     private fun transformThread() {
         printOnScreen("NOAA demodulation started.\n")
         val readPath = "${context!!.getExternalFilesDir(null)}/noaa_iq_sample_832k.iq"
 //        val writePath = "${context!!.getExternalFilesDir(null)}/noaa_sample_demoded.iq"
-        val writePath = "${context!!.getExternalFilesDir(null)}/noaa_iq_sample_832k_fm_demoded.iq"
+        val writePath = "${context!!.getExternalFilesDir(null)}/noaa_iq_sample_832k_decoded.iq"
         val reader = FileReader(readPath)
 
 //        val filter = ComplexFIRFilter(reader, NOAA)
         val fmDemodulator = FMDemodulator(reader, 7500)
-//        val hilbert = HilbertTransform(fmDemodulator)
-//        val amDemodulator = AMDemodulator(hilbert, gain = 4f)
-//        val decimator = Decimator(amDemodulator, 200, NOAA)
+        val hilbert = HilbertTransform(fmDemodulator)
+        val amDemodulator = AMDemodulator(hilbert, gain = 4f)
+        val decimator = Decimator(amDemodulator, 200, NOAA)
+        val syncer = NOAALineSyncer(decimator)
+        val image = NOAAImageSink(syncer)
 //        val filter2 = FIRFilter(amDemodulator, NOAA)
 
         val writer = FileWriter()
-//        writer.write(decimator, writePath)
-        writer.write(fmDemodulator, writePath)
-//        val audioSink = AudioSink()
-//        while (decimator.hasNext())
-//            audioSink.write(amDemodulator.next())
-//            audioSink.write(decimator.next())
-//        writer.write(amDemodulator, writePath)
-        printOnScreen("NOAA demodulation finished.\n")
+        writer.write(arrayListOf(image.write()).iterator(), writePath)
+        printOnScreen("NOAA decoding finished.\n")
     }
 
     private fun printOnScreen(msg: String) {
