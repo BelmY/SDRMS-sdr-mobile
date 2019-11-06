@@ -8,7 +8,6 @@ import android.media.AudioRecord.MetricsConstants.CHANNELS
 import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioTrack.WRITE_BLOCKING
-import kotlin.math.ceil
 import kotlin.math.cos
 import kotlin.math.sin
 
