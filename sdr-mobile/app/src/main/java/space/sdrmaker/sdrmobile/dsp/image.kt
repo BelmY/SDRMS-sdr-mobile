@@ -83,28 +83,24 @@ class NOAAImageSink(private val input: Iterator<Array<SyncedSample>>) {
     private val lineLenght = 2080
     private var x = 0
     private var y = 0
-    private var result = FloatArray(0)
+    private var result = FloatArray(lineLenght)
 
     fun write(): FloatArray {
         for (samples in input) {
-            val newResult = FloatArray(result.size + samples.size)
-            System.arraycopy(result, 0, newResult, 0, result.size)
-            result = newResult
             for (sample in samples) {
-                if (x.rem(50) == 0)
-                    println("Line $x")
 
-                if (y > lineLenght) {
+                if (y >= lineLenght) {
                     y = 0
                     x++
+                    val newResult = FloatArray(lineLenght * (x + 1))
+                    System.arraycopy(result, 0, newResult, 0, result.size)
+                    result = newResult
                 }
 
                 if(sample.isSyncA) {
-                    println("${x*lineLenght + y} $x A")
                     y = 0
                 }
                 else if(sample.isSyncB) {
-                    println("${x*lineLenght + y} $x B")
                     y = lineLenght / 2
                 }
 
