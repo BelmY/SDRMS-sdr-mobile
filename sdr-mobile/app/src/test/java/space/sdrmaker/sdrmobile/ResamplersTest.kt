@@ -127,14 +127,14 @@ class ResamplersTest {
     @Test
     fun test_ComplexDownsampler() {
         val data = arrayListOf(
-            floatArrayOf(1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f),
-            floatArrayOf(5f, 6f, 7f, 8f, 1f, 2f, 3f, 4f)
+            floatArrayOf(1f, 2f, 3f, 4f, 5f, 6f),
+            floatArrayOf(7f, 8f, 9f, 10f, 11f, 12f, 13f, 14f)
         )
         val downsampler = ComplexDownsampler(data.iterator(), 2)
         val out = Array(data.size) { downsampler.next() }
         val expected = arrayListOf(
             floatArrayOf(1f, 2f, 5f, 6f),
-            floatArrayOf(5f, 6f, 1f, 2f)
+            floatArrayOf(9f, 10f, 13f, 14f)
         )
         assertEquals(expected.size, out.size)
         for(i in 0 until expected.size) {
@@ -181,8 +181,9 @@ class ResamplersTest {
         val decimator = ComplexDecimator(data.iterator(), 2, coeffs, gain = coeffs.size.toFloat())
         val expected = arrayListOf(
             floatArrayOf(1f, 1f, 10f, 10f, 22f, 22f),
-            floatArrayOf(28f, 28f, 40f, 40f, 52f, 52f)
+            floatArrayOf(34f, 34f, 46f, 46f)
         )
+
         val out = Array(data.size) { decimator.next() }
         assertEquals(expected.size, out.size)
         for(i in 0 until expected.size) {

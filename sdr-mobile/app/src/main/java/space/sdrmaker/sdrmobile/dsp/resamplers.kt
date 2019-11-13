@@ -1,6 +1,6 @@
 package space.sdrmaker.sdrmobile.dsp
 
-import kotlin.math.ceil
+import kotlin.math.floor
 
 class Upsampler(private val input: Iterator<FloatArray>, private val factor: Int) :
     Iterator<FloatArray> {
@@ -57,15 +57,16 @@ class Downsampler(private val input: Iterator<FloatArray>, private val factor: I
 class ComplexDownsampler(private val input: Iterator<FloatArray>, private val factor: Int) :
     Iterator<FloatArray> {
 
+    private var rem = 0
+
     override fun next(): FloatArray {
         val nextArray = input.next()
-        var resultSize = ceil(nextArray.size.toFloat() / factor).toInt()
-        resultSize = if (resultSize.rem(2) == 1) resultSize + 1 else resultSize
-        val result = FloatArray(resultSize)
-        for (i in 0 until resultSize - 1 step 2) {
-            result[i] = nextArray[i * factor]
-            result[i + 1] = nextArray[i * factor + 1]
-        }
+        val offset = (factor - rem).rem(factor)
+        val result =
+            nextArray.filterIndexed {
+                    index, _ ->
+                (floor(index.toDouble() / 2) - offset).rem(factor) == 0.0 }.toFloatArray()
+        rem = (rem + nextArray.size / 2).rem(factor)
         return result
     }
 
