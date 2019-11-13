@@ -39,9 +39,16 @@ class ComplexUpsampler(private val input: Iterator<FloatArray>, private val fact
 class Downsampler(private val input: Iterator<FloatArray>, private val factor: Int) :
     Iterator<FloatArray> {
 
+    private var rem = 0
+
     override fun next(): FloatArray {
         val nextArray = input.next()
-        return FloatArray(ceil(nextArray.size.toFloat() / factor).toInt()) { index -> nextArray[index * factor] }
+        val offset = (factor - rem).rem(factor)
+        val result =
+            nextArray.filterIndexed { index, _ -> index.rem(factor) == offset }.toFloatArray()
+        rem = (rem + nextArray.size).rem(factor)
+
+        return result
     }
 
     override fun hasNext() = input.hasNext()
@@ -65,7 +72,8 @@ class ComplexDownsampler(private val input: Iterator<FloatArray>, private val fa
     override fun hasNext() = input.hasNext()
 }
 
-class Decimator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray, gain: Float = 1f) : Iterator<FloatArray> {
+class Decimator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray, gain: Float = 1f) :
+    Iterator<FloatArray> {
 
     private val filter = FIRFilter(input, taps, gain = gain)
     private val downsampler = Downsampler(filter, factor)
@@ -75,7 +83,12 @@ class Decimator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray, gain
     override fun next() = downsampler.next()
 }
 
-class ComplexDecimator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray, gain: Float = 1f) :
+class ComplexDecimator(
+    input: Iterator<FloatArray>,
+    factor: Int,
+    taps: FloatArray,
+    gain: Float = 1f
+) :
     Iterator<FloatArray> {
 
     private val filter = ComplexFIRFilter(input, taps, gain = gain)
@@ -101,7 +114,12 @@ class Interpolator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray, g
     }
 }
 
-class ComplexInterpolator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray, gain: Float = 1f) :
+class ComplexInterpolator(
+    input: Iterator<FloatArray>,
+    factor: Int,
+    taps: FloatArray,
+    gain: Float = 1f
+) :
     Iterator<FloatArray> {
 
     private val upsampler = ComplexUpsampler(input, factor)

@@ -5,7 +5,7 @@ import kotlin.math.roundToInt
 
 class SyncedSample(val value: Float, val isSyncA: Boolean = false, val isSyncB: Boolean = false)
 
-class NOAALineSyncer (private val input: Iterator<FloatArray>) : Iterator<Array<SyncedSample>> {
+class NOAALineSyncer(private val input: Iterator<FloatArray>) : Iterator<Array<SyncedSample>> {
 
     private val syncaSeq = intArrayOf(
         0, 0, 0, 0,
@@ -48,13 +48,13 @@ class NOAALineSyncer (private val input: Iterator<FloatArray>) : Iterator<Array<
         return result
     }
 
-    private fun getSyncedSample() : SyncedSample {
+    private fun getSyncedSample(): SyncedSample {
         if (window.size < syncPatternLength)
-            return SyncedSample(window.peekLast())
+            return SyncedSample(window.peekLast()!!)
 
         var synca = 0
         var syncb = 0
-        for((counter, sample) in window.withIndex()) {
+        for ((counter, sample) in window.withIndex()) {
             if (sample.roundToInt() == syncaSeq[counter])
                 synca++
             if (sample.roundToInt() == syncbSeq[counter])
@@ -62,7 +62,7 @@ class NOAALineSyncer (private val input: Iterator<FloatArray>) : Iterator<Array<
         }
 
         return SyncedSample(
-            window.peekLast(),
+            window.peekLast()!!,
             synca > syncThreshold,
             syncb > syncThreshold
         )
@@ -78,7 +78,10 @@ class NOAALineSyncer (private val input: Iterator<FloatArray>) : Iterator<Array<
 
 }
 
-class NOAAImageSink(private val input: Iterator<Array<SyncedSample>>) {
+class NOAAImageSink(
+    private val input: Iterator<Array<SyncedSample>>,
+    private val verbose: Boolean = false
+) {
 
     private val lineLenght = 2080
     private var x = 0
@@ -95,12 +98,13 @@ class NOAAImageSink(private val input: Iterator<Array<SyncedSample>>) {
                     val newResult = FloatArray(lineLenght * (x + 1))
                     System.arraycopy(result, 0, newResult, 0, result.size)
                     result = newResult
+                    if (verbose)
+                        println("Line $x")
                 }
 
-                if(sample.isSyncA) {
+                if (sample.isSyncA) {
                     y = 0
-                }
-                else if(sample.isSyncB) {
+                } else if (sample.isSyncB) {
                     y = lineLenght / 2
                 }
 
