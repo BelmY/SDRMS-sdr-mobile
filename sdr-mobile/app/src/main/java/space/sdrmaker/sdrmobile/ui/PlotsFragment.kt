@@ -11,18 +11,23 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.mantz_it.hackrf_android.Hackrf
 import com.mantz_it.hackrf_android.HackrfCallbackInterface
+import kotlinx.android.synthetic.main.fragment_plots.view.*
 import space.sdrmaker.sdrmobile.R
 import space.sdrmaker.sdrmobile.dsp.*
 import space.sdrmaker.sdrmobile.dsp.taps.*
+import java.util.concurrent.ArrayBlockingQueue
 import kotlin.concurrent.thread
 
 
-class FMRcvFragment : Fragment(), HackrfCallbackInterface {
+class PlotsFragment : Fragment(), HackrfCallbackInterface {
 
     private lateinit var root: View
     private lateinit var tvOutput: TextView
     private lateinit var initButton: Button
     private lateinit var startButton: Button
+    private lateinit var fftPlot: FFTView
+    private lateinit var waterfallPlot: WaterfallView
+
     private lateinit var hackrf: Hackrf
     private var channelFreq = 89800000L
     private var offset = 200000
@@ -36,7 +41,7 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
     private var amp = false
     private var antennaPower = false
 
-    var stopRequested = false
+    private var stopRequested = false
     private val handler = Handler()
 
 
@@ -44,7 +49,7 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        root = inflater.inflate(R.layout.fragment_fmrcv, container, false)
+        root = inflater.inflate(R.layout.fragment_plots, container, false)
 
         // setup UI
         initButton = root.findViewById(R.id.initButton)
@@ -55,6 +60,9 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
         startButton.setOnClickListener {
             startRX()
         }
+        fftPlot = root.fftPlot
+        waterfallPlot = root.waterfallPlot
+
         tvOutput = root.findViewById<Button>(R.id.tvOutput)
         setUIState(UIState.STARTED)
         tvOutput.movementMethod = ScrollingMovementMethod()
@@ -141,18 +149,41 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
         val hackRFSignalSource = HackRFSignalSource(hackrf)
         val sineWaveSource = ComplexSineWaveSource(offset, samplingRate, 1024 * 16)
         val multiply = ComplexMultiply(sineWaveSource, hackRFSignalSource)
-        val rfDecimator = ComplexFIRFilter(multiply, CUT75k_FREQ882000_45, lowpassDecimation, 4f)
-        val fmDemodulator = FMDemodulator(rfDecimator, 7500)
-        val audioDecimator = FIRFilter(fmDemodulator, CUT20k_FREQ441000_81, audioDecimation, 10f)
-        val audioSink = AudioSink()
-        while (!stopRequested && audioDecimator.hasNext()) {
-            audioSink.write(
-                audioDecimator.next()
-            )
+
+        val fmQueue = ArrayBlockingQueue<FloatArray>(1024)
+        val fftQueue = ArrayBlockingQueue<FloatArray>(1024)
+        val queueSink = QueueSink()
+
+        // Data thread
+        thread {
+            queueSink.write(multiply, fmQueue, fftQueue)
         }
-        hackrf.stop()
-        printOnScreen("RX Stopped.")
-        setUIState(UIState.INITIALIZED)
+
+        // FM pipeline
+        val fmQueueSource = QueueSource(fmQueue)
+        val rfDecimator =
+            ComplexFIRFilter(fmQueueSource, CUT75k_FREQ882000_45, lowpassDecimation, 4f)
+        val fmDemodulator = FMDemodulator(rfDecimator, 7500)
+        val audioDecimator =
+            FIRFilter(fmDemodulator, CUT20k_FREQ441000_81, audioDecimation, 10f)
+        val audioSink = AudioSink()
+        thread {
+            while (!stopRequested && audioDecimator.hasNext()) {
+                audioSink.write(audioDecimator.next())
+            }
+        }
+
+        // plotting pipeline
+        val fftQueueSource = QueueSource(fftQueue)
+        val fft = ComplexFFT(fftQueueSource)
+        val fftPlotQueue = ArrayBlockingQueue<FloatArray>(1024)
+        val plotQueueSink = QueueSink()
+        thread {
+            plotQueueSink.write(fft, fftPlotQueue)
+        }
+        thread {
+            fftPlot.start(fftPlotQueue)
+        }
     }
 
     private fun printOnScreen(msg: String) {

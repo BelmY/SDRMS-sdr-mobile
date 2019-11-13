@@ -10,7 +10,8 @@ private val TAB_TITLES = arrayOf(
     R.string.tab_1_title,
     R.string.tab_2_title,
     R.string.tab_3_title,
-    R.string.tab_4_title
+    R.string.tab_4_title,
+    R.string.tab_5_title
 )
 
 /**
@@ -27,6 +28,7 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
             1 -> AMRcvFragment()
             2 -> HilbertTransformFragment()
             3 -> NOAAFragment()
+            4 -> PlotsFragment()
             else -> FMRcvFragment()
         }
     }
@@ -36,6 +38,6 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
     }
 
     override fun getCount(): Int {
-        return 4
+        return 5
     }
 }

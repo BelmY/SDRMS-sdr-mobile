@@ -3,8 +3,7 @@ package space.sdrmaker.sdrmobile
 import org.junit.Test
 
 import org.junit.Assert.*
-import space.sdrmaker.sdrmobile.dsp.FileReader
-import space.sdrmaker.sdrmobile.dsp.Multiply
+import space.sdrmaker.sdrmobile.dsp.ComplexMultiply
 
 class MathTest {
 
@@ -14,7 +13,7 @@ class MathTest {
             floatArrayOf(1f, 1f, 2f, 2f),
             floatArrayOf(3f, 3f, 4f, 4f)
         )
-        val multiply = Multiply(data.iterator(), data.iterator())
+        val multiply = ComplexMultiply(data.iterator(), data.iterator())
         val expected = arrayListOf(
             floatArrayOf(0f, 2f, 0f, 8f),
             floatArrayOf(0f, 18f, 0f, 32f)

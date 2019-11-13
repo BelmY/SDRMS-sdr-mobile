@@ -2,8 +2,10 @@ package space.sdrmaker.sdrmobile.dsp
 
 import org.jtransforms.fft.FloatFFT_1D
 import kotlin.math.floor
+import kotlin.math.log10
+import kotlin.math.sqrt
 
-class Multiply(
+class ComplexMultiply(
     private val input1: Iterator<FloatArray>,
     private val input2: Iterator<FloatArray>,
     private val gain: Float = 1f
@@ -58,6 +60,39 @@ class HilbertTransform(
 
         fft.complexInverse(dataFFT, true)
         return dataFFT
+    }
+
+    override fun hasNext() = input.hasNext()
+}
+
+class ComplexFFT(
+    private val input: Iterator<FloatArray>
+) : Iterator<FloatArray> {
+
+    private var length = -1
+    private lateinit var fft: FloatFFT_1D
+
+    override fun next(): FloatArray {
+        val nextArray = input.next()
+        if (length < 0) {
+            length = nextArray.size
+            fft = FloatFFT_1D(length.toLong())
+        }
+        val dataFFT = FloatArray(length * 2)
+        val result = FloatArray(length)
+        nextArray.copyInto(dataFFT)
+        fft.complexForward(dataFFT)
+        for (i in 0 until length) {
+            result[i] = log10(sqrt(dataFFT[2 * i] * dataFFT[2 * i] + dataFFT[2 * i + 1] * dataFFT[2 * i + 1]))
+        }
+        return shift(result)
+    }
+
+    private fun shift(x: FloatArray): FloatArray {
+        val result = FloatArray(x.size)
+        x.copyInto(result, 0, x.size / 2, x.size)
+        x.copyInto(result, x.size / 2, 0, x.size / 2)
+        return result
     }
 
     override fun hasNext() = input.hasNext()

@@ -8,6 +8,9 @@ import android.media.AudioRecord.MetricsConstants.CHANNELS
 import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioTrack.WRITE_BLOCKING
+import java.util.concurrent.ArrayBlockingQueue
+import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -48,7 +51,7 @@ class BufferedFileReader(
 
     init {
         var read = blockSize
-        while(read == blockSize) {
+        while (read == blockSize) {
             val bytes = ByteArray(blockSize)
             read = stream.read(bytes)
             if (read < blockSize) {
@@ -162,5 +165,29 @@ class SineWaveSource(
     override fun hasNext() = true
 
     override fun next() =
-        FloatArray(blockSize) {gain * cos(2 * Math.PI * frequency * t++ / rate).toFloat()}
+        FloatArray(blockSize) { gain * cos(2 * Math.PI * frequency * t++ / rate).toFloat() }
+}
+
+class QueueSink {
+
+    fun write(input: Iterator<FloatArray>, vararg queues: ArrayBlockingQueue<FloatArray>) {
+        while (input.hasNext()) {
+            val nextArray = input.next()
+            for (queue in queues) {
+                queue.put(nextArray)
+            }
+        }
+    }
+}
+
+class QueueSource(private val input: ArrayBlockingQueue<FloatArray>) : Iterator<FloatArray> {
+
+    override fun next(): FloatArray {
+        while (true) {
+            return input.poll(100, TimeUnit.MILLISECONDS) ?: continue
+        }
+    }
+
+    override fun hasNext() = true
+
 }
