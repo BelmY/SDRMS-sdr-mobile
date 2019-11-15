@@ -2,8 +2,11 @@ package space.sdrmaker.sdrmobile
 
 import org.junit.Test
 
-import org.junit.Assert.*
-import space.sdrmaker.sdrmobile.dsp.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertArrayEquals
+import space.sdrmaker.sdrmobile.dsp.ComplexFIRFilter
+import space.sdrmaker.sdrmobile.dsp.FIRFilter
+
 
 class FiltersTest {
     @Test

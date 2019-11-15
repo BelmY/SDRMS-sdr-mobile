@@ -96,7 +96,6 @@ class Normalizer(
                 result[index] = (sample - minVal) * (max - min) / (maxVal - minVal) + min
             }
         }
-
         return result
     }
 

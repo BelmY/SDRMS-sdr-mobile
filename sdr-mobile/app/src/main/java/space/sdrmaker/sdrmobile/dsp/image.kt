@@ -33,7 +33,7 @@ class NOAALineSyncer(private val input: Iterator<FloatArray>) : Iterator<Array<S
     )
 
     private val syncPatternLength = 40
-    private val syncThreshold = 50
+    private val syncThreshold = 37
 
     private val window = LinkedBlockingDeque<Float>(syncPatternLength)
 
@@ -44,7 +44,6 @@ class NOAALineSyncer(private val input: Iterator<FloatArray>) : Iterator<Array<S
             windowAppend(sample)
             result[counter] = getSyncedSample()
         }
-
         return result
     }
 
@@ -91,7 +90,6 @@ class NOAAImageSink(
     fun write(): FloatArray {
         for (samples in input) {
             for (sample in samples) {
-
                 if (y >= lineLenght) {
                     y = 0
                     x++
@@ -116,7 +114,6 @@ class NOAAImageSink(
                 y++
             }
         }
-
         return result
     }
 }
