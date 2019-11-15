@@ -33,7 +33,7 @@ class NOAALineSyncer(private val input: Iterator<FloatArray>) : Iterator<Array<S
     )
 
     private val syncPatternLength = 40
-    private val syncThreshold = 35
+    private val syncThreshold = 50
 
     private val window = LinkedBlockingDeque<Float>(syncPatternLength)
 
@@ -103,8 +103,12 @@ class NOAAImageSink(
                 }
 
                 if (sample.isSyncA) {
+                    if (verbose)
+                        println("Sync A: ($x, $y)")
                     y = 0
                 } else if (sample.isSyncB) {
+                    if (verbose)
+                        println("Sync B: ($x, $y)")
                     y = lineLenght / 2
                 }
 
