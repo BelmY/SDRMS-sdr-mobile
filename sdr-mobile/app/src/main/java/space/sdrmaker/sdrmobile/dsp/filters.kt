@@ -13,15 +13,18 @@ class FIRFilter(
     private val length: Int = coefs.size
     private val delayLine = FloatArray(length)
     private var count = 0
+    private var rem = 0
 
     override fun next(): FloatArray {
         val nextArray = input.next()
-        var result = FloatArray(ceil(nextArray.size.toFloat() / decimation).toInt()) { 0f }
+        val offset = (decimation - rem).rem(decimation)
+        val resultSize = ceil((nextArray.size.toFloat() - offset) / decimation).toInt()
+        val result = FloatArray(resultSize) { 0f }
         nextArray.forEachIndexed { arrayIndex, value ->
             run {
                 delayLine[count] = value
                 var index = count
-                if (arrayIndex.rem(decimation) == 0) {
+                if ((arrayIndex + rem).rem(decimation) == 0) {
                     for (i in 0 until length) {
                         result[arrayIndex / decimation] += coefs[i] * delayLine[index--]
                         if (index < 0) index = length - 1
@@ -31,6 +34,7 @@ class FIRFilter(
                 if (++count >= length) count = 0
             }
         }
+        rem = (rem + nextArray.size).rem(decimation)
         return result
     }
 
