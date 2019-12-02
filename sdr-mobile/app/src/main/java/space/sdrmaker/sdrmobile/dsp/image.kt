@@ -77,7 +77,7 @@ class NOAALineSyncer(private val input: Iterator<FloatArray>) : Iterator<Array<S
 
 }
 
-class NOAAImageSink(
+class NOAAImageSink(  // TODO: implement Sink interface
     private val input: Iterator<Array<SyncedSample>>,
     private val verbose: Boolean = false
 ) {

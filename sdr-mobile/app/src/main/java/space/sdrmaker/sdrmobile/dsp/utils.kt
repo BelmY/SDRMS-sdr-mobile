@@ -14,6 +14,9 @@ import kotlin.collections.ArrayList
 import kotlin.math.cos
 import kotlin.math.sin
 
+interface Sink {
+    fun write(input: FloatArray)
+}
 
 class FileReader(
     path: String,
@@ -93,7 +96,7 @@ class FileWriter {
 
 const val AUDIO_SAMPLE_RATE = 44100
 
-class AudioSink {
+class AudioSink : Sink {
 
     private val audioTrack: AudioTrack
 
@@ -126,7 +129,7 @@ class AudioSink {
         audioTrack.play()
     }
 
-    fun write(input: FloatArray) {
+    override fun write(input: FloatArray) {
         audioTrack.write(input, 0, input.size, WRITE_BLOCKING)
     }
 }
@@ -168,14 +171,11 @@ class SineWaveSource(
         FloatArray(blockSize) { gain * cos(2 * Math.PI * frequency * t++ / rate).toFloat() }
 }
 
-class QueueSink {
+class QueueSink(private vararg val queues: ArrayBlockingQueue<FloatArray>) : Sink {
 
-    fun write(input: Iterator<FloatArray>, vararg queues: ArrayBlockingQueue<FloatArray>) {
-        while (input.hasNext()) {
-            val nextArray = input.next()
-            for (queue in queues) {
-                queue.put(nextArray)
-            }
+    override fun write(input: FloatArray) {
+        for (queue in queues) {
+            queue.put(input)
         }
     }
 }

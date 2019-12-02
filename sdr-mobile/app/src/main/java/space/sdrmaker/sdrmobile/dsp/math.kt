@@ -1,9 +1,7 @@
 package space.sdrmaker.sdrmobile.dsp
 
 import org.jtransforms.fft.FloatFFT_1D
-import kotlin.math.floor
-import kotlin.math.log10
-import kotlin.math.sqrt
+import kotlin.math.*
 
 class ComplexMultiply(
     private val input1: Iterator<FloatArray>,
@@ -17,8 +15,7 @@ class ComplexMultiply(
     override fun next(): FloatArray {
         val array1 = input1.next()
         val array2 = input2.next()
-        assert(array1.size == array2.size)
-        val size = array1.size
+        val size = kotlin.math.min(array1.size, array2.size)
         val result = FloatArray(size)
         for (i in 0 until size - 1 step 2) {
             // real component
@@ -65,25 +62,28 @@ class HilbertTransform(
     override fun hasNext() = input.hasNext()
 }
 
+fun hannWindow(input: FloatArray): FloatArray {
+    return FloatArray(input.size) { n ->
+        (0.5 - 0.5 * cos((2 * PI * n) / (input.size - 1))).toFloat() * input[n]
+    }
+}
+
 class ComplexFFT(
-    private val input: Iterator<FloatArray>
+    private val input: Iterator<FloatArray>,
+    private var size: Int
 ) : Iterator<FloatArray> {
 
-    private var length = -1
-    private lateinit var fft: FloatFFT_1D
+    private var fft: FloatFFT_1D = FloatFFT_1D(size.toLong())
 
     override fun next(): FloatArray {
         val nextArray = input.next()
-        if (length < 0) {
-            length = nextArray.size
-            fft = FloatFFT_1D(length.toLong())
-        }
-        val dataFFT = FloatArray(length * 2)
-        val result = FloatArray(length)
-        nextArray.copyInto(dataFFT)
+        val dataFFT = FloatArray(size * 2)
+        val result = FloatArray(size)
+        hannWindow(nextArray).copyInto(dataFFT, 0, 0, min(size, nextArray.size))
         fft.complexForward(dataFFT)
-        for (i in 0 until length) {
-            result[i] = log10(sqrt(dataFFT[2 * i] * dataFFT[2 * i] + dataFFT[2 * i + 1] * dataFFT[2 * i + 1]))
+        for (i in 0 until size) {
+            result[i] =
+                20 * log10( sqrt(dataFFT[2 * i] * dataFFT[2 * i] + dataFFT[2 * i + 1] * dataFFT[2 * i + 1]) / size)
         }
         return shift(result)
     }
@@ -126,7 +126,7 @@ class Normalizer(
                 minVal = sample
 
             if (maxVal == minVal) {
-                result[index] = if(sample < min) min else if (sample > max) max else sample
+                result[index] = if (sample < min) min else if (sample > max) max else sample
             } else {
                 result[index] = (sample - minVal) * (max - min) / (maxVal - minVal) + min
             }

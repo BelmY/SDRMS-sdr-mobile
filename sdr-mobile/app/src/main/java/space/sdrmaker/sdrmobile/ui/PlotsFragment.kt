@@ -29,6 +29,7 @@ class PlotsFragment : Fragment(), HackrfCallbackInterface {
     private lateinit var waterfallPlot: WaterfallView
 
     private lateinit var hackrf: Hackrf
+    private lateinit var hackRFSignalSource: HackRFSignalSource
     private var channelFreq = 89800000L
     private var offset = 200000
     private var centerFreq = channelFreq + offset
@@ -36,8 +37,9 @@ class PlotsFragment : Fragment(), HackrfCallbackInterface {
     private var bandwidth = samplingRate
     private var audioDecimation = 10
     private val lowpassDecimation = samplingRate / AUDIO_SAMPLE_RATE / audioDecimation
-    private var lnaGain = 50
-    private var vgaGain = 32
+
+    private var lnaGain = 30
+    private var vgaGain = 20
     private var amp = false
     private var antennaPower = false
 
@@ -78,7 +80,11 @@ class PlotsFragment : Fragment(), HackrfCallbackInterface {
 
     private fun stopRX() {
         tvOutput.append("\nRX Stop\n")
+
         stopRequested = true
+        Thread.sleep(10)
+        hackRFSignalSource.stop()
+        setUIState(UIState.INITIALIZED)
     }
 
     private fun initHackrf() {
@@ -117,6 +123,8 @@ class PlotsFragment : Fragment(), HackrfCallbackInterface {
     override fun onHackrfReady(hackrf: Hackrf) {
         tvOutput.append("HackRF is ready!\n")
         this.hackrf = hackrf
+        hackRFSignalSource = HackRFSignalSource(hackrf)
+
         setUIState(UIState.INITIALIZED)
     }
 
@@ -146,17 +154,18 @@ class PlotsFragment : Fragment(), HackrfCallbackInterface {
     private fun receiveThread() {
         setUIState(UIState.RECEIVING)
         setupHackRF()
-        val hackRFSignalSource = HackRFSignalSource(hackrf)
         val sineWaveSource = ComplexSineWaveSource(offset, samplingRate, 1024 * 16)
         val multiply = ComplexMultiply(sineWaveSource, hackRFSignalSource)
 
         val fmQueue = ArrayBlockingQueue<FloatArray>(1024)
         val fftQueue = ArrayBlockingQueue<FloatArray>(1024)
-        val queueSink = QueueSink()
+        val queueSink = QueueSink(fmQueue, fftQueue)
 
         // Data thread
         thread {
-            queueSink.write(multiply, fmQueue, fftQueue)
+            while(!stopRequested) {
+                queueSink.write(multiply.next())
+            }
         }
 
         // FM pipeline
@@ -175,14 +184,11 @@ class PlotsFragment : Fragment(), HackrfCallbackInterface {
 
         // plotting pipeline
         val fftQueueSource = QueueSource(fftQueue)
-        val fft = ComplexFFT(fftQueueSource)
-        val fftPlotQueue = ArrayBlockingQueue<FloatArray>(1024)
-        val plotQueueSink = QueueSink()
+        val fft = ComplexFFT(fftQueueSource, 4096)
         thread {
-            plotQueueSink.write(fft, fftPlotQueue)
-        }
-        thread {
-            fftPlot.start(fftPlotQueue)
+            while(!stopRequested) {
+                fftPlot.write(fft.next())
+            }
         }
     }
 
