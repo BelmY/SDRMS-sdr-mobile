@@ -77,15 +77,16 @@ class ComplexFFT(
 
     override fun next(): FloatArray {
         val nextArray = input.next()
-        val dataFFT = FloatArray(size * 2)
+        var dataFFT = FloatArray(size * 2)
         val result = FloatArray(size)
-        hannWindow(nextArray).copyInto(dataFFT, 0, 0, min(size, nextArray.size))
+        nextArray.copyInto(dataFFT, 0, 0, min(size * 2, nextArray.size))
         fft.complexForward(dataFFT)
+        dataFFT = shift(dataFFT)
         for (i in 0 until size) {
             result[i] =
-                20 * log10( sqrt(dataFFT[2 * i] * dataFFT[2 * i] + dataFFT[2 * i + 1] * dataFFT[2 * i + 1]) / size)
+                20 * log10(2 * sqrt(dataFFT[2 * i] * dataFFT[2 * i] + dataFFT[2 * i + 1] * dataFFT[2 * i + 1]) / size)
         }
-        return shift(result)
+        return result
     }
 
     private fun shift(x: FloatArray): FloatArray {

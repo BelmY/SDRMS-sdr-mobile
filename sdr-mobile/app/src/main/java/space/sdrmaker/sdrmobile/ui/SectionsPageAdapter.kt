@@ -10,8 +10,7 @@ private val TAB_TITLES = arrayOf(
     R.string.tab_1_title,
     R.string.tab_2_title,
     R.string.tab_3_title,
-    R.string.tab_4_title,
-    R.string.tab_5_title
+    R.string.tab_4_title
 )
 
 /**
@@ -24,12 +23,11 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
         // getItem is called to instantiate the fragment for the given page.
         // Return appropriate Fragment (defined as a static inner class below).
         return when(position) {
-            0 -> FMRcvFragment()
-            1 -> AMRcvFragment()
-            2 -> HilbertTransformFragment()
-            3 -> NOAAFragment()
-            4 -> PlotsFragment()
-            else -> FMRcvFragment()
+            0 -> NOAARcvFragment()
+            1 -> NOAAFragment()
+            2 -> FMRcvFragment()
+            3 -> PlotsFragment()
+            else -> NOAARcvFragment()
         }
     }
 
@@ -38,6 +36,6 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
     }
 
     override fun getCount(): Int {
-        return 5
+        return 4
     }
 }

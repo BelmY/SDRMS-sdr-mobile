@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">SDR Mobile</string>
-    <string name="tab_1_title">FM</string>
-    <string name="tab_2_title">AM</string>
-    <string name="tab_3_title">Hilbert</string>
-    <string name="tab_4_title">NOAA</string>
-    <string name="tab_5_title">Plots</string>
+    <string name="tab_1_title">Capture</string>
+    <string name="tab_2_title">Decode</string>
+    <string name="tab_3_title">FM</string>
+    <string name="tab_4_title">Plots</string>
 </resources>

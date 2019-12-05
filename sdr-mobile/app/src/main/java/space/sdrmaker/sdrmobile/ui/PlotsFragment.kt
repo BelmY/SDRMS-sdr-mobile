@@ -30,16 +30,21 @@ class PlotsFragment : Fragment(), HackrfCallbackInterface {
 
     private lateinit var hackrf: Hackrf
     private lateinit var hackRFSignalSource: HackRFSignalSource
-    private var channelFreq = 89800000L
+//    private var channelFreq = 89800000L
+    private var channelFreq = 137912500L // NOAA 18
+//    private var channelFreq = 137100000L // NOAA 19
+//    private var channelFreq = 137620000L // NOAA 15
+
     private var offset = 200000
     private var centerFreq = channelFreq + offset
-    private var samplingRate = 882000
+//    private var samplingRate = 882000
+    private var samplingRate = 832000
     private var bandwidth = samplingRate
     private var audioDecimation = 10
     private val lowpassDecimation = samplingRate / AUDIO_SAMPLE_RATE / audioDecimation
 
-    private var lnaGain = 30
-    private var vgaGain = 20
+    private var lnaGain = 32
+    private var vgaGain = 16
     private var amp = false
     private var antennaPower = false
 

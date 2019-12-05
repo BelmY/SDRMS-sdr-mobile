@@ -11,8 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import space.sdrmaker.sdrmobile.R
 import space.sdrmaker.sdrmobile.dsp.*
-import space.sdrmaker.sdrmobile.dsp.taps.SR8320_2000_2100_75t
-import space.sdrmaker.sdrmobile.dsp.taps.SR832k_7k_9k_283t
+import space.sdrmaker.sdrmobile.dsp.taps.*
 import kotlin.concurrent.thread
 
 
@@ -48,11 +47,14 @@ class NOAAFragment : Fragment() {
 
     private fun transformThread() {
         printOnScreen("NOAA demodulation started.\n")
-        val readPath = "${context!!.getExternalFilesDir(null)}/gqrx_20190824_152507_137100000_mono832k-norm.raw"
-        val writePath = "${context!!.getExternalFilesDir(null)}/gqrx_20190824_152507_137100000_mono832k-norm-decoded.iq"
+        val readPath = "${context!!.getExternalFilesDir(null)}/NOAA-2019-12-05 10:17:40.473.iq"
+        val writePath = "${context!!.getExternalFilesDir(null)}/NOAA-SR832k_20k_189-SR832k_7k_9k_283t-SR8320_2000_2100_75t.px"
 
         val reader = FileReader(readPath, blockSize = 16 * 1000)
-        val decimator1 = FIRFilter(reader, SR832k_7k_9k_283t, 100)
+        val filter =
+            ComplexFIRFilter(reader, SR832k_20k_189)
+        val fmDemodulator = FMDemodulator(filter, 5000)
+        val decimator1 = FIRFilter(fmDemodulator, SR832k_7k_9k_283t, 100)
         val hilbert = HilbertTransform(decimator1)
         val amDemodulator = AMDemodulator(hilbert)
         val decimator2 = FIRFilter(amDemodulator, SR8320_2000_2100_75t, 2)
@@ -60,8 +62,9 @@ class NOAAFragment : Fragment() {
         val syncer = NOAALineSyncer(normalizer)
         val image = NOAAImageSink(syncer, verbose = true)
 
-        val writer = FileWriter()
-        writer.write(arrayListOf(image.write()).iterator(), writePath)
+        val writer = FileWriter(writePath)
+        writer.write(image.write())
+        writer.close()
         printOnScreen("NOAA decoding finished.\n")
     }
 

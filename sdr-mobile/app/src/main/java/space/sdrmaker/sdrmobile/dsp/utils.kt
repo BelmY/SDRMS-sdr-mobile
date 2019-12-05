@@ -75,26 +75,25 @@ class BufferedFileReader(
 
 }
 
-class FileWriter {
+class FileWriter(path: String) {
 
-    fun write(input: Iterator<FloatArray>, path: String, limit: Int = 0) {
-        val stream = File(path).outputStream().buffered()
-        var counter = 0
-        while (input.hasNext() && (counter < limit || limit == 0)) {
-            val nextArray = input.next()
-            val bytes = ByteBuffer.allocate(nextArray.size * 4).order(ByteOrder.LITTLE_ENDIAN)
-            for (value in nextArray) {
-                bytes.putFloat(value)
-            }
-            stream.write(bytes.array())
-            counter++
+    private val stream = File(path).outputStream().buffered()
+
+    fun write(input: FloatArray) {
+        val bytes = ByteBuffer.allocate(input.size * 4).order(ByteOrder.LITTLE_ENDIAN)
+        for (value in input) {
+            bytes.putFloat(value)
         }
+        stream.write(bytes.array())
+    }
+
+    fun close() {
         stream.flush()
         stream.close()
     }
 }
 
-const val AUDIO_SAMPLE_RATE = 44100
+const val AUDIO_SAMPLE_RATE = 41600
 
 class AudioSink : Sink {
 
