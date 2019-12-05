@@ -95,18 +95,18 @@ class FileWriter(path: String) {
 
 const val AUDIO_SAMPLE_RATE = 41600
 
-class AudioSink : Sink {
+class AudioSink(private val sampleRate: Int = 44100) : Sink {
 
     private val audioTrack: AudioTrack
 
     init {
         var mBufferSize = AudioTrack.getMinBufferSize(
-            AUDIO_SAMPLE_RATE,
+            sampleRate,
             AudioFormat.CHANNEL_OUT_MONO,
             AudioFormat.ENCODING_PCM_FLOAT
         )
         if (mBufferSize == AudioTrack.ERROR || mBufferSize == AudioTrack.ERROR_BAD_VALUE) {
-            mBufferSize = AUDIO_SAMPLE_RATE * CHANNELS.toInt() * 2
+            mBufferSize = sampleRate * CHANNELS.toInt() * 2
         }
 
         audioTrack = AudioTrack.Builder()
@@ -119,7 +119,7 @@ class AudioSink : Sink {
             .setAudioFormat(
                 AudioFormat.Builder()
                     .setEncoding(AudioFormat.ENCODING_PCM_FLOAT)
-                    .setSampleRate(AUDIO_SAMPLE_RATE)
+                    .setSampleRate(sampleRate)
                     .setChannelMask(AudioFormat.CHANNEL_OUT_MONO).build()
             )
             .setBufferSizeInBytes(mBufferSize)

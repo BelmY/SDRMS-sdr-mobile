@@ -33,7 +33,8 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
     private lateinit var hackrf: Hackrf
     private lateinit var hackRFSignalSource: HackRFSignalSource
     private lateinit var fileWriter: FileWriter
-    private var channelFreq = 137912500L // NOAA 18
+    private var channelFreq = 89800000L
+//    private var channelFreq = 137912500L // NOAA 18
 //    private var channelFreq = 137100000L // NOAA 19
 //    private var channelFreq = 137620000L // NOAA 15
     private var offset = 200000
@@ -166,37 +167,12 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
 
         val fmQueue = ArrayBlockingQueue<FloatArray>(1024)
         val fftQueue = ArrayBlockingQueue<FloatArray>(1024)
-        val fileQueue = ArrayBlockingQueue<FloatArray>(1024)
-        val queueSink = QueueSink(fmQueue, fftQueue, fileQueue)
+        val queueSink = QueueSink(fmQueue, fftQueue)
 
         // Data thread
         thread {
             while(!stopRequested) {
                 queueSink.write(multiply.next())
-            }
-        }
-
-        // file pipeline
-        val fileQueueSource = QueueSource(fileQueue)
-        val writePath = "${context!!.getExternalFilesDir(null)}/NOAA-${Timestamp(System.currentTimeMillis())}.iq"
-        fileWriter = FileWriter(writePath)
-        thread {
-            while (!stopRequested) {
-                fileWriter.write(fileQueueSource.next())
-            }
-        }
-
-        // FM pipeline
-        val fmQueueSource = QueueSource(fmQueue)
-        val rfDecimator =
-            ComplexFIRFilter(fmQueueSource, CUT75k_FREQ882000_45, lowpassDecimation, 4f)
-        val fmDemodulator = FMDemodulator(rfDecimator, 7500)
-        val audioDecimator =
-            FIRFilter(fmDemodulator, CUT20k_FREQ441000_81, audioDecimation, 10f)
-        val audioSink = AudioSink()
-        thread {
-            while (!stopRequested && audioDecimator.hasNext()) {
-                audioSink.write(audioDecimator.next())
             }
         }
 
@@ -208,6 +184,44 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
                 fftPlot.write(fft.next())
             }
         }
+
+        // FM pipeline
+        val fmQueueSource = QueueSource(fmQueue)
+        val filter =
+            ComplexFIRFilter(fmQueueSource, SR832k_20k_189)
+        val fmDemodulator = FMDemodulator(filter, 5000)
+
+        val audioQueue = ArrayBlockingQueue<FloatArray>(1024)
+        val fileQueue = ArrayBlockingQueue<FloatArray>(1024)
+        val fmSink = QueueSink(audioQueue, fileQueue)
+
+        // FM thread
+        thread {
+            while(!stopRequested) {
+                fmSink.write(fmDemodulator.next())
+            }
+        }
+
+        val audioQueueSource = QueueSource(audioQueue)
+        val audioDecimator = FIRFilter(audioQueueSource, CUT20k_FREQ441000_81, 20, 10f)
+        val audioSink = AudioSink(41600)
+        thread {
+            while (!stopRequested && audioDecimator.hasNext()) {
+                audioSink.write(audioDecimator.next())
+            }
+        }
+
+        // file pipeline
+        val fileQueueSource = QueueSource(fileQueue)
+        val fileDecimator = FIRFilter(fileQueueSource, SR832k_7k_9k_283t, 100)
+        val writePath = "${context!!.getExternalFilesDir(null)}/NOAA-${Timestamp(System.currentTimeMillis())}-8320kHz.iq"
+        fileWriter = FileWriter(writePath)
+        thread {
+            while (!stopRequested) {
+                fileWriter.write(fileDecimator.next())
+            }
+        }
+
     }
 
     private fun printOnScreen(msg: String) {
