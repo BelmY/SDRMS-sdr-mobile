@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.fragment_plots.view.*
 import space.sdrmaker.sdrmobile.R
 import space.sdrmaker.sdrmobile.dsp.*
 import space.sdrmaker.sdrmobile.dsp.taps.*
+import space.sdrmaker.sdrmobile.noaa.NOAA_FREQUENCIES
 import java.sql.Timestamp
 import java.util.concurrent.ArrayBlockingQueue
 import kotlin.concurrent.thread
@@ -25,7 +26,7 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
 
     private lateinit var root: View
     private lateinit var tvOutput: TextView
-    private lateinit var initButton: Button
+    private lateinit var recButton: Button
     private lateinit var startButton: Button
     private lateinit var fftPlot: FFTView
     private lateinit var waterfallPlot: WaterfallView
@@ -33,16 +34,17 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
     private lateinit var hackrf: Hackrf
     private lateinit var hackRFSignalSource: HackRFSignalSource
     private lateinit var fileWriter: FileWriter
-    private var channelFreq = 89800000L
+//    private var channelFreq = 89800000L
 //    private var channelFreq = 137912500L // NOAA 18
 //    private var channelFreq = 137100000L // NOAA 19
 //    private var channelFreq = 137620000L // NOAA 15
+    private var noaa = 15
+    private var channelFreq = NOAA_FREQUENCIES[noaa] ?: 137620000L // NOAA 15
+
     private var offset = 200000
     private var centerFreq = channelFreq + offset
     private var samplingRate = 832000
     private var bandwidth = samplingRate
-    private var audioDecimation = 10
-    private val lowpassDecimation = samplingRate / AUDIO_SAMPLE_RATE / audioDecimation
 
     private var lnaGain = 32
     private var vgaGain = 16
@@ -60,10 +62,7 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
         root = inflater.inflate(R.layout.fragment_plots, container, false)
 
         // setup UI
-        initButton = root.findViewById(R.id.initButton)
-        initButton.setOnClickListener {
-            initHackrf()
-        }
+        recButton = root.findViewById(R.id.recButton)
         startButton = root.findViewById(R.id.startButton)
         startButton.setOnClickListener {
             startRX()
@@ -72,16 +71,29 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
         waterfallPlot = root.waterfallPlot
 
         tvOutput = root.findViewById<Button>(R.id.tvOutput)
-        setUIState(UIState.STARTED)
+        setUIState(UIState.INITIALIZED)
         tvOutput.movementMethod = ScrollingMovementMethod()
         tvOutput.append("Ready...\n")
 
         return root
     }
 
+    private fun setupFFTPlotAxis() {
+        fftPlot.setupXAxis(channelFreq.toFloat() / 1000000, bandwidth.toFloat() / 1000000, ticks = getFFTXTicks(5))
+        fftPlot.setupYAxis()
+    }
+
+    private fun getFFTXTicks(numTicks: Int): FloatArray {
+        val start = channelFreq.toFloat() / 1000000 - bandwidth.toFloat() / 2000000
+        val stop = channelFreq.toFloat() / 1000000 + bandwidth.toFloat() / 2000000
+        val step = (stop - start) / (numTicks - 1)
+        return FloatArray(numTicks) {i -> start + i * step}
+    }
+
     private fun startRX() {
         tvOutput.append("RX Start\n")
-        thread { this.receiveThread() }
+        setupFFTPlotAxis()
+        initHackrf()
     }
 
     private fun stopRX() {
@@ -91,7 +103,11 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
         Thread.sleep(10)
         hackRFSignalSource.stop()
         fileWriter.close()
-        Toast.makeText(context,"File saved to ${context!!.getExternalFilesDir(null)}",Toast.LENGTH_LONG).show()
+        Toast.makeText(
+            context,
+            "File saved to ${context!!.getExternalFilesDir(null)}",
+            Toast.LENGTH_LONG
+        ).show()
         setUIState(UIState.INITIALIZED)
     }
 
@@ -99,26 +115,26 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
         val queueSize = samplingRate * 2    // buffer 1 second
         if (!Hackrf.initHackrf(context, this, queueSize)) {
             tvOutput.append("HackRF initialization failed.\n")
-            setUIState(UIState.STARTED)
+            setUIState(UIState.INITIALIZED)
         }
     }
 
     private fun setUIState(state: UIState) {
         when (state) {
             UIState.STARTED -> {
-                initButton.isEnabled = true
+                recButton.isEnabled = true
                 startButton.isEnabled = false
                 stopRequested = false
             }
             UIState.INITIALIZED -> {
-                initButton.isEnabled = false
+                recButton.isEnabled = false
                 startButton.isEnabled = true
                 stopRequested = false
                 startButton.text = "RX Start"
                 startButton.setOnClickListener { startRX() }
             }
             UIState.RECEIVING -> {
-                initButton.isEnabled = false
+                recButton.isEnabled = false
                 startButton.isEnabled = true
                 startButton.text = "RX Stop"
                 startButton.setOnClickListener {
@@ -132,13 +148,15 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
         tvOutput.append("HackRF is ready!\n")
         this.hackrf = hackrf
         hackRFSignalSource = HackRFSignalSource(hackrf)
-
-        setUIState(UIState.INITIALIZED)
+        thread {
+            setUIState(UIState.RECEIVING)
+            receiveThread()
+        }
     }
 
     override fun onHackrfError(message: String) {
         tvOutput.append("Error while opening HackRF: $message\n")  // FIXME: message not displayed
-        setUIState(UIState.STARTED)
+        setUIState(UIState.INITIALIZED)
     }
 
     private fun setupHackRF() {
@@ -171,7 +189,7 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
 
         // Data thread
         thread {
-            while(!stopRequested) {
+            while (!stopRequested) {
                 queueSink.write(multiply.next())
             }
         }
@@ -180,7 +198,7 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
         val fftQueueSource = QueueSource(fftQueue)
         val fft = ComplexFFT(fftQueueSource, 4096)
         thread {
-            while(!stopRequested) {
+            while (!stopRequested) {
                 fftPlot.write(fft.next())
             }
         }
@@ -197,7 +215,7 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
 
         // FM thread
         thread {
-            while(!stopRequested) {
+            while (!stopRequested) {
                 fmSink.write(fmDemodulator.next())
             }
         }
@@ -214,7 +232,8 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
         // file pipeline
         val fileQueueSource = QueueSource(fileQueue)
         val fileDecimator = FIRFilter(fileQueueSource, SR832k_7k_9k_283t, 100)
-        val writePath = "${context!!.getExternalFilesDir(null)}/NOAA-${Timestamp(System.currentTimeMillis())}-8320kHz.iq"
+        val writePath =
+            "${context!!.getExternalFilesDir(null)}/NOAA-${Timestamp(System.currentTimeMillis())}-8320Sps.iq"
         fileWriter = FileWriter(writePath)
         thread {
             while (!stopRequested) {

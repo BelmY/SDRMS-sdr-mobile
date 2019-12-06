@@ -47,18 +47,14 @@ class NOAAFragment : Fragment() {
 
     private fun transformThread() {
         printOnScreen("NOAA demodulation started.\n")
-        val readPath = "${context!!.getExternalFilesDir(null)}/NOAA-2019-12-05 10:17:40.473.iq"
-        val writePath = "${context!!.getExternalFilesDir(null)}/NOAA-SR832k_20k_189-SR832k_7k_9k_283t-SR8320_2000_2100_75t.px"
+        val readPath = "${context!!.getExternalFilesDir(null)}/NOAA-2019-12-06 10:04:05.014-8320Sps.iq"
+        val writePath = "${context!!.getExternalFilesDir(null)}/NOAA-2019-12-06 10:04:05.014-8320Sps.px"
 
         val reader = FileReader(readPath, blockSize = 16 * 1000)
-        val filter =
-            ComplexFIRFilter(reader, SR832k_20k_189)
-        val fmDemodulator = FMDemodulator(filter, 5000)
-        val decimator1 = FIRFilter(fmDemodulator, SR832k_7k_9k_283t, 100)
-        val hilbert = HilbertTransform(decimator1)
+        val hilbert = HilbertTransform(reader)
         val amDemodulator = AMDemodulator(hilbert)
-        val decimator2 = FIRFilter(amDemodulator, SR8320_2000_2100_75t, 2)
-        val normalizer = Normalizer(decimator2, 0f, 1f)
+        val decimator = FIRFilter(amDemodulator, SR8320_2000_2100_75t, 2)
+        val normalizer = Normalizer(decimator, 0f, 1f)
         val syncer = NOAALineSyncer(normalizer)
         val image = NOAAImageSink(syncer, verbose = true)
 

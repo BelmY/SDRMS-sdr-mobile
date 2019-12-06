@@ -47,7 +47,7 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
         root = inflater.inflate(R.layout.fragment_fmrcv, container, false)
 
         // setup UI
-        initButton = root.findViewById(R.id.initButton)
+        initButton = root.findViewById(R.id.recButton)
         initButton.setOnClickListener {
             initHackrf()
         }

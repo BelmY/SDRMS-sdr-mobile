@@ -38,13 +38,13 @@
         app:layout_constraintVertical_bias="0.83" />
 
     <Button
-        android:id="@+id/initButton"
+        android:id="@+id/recButton"
         android:layout_width="150dp"
         android:layout_height="55dp"
-        android:text="Init"
+        android:text="Rec"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/startButton"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/startButton"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.955" />
 
@@ -54,8 +54,8 @@
         android:layout_height="55dp"
         android:text="RX"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/initButton"
+        app:layout_constraintEnd_toStartOf="@+id/recButton"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.955" />
 

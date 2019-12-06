@@ -4,11 +4,8 @@ import com.mantz_it.hackrf_android.Hackrf
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
-import kotlin.random.Random
-
 
 const val PACKET_QUEUE_SIZE = 10
-
 
 class HackRFSignalSource(
     private val hackrf: Hackrf
@@ -30,9 +27,7 @@ class HackRFSignalSource(
         }
 
         val result = FloatArray(packet.size) { i -> packet[i].toFloat() / 128}
-        val index = Random.nextInt(0, 1024 * 16)
         hackrf.returnBufferToBufferPool(packet)
-
         return result
     }
 

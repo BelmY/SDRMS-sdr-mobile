@@ -23,14 +23,15 @@ class FFTView @JvmOverloads constructor(
     private var labelPaint: Paint = Paint()
     private var gridPaint: Paint = Paint()
     private var grid: Path = Path()
-    private val yMin = -100f
-    private val yMax = 0f
-    private val xMin = 89.359000f
-    private val xMax = 90.241000f
-    private val yLabel = "[dBm]"
-    private val xLabel = "[MHz]"
-    private val yTicks = floatArrayOf(-20f, -40f, -60f, -80f, -100f)
-    private val xTicks = floatArrayOf(89.4f, 89.6f, 89.8f, 90f, 90.2f)
+
+    private var yLabel = "[dB]"
+    private var xLabel = "[MHz]"
+    private var yMin = -100
+    private var yMax = 0
+    private var xMin = 0f
+    private var xMax = 100f
+    private var yTicks: IntArray = (-100 until 0 step 20).toList().toIntArray()
+    private var xTicks: FloatArray = (0 until 100 step 20).toList().toIntArray().map {it.toFloat()}.toFloatArray()
 
     private val yLabelMargin = 10f
     private val labelSize = 20f
@@ -60,8 +61,31 @@ class FFTView @JvmOverloads constructor(
 
     }
 
-    private fun drawAxis(canvas: Canvas) {
+    fun setupXAxis(
+        centerFrequency: Float,
+        bandwidth: Float,
+        ticks: FloatArray,
+        label: String = "[MHz]"
+    ) {
+        xMin = centerFrequency - bandwidth / 2
+        xMax = centerFrequency + bandwidth / 2
+        xTicks = ticks
+        xLabel = label
+    }
 
+    fun setupYAxis(
+        min: Int = -100,
+        max: Int = 0,
+        ticks: IntArray = (-100 until 0 step 20).toList().toIntArray(),
+        label: String = "[dB]"
+    ) {
+        yMin = min
+        yMax = max
+        yTicks = ticks
+        yLabel = label
+    }
+
+    private fun drawAxis(canvas: Canvas) {
         axis = Path()
         axis.moveTo(0f, 0f)
         axis.lineTo(0f, height.toFloat())
@@ -70,23 +94,33 @@ class FFTView @JvmOverloads constructor(
 
         grid = Path()
         for (tick in yTicks) {
-            grid.moveTo(0f, yTranslate(tick))
-            grid.lineTo(width.toFloat(), yTranslate(tick))
+            grid.moveTo(0f, yTranslate(tick.toFloat()))
+            grid.lineTo(width.toFloat(), yTranslate(tick.toFloat()))
         }
 
         for (tick in xTicks) {
-            grid.moveTo(xTranslate(tick), 0f)
-            grid.lineTo(xTranslate(tick), height.toFloat())
+            grid.moveTo(xTranslate(tick.toFloat()), 0f)
+            grid.lineTo(xTranslate(tick.toFloat()), height.toFloat())
         }
 
         canvas.drawPath(grid, gridPaint)
 
         for (tick in yTicks) {
-            canvas.drawText(tick.toString(), yLabelMargin, yTranslate(tick) - labelSize / 2 + 1, labelPaint)
+            canvas.drawText(
+                tick.toString(),
+                yLabelMargin,
+                yTranslate(tick.toFloat()) - labelSize / 2 + 1,
+                labelPaint
+            )
         }
 
         for (tick in xTicks) {
-            canvas.drawText(tick.toString(), xTranslate(tick), height - labelSize / 2 + 1, labelPaint)
+            canvas.drawText(
+                tick.toString(),
+                xTranslate(tick.toFloat()),
+                height - labelSize / 2 + 1,
+                labelPaint
+            )
         }
 
         canvas.drawText(xLabel, width - 60f, height - labelSize / 2 + 1, labelPaint)
