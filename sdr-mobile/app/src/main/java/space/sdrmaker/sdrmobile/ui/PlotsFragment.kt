@@ -69,7 +69,7 @@ class PlotsFragment : Fragment(), HackrfCallbackInterface {
         waterfallPlot = root.waterfallPlot
 
         tvOutput = root.findViewById<Button>(R.id.tvOutput)
-        setUIState(UIState.INITIALIZED)
+        setUIState(UIState.STARTED)
         tvOutput.movementMethod = ScrollingMovementMethod()
         tvOutput.append("Ready...\n")
 
@@ -105,33 +105,38 @@ class PlotsFragment : Fragment(), HackrfCallbackInterface {
             "File saved to ${context!!.getExternalFilesDir(null)}",
             Toast.LENGTH_LONG
         ).show()
-        setUIState(UIState.INITIALIZED)
+        setUIState(UIState.STARTED)
     }
 
     private fun initHackrf() {
         val queueSize = samplingRate * 2    // buffer 1 second
         if (!Hackrf.initHackrf(context, this, queueSize)) {
             tvOutput.append("HackRF initialization failed.\n")
-            setUIState(UIState.INITIALIZED)
+            setUIState(UIState.STARTED)
         }
     }
 
     private fun setUIState(state: UIState) {
         when (state) {
             UIState.STARTED -> {
-                recButton.isEnabled = true
-                startButton.isEnabled = false
-                stopRequested = false
-            }
-            UIState.INITIALIZED -> {
                 recButton.isEnabled = false
+                recButton.text = "REC Start"
                 startButton.isEnabled = true
                 stopRequested = false
                 startButton.text = "RX Start"
                 startButton.setOnClickListener { startRX() }
             }
             UIState.RECEIVING -> {
-                recButton.isEnabled = false
+                recButton.isEnabled = true
+                startButton.isEnabled = true
+                startButton.text = "RX Stop"
+                startButton.setOnClickListener {
+                    stopRX()
+                }
+            }
+            UIState.RECORDING -> {
+                recButton.isEnabled = true
+                recButton.text = "REC Stop"
                 startButton.isEnabled = true
                 startButton.text = "RX Stop"
                 startButton.setOnClickListener {
@@ -153,7 +158,7 @@ class PlotsFragment : Fragment(), HackrfCallbackInterface {
 
     override fun onHackrfError(message: String) {
         tvOutput.append("Error while opening HackRF: $message\n")  // FIXME: message not displayed
-        setUIState(UIState.INITIALIZED)
+        setUIState(UIState.STARTED)
     }
 
     private fun setupHackRF() {

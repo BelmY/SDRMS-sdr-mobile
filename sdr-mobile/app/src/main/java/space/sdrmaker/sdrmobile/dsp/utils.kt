@@ -174,7 +174,7 @@ class QueueSink(private vararg val queues: ArrayBlockingQueue<FloatArray>) : Sin
 
     override fun write(input: FloatArray) {
         for (queue in queues) {
-            queue.put(input)
+            queue.offer(input)
         }
     }
 }

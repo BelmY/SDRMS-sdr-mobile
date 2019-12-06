@@ -88,7 +88,7 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
                 startButton.isEnabled = false
                 stopRequested = false
             }
-            UIState.INITIALIZED -> {
+            UIState.STARTED -> {
                 initButton.isEnabled = false
                 startButton.isEnabled = true
                 stopRequested = false
@@ -109,7 +109,7 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
     override fun onHackrfReady(hackrf: Hackrf) {
         tvOutput.append("HackRF is ready!\n")
         this.hackrf = hackrf
-        setUIState(UIState.INITIALIZED)
+        setUIState(UIState.STARTED)
     }
 
     override fun onHackrfError(message: String) {
@@ -152,7 +152,7 @@ class FMRcvFragment : Fragment(), HackrfCallbackInterface {
         }
         hackrf.stop()
         printOnScreen("RX Stopped.")
-        setUIState(UIState.INITIALIZED)
+        setUIState(UIState.STARTED)
     }
 
     private fun printOnScreen(msg: String) {
