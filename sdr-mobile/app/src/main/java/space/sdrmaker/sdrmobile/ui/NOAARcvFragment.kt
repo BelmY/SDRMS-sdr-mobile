@@ -6,13 +6,12 @@ import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import com.mantz_it.hackrf_android.Hackrf
 import com.mantz_it.hackrf_android.HackrfCallbackInterface
-import kotlinx.android.synthetic.main.fragment_plots.view.*
+import kotlinx.android.synthetic.main.fragment_noaarcv.view.*
+import kotlinx.android.synthetic.main.fragment_plots.view.fftPlot
 import space.sdrmaker.sdrmobile.R
 import space.sdrmaker.sdrmobile.dsp.*
 import space.sdrmaker.sdrmobile.dsp.taps.*
@@ -20,6 +19,7 @@ import space.sdrmaker.sdrmobile.noaa.NOAA_FREQUENCIES
 import java.sql.Timestamp
 import java.util.concurrent.ArrayBlockingQueue
 import kotlin.concurrent.thread
+import android.widget.ArrayAdapter
 
 
 class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
@@ -30,6 +30,7 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
     private lateinit var startButton: Button
     private lateinit var fftPlot: FFTView
     private lateinit var uiState: UIState
+    private lateinit var noaaSelector: Spinner
 
     private lateinit var hackrf: Hackrf
     private lateinit var hackRFSignalSource: HackRFSignalSource
@@ -42,7 +43,7 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
     private var noaa = 15
     private var channelFreq = NOAA_FREQUENCIES[noaa] ?: 137620000L // NOAA 15
 
-    private var offset = 200000
+    private val offset = 200000
     private var centerFreq = channelFreq + offset
     private var samplingRate = 832000
     private var bandwidth = samplingRate
@@ -63,19 +64,50 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
         root = inflater.inflate(R.layout.fragment_noaarcv, container, false)
 
         // setup UI
-        recButton = root.findViewById(R.id.recButton)
-        startButton = root.findViewById(R.id.startButton)
+        recButton = root.recButton
+        startButton = root.startButton
         startButton.setOnClickListener {
             startRX()
         }
         fftPlot = root.fftPlot
+        noaaSelector = root.noaaSelector
+        val spinnerArrayAdapter = ArrayAdapter<String>(
+            context!!, android.R.layout.simple_spinner_item,
+            arrayOf("NOAA 15", "NOAA 18", "NOAA 19")
+        )
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        noaaSelector.adapter = spinnerArrayAdapter
+        noaaSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
 
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                when (position) {
+                    0 -> setNOAA(15)
+                    1 -> setNOAA(18)
+                    2 -> setNOAA(19)
+                    else -> setNOAA(15)
+                }
+            }
+        }
         tvOutput = root.findViewById<Button>(R.id.tvOutput)
         setUIState(UIState.STARTED)
         tvOutput.movementMethod = ScrollingMovementMethod()
         tvOutput.append("Ready...\n")
 
         return root
+    }
+
+    private fun setNOAA(num: Int) {
+        noaa = num
+        channelFreq = NOAA_FREQUENCIES[noaa] ?: 137620000L // NOAA 15
+        centerFreq = channelFreq + offset
+
     }
 
     private fun setupFFTPlotAxis() {
