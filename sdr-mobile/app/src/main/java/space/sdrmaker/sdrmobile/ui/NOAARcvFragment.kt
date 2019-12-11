@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import com.mantz_it.hackrf_android.Hackrf
 import com.mantz_it.hackrf_android.HackrfCallbackInterface
 import kotlinx.android.synthetic.main.fragment_noaarcv.view.*
-import kotlinx.android.synthetic.main.fragment_plots.view.fftPlot
 import space.sdrmaker.sdrmobile.R
 import space.sdrmaker.sdrmobile.dsp.*
 import space.sdrmaker.sdrmobile.dsp.taps.*
@@ -27,7 +26,7 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
     private lateinit var root: View
     private lateinit var tvOutput: TextView
     private lateinit var recButton: Button
-    private lateinit var startButton: Button
+    private lateinit var rxButton: Button
     private lateinit var fftPlot: FFTView
     private lateinit var uiState: UIState
     private lateinit var noaaSelector: Spinner
@@ -36,10 +35,6 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
     private lateinit var hackRFSignalSource: HackRFSignalSource
     private lateinit var fileWriter: FileWriter
     private var fileQueue = ArrayBlockingQueue<FloatArray>(1024)
-//    private var channelFreq = 89800000L
-//    private var channelFreq = 137912500L // NOAA 18
-//    private var channelFreq = 137100000L // NOAA 19
-//    private var channelFreq = 137620000L // NOAA 15
     private var noaa = 15
     private var channelFreq = NOAA_FREQUENCIES[noaa] ?: 137620000L // NOAA 15
 
@@ -65,8 +60,8 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
 
         // setup UI
         recButton = root.recButton
-        startButton = root.startButton
-        startButton.setOnClickListener {
+        rxButton = root.rxButton
+        rxButton.setOnClickListener {
             startRX()
         }
         fftPlot = root.fftPlot
@@ -157,7 +152,7 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
         val fileQueueSource = QueueSource(fileQueue)
         val fileDecimator = FIRFilter(fileQueueSource, SR832k_7k_9k_283t, 100)
         val writePath =
-            "${context!!.getExternalFilesDir(null)}/NOAA-${Timestamp(System.currentTimeMillis())}-8320Sps.iq"
+            "${context!!.getExternalFilesDir(null)}/NOAA${noaa}-${Timestamp(System.currentTimeMillis())}-8320Sps.iq"
         fileWriter = FileWriter(writePath)
         setUIState(UIState.RECORDING)
         thread {
@@ -187,27 +182,27 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
                 recButton.text = "REC Start"
                 recButton.setOnClickListener { startRec() }
 
-                startButton.isEnabled = true
-                startButton.text = "RX Start"
-                startButton.setOnClickListener { startRX() }
+                rxButton.isEnabled = true
+                rxButton.text = "RX Start"
+                rxButton.setOnClickListener { startRX() }
             }
             UIState.RECEIVING -> {
                 recButton.isEnabled = true
                 recButton.text = "REC Start"
                 recButton.setOnClickListener { startRec() }
 
-                startButton.isEnabled = true
-                startButton.text = "RX Stop"
-                startButton.setOnClickListener { stopRX() }
+                rxButton.isEnabled = true
+                rxButton.text = "RX Stop"
+                rxButton.setOnClickListener { stopRX() }
             }
             UIState.RECORDING -> {
                 recButton.isEnabled = true
                 recButton.text = "REC Stop"
                 recButton.setOnClickListener { stopRec() }
 
-                startButton.isEnabled = true
-                startButton.text = "RX Stop"
-                startButton.setOnClickListener { stopRX() }
+                rxButton.isEnabled = true
+                rxButton.text = "RX Stop"
+                rxButton.setOnClickListener { stopRX() }
             }
         }
     }

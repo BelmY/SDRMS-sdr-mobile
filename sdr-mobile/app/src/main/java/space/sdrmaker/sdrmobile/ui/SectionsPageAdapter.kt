@@ -24,9 +24,7 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
         // Return appropriate Fragment (defined as a static inner class below).
         return when(position) {
             0 -> NOAARcvFragment()
-            1 -> NOAAFragment()
-            2 -> FMRcvFragment()
-            3 -> PlotsFragment()
+            1 -> NOAADecodeFragment()
             else -> NOAARcvFragment()
         }
     }
@@ -36,6 +34,6 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
     }
 
     override fun getCount(): Int {
-        return 4
+        return 2
     }
 }
