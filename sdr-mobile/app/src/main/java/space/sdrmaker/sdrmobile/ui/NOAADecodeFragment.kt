@@ -30,7 +30,7 @@ class NOAADecodeFragment : Fragment(), TabLayout.OnTabSelectedListener {
     private var decoded = 0
     private var toDecode = 0
     private val iqExtension = "iq"
-    private val imgExtension = "px"
+    private val imgExtension = "png"
     private val handler = Handler()
 
     override fun onCreateView(
@@ -72,10 +72,10 @@ class NOAADecodeFragment : Fragment(), TabLayout.OnTabSelectedListener {
 
     private fun listFiles(): List<String> {
         val dir = "${context!!.getExternalFilesDir(null)}"
-        val iqFiles = File(dir).listFiles().filter { it.extension == "iq" }.map {
+        val iqFiles = File(dir).listFiles().filter { it.extension == iqExtension }.map {
             it.name.slice(0 until it.name.length - iqExtension.length - 1)
         }.toSet()
-        val imgFiles = File(dir).listFiles().filter { it.extension == "px" }.map {
+        val imgFiles = File(dir).listFiles().filter { it.extension == imgExtension }.map {
             it.name.slice(0 until it.name.length - imgExtension.length - 1)
         }.toSet()
 
@@ -117,11 +117,9 @@ class NOAADecodeFragment : Fragment(), TabLayout.OnTabSelectedListener {
         val decimator = FIRFilter(amDemodulator, SR8320_2000_2100_75t, 2)
         val normalizer = Normalizer(decimator, 0f, 1f)
         val syncer = NOAALineSyncer(normalizer)
-        val image = NOAAImageSink(syncer, verbose = true)
+        val image = NOAAImageSink(syncer, writePath, verbose = true)
+        image.write()
 
-        val writer = FileWriter(writePath)
-        writer.write(image.write())
-        writer.close()
         decoded++
         updateProgress()
         if (decoded == toDecode) {

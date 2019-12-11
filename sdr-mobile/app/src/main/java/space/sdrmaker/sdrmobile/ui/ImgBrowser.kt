@@ -22,7 +22,7 @@ class ImgBrowser : Fragment(), TabLayout.OnTabSelectedListener {
     private lateinit var fileTable: TableLayout
     private lateinit var files: List<String>
     private lateinit var labels: ArrayList<TextView>
-    private val imgExtension = "jpeg"
+    private val imgExtension = "png"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

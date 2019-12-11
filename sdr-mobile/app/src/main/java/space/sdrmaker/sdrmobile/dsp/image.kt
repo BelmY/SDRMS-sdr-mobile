@@ -1,6 +1,11 @@
 package space.sdrmaker.sdrmobile.dsp
 
+import android.graphics.*
+import androidx.core.graphics.set
+import java.io.FileOutputStream
 import java.util.concurrent.LinkedBlockingDeque
+import kotlin.math.floor
+import kotlin.math.pow
 import kotlin.math.roundToInt
 
 class SyncedSample(val value: Float, val isSyncA: Boolean = false, val isSyncB: Boolean = false)
@@ -79,6 +84,7 @@ class NOAALineSyncer(private val input: Iterator<FloatArray>) : Iterator<Array<S
 
 class NOAAImageSink(  // TODO: implement Sink interface
     private val input: Iterator<Array<SyncedSample>>,
+    private val outPath: String,
     private val verbose: Boolean = false
 ) {
 
@@ -87,7 +93,7 @@ class NOAAImageSink(  // TODO: implement Sink interface
     private var y = 0
     private var result = FloatArray(lineLenght)
 
-    fun write(): FloatArray {
+    fun write() {
         for (samples in input) {
             for (sample in samples) {
                 if (y >= lineLenght) {
@@ -114,6 +120,21 @@ class NOAAImageSink(  // TODO: implement Sink interface
                 y++
             }
         }
-        return result
+
+        val bitmap = Bitmap.createBitmap(
+            lineLenght,
+            x + 1,
+            Bitmap.Config.ARGB_8888
+        )
+        result.forEachIndexed { index, value ->
+            bitmap[index % lineLenght, floor(index.toFloat() / lineLenght).toInt()] =
+                ((2f.pow(8).toInt() - 1) shl 24) +
+                        ((value * (2f.pow(8).toInt() - 1)).toInt() shl 16) +
+                        ((value * (2f.pow(8).toInt() - 1)).toInt() shl 8) +
+                        (value * (2f.pow(8).toInt() - 1)).toInt()
+        }
+        val file = FileOutputStream(outPath)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, file)
+        file.close()
     }
 }
