@@ -28,7 +28,7 @@ Benchmark results can be downloaded in a form of rendered [IPython Notebook](htt
 
 ## SDR Mobile application
 
-SDR Mobile application is the actual implementation of the NOAA decoder.
+SDR Mobile application is the actual implementation of the NOAA decoder. Here's a [hands-on guide](https://gitlab.com/librespacefoundation/sdrmakerspace/sdr-mobile/-/wikis/Satellite-hunting-with-SDR-Mobile-HowTo-guide).
 
 # Running the application
 
