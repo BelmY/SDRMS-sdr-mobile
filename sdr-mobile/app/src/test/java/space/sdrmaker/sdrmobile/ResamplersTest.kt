@@ -4,14 +4,14 @@ import org.junit.Test
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertArrayEquals
-import space.sdrmaker.sdrmobile.dsp.ComplexInterpolator
-import space.sdrmaker.sdrmobile.dsp.ComplexUpsampler
-import space.sdrmaker.sdrmobile.dsp.Interpolator
-import space.sdrmaker.sdrmobile.dsp.Upsampler
-import space.sdrmaker.sdrmobile.dsp.Downsampler
-import space.sdrmaker.sdrmobile.dsp.ComplexDownsampler
-import space.sdrmaker.sdrmobile.dsp.Decimator
-import space.sdrmaker.sdrmobile.dsp.ComplexDecimator
+import space.sdrmaker.sdrmobile.dsp.resamplers.ComplexInterpolator
+import space.sdrmaker.sdrmobile.dsp.resamplers.ComplexUpsampler
+import space.sdrmaker.sdrmobile.dsp.resamplers.Interpolator
+import space.sdrmaker.sdrmobile.dsp.resamplers.Upsampler
+import space.sdrmaker.sdrmobile.dsp.resamplers.Downsampler
+import space.sdrmaker.sdrmobile.dsp.resamplers.ComplexDownsampler
+import space.sdrmaker.sdrmobile.dsp.resamplers.Decimator
+import space.sdrmaker.sdrmobile.dsp.resamplers.ComplexDecimator
 
 
 class ResamplersTest {

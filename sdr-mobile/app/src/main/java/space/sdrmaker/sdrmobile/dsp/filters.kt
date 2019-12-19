@@ -1,8 +1,16 @@
-package space.sdrmaker.sdrmobile.dsp
+package space.sdrmaker.sdrmobile.dsp.filters
 
 import java.util.ArrayDeque
 import kotlin.math.ceil
 
+/**
+ * Implementation of real input low-pass FIR filter.
+ *
+ * @property input Iterator providing FloatArrays representing real-valued signal to be filtered.
+ * @property coefs FloatArray of FIR coefficients.
+ * @property decimation Decimation ratio, default = 1 (no decimation).
+ * @property gain Filtered signal gain.
+ */
 class FIRFilter(
     private val input: Iterator<FloatArray>,
     private val coefs: FloatArray,
@@ -15,6 +23,11 @@ class FIRFilter(
     private var count = 0
     private var rem = 0
 
+    /**
+     * Performs filtering on next array provided by input Iterator.
+     *
+     * @return FloatArray of filtered real-valued signal based on input.
+     */
     override fun next(): FloatArray {
         val nextArray = input.next()
         val offset = (decimation - rem).rem(decimation)
@@ -41,6 +54,14 @@ class FIRFilter(
     override fun hasNext() = input.hasNext()
 }
 
+/**
+ * Implementation of interleaved complex input low-pass FIR filter.
+ *
+ * @property input Iterator providing FloatArrays representing interleaved complex signal to be filtered.
+ * @property coefs FloatArray of FIR coefficients.
+ * @property decimation Decimation ratio, default = 1 (no decimation).
+ * @property gain Filtered signal gain.
+ */
 class ComplexFIRFilter(
     private val input: Iterator<FloatArray>,
     private val coefs: FloatArray,
@@ -52,6 +73,11 @@ class ComplexFIRFilter(
     private val imDelayLine = FloatArray(length)
     private var count = 0
 
+    /**
+     * Performs filtering on next array provided by input Iterator.
+     *
+     * @return FloatArray of filtered interleaved complex signal based on input.
+     */
     override fun next(): FloatArray {
         val nextArray = input.next()
         val result = FloatArray(ceil(nextArray.size.toFloat() / decimation).toInt()) { 0f }
@@ -100,6 +126,13 @@ class MovingAverager(
     fun delayedSig() = out
 }
 
+/**
+ * Implementation of real input moving average DC filter (2 moving averagers).
+ *
+ * @property input Iterator providing FloatArrays representing real-valued signal to be filtered.
+ * @param length FloatArray of FIR coefficients.
+ * @property gain Filtered signal gain.
+ */
 class DCFilterShort(
     private val input: Iterator<FloatArray>,
     length: Int,
@@ -110,6 +143,11 @@ class DCFilterShort(
     private val ma0 = MovingAverager(length)
     private val ma1 = MovingAverager(length)
 
+    /**
+     * Performs filtering on next array provided by input Iterator.
+     *
+     * @return FloatArray of filtered real-valued signal based on input.
+     */
     override fun next(): FloatArray {
         val nextArray = input.next()
         val result = FloatArray(nextArray.size)
@@ -125,6 +163,13 @@ class DCFilterShort(
     override fun hasNext() = input.hasNext()
 }
 
+/**
+ * Implementation of real input moving average DC filter (4 moving averagers).
+ *
+ * @property input Iterator providing FloatArrays representing real-valued signal to be filtered.
+ * @param length FloatArray of FIR coefficients.
+ * @property gain Filtered signal gain.
+ */
 class DCFilterLong(
     private val input: Iterator<FloatArray>,
     length: Int,
@@ -138,6 +183,11 @@ class DCFilterLong(
     private val ma3 = MovingAverager(length)
     private val delayLine = ArrayDeque<Float>(length - 1)
 
+    /**
+     * Performs filtering on next array provided by input Iterator.
+     *
+     * @return FloatArray of filtered real-valued signal based on input.
+     */
     override fun next(): FloatArray {
         val nextArray = input.next()
         val result = FloatArray(nextArray.size)

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <space.sdrmaker.sdrmobile.dsp.FFTView
+    <space.sdrmaker.sdrmobile.dsp.plots.FFTView
         android:id="@+id/fftPlot"
         android:layout_width="333dp"
         android:layout_height="291dp"

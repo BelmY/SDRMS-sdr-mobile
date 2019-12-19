@@ -3,7 +3,7 @@ package space.sdrmaker.sdrmobile
 import org.junit.Test
 
 import org.junit.Assert.*
-import space.sdrmaker.sdrmobile.dsp.ComplexMultiply
+import space.sdrmaker.sdrmobile.dsp.math.ComplexMultiply
 
 class MathTest {
 

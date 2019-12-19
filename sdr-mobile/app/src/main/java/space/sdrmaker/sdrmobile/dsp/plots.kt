@@ -1,4 +1,4 @@
-package space.sdrmaker.sdrmobile.dsp
+package space.sdrmaker.sdrmobile.dsp.plots
 
 import android.content.Context
 import android.graphics.*
@@ -6,15 +6,25 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.graphics.get
 import androidx.core.graphics.set
+import space.sdrmaker.sdrmobile.dsp.utils.Sink
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.TimeUnit
 
 
+/**
+ * Android View displaying FFT plot.
+ *
+ * @constructor
+ *
+ * @param context Android View context.
+ * @param attrs Android View attributes.
+ * @param defStyleAttr
+ */
 class FFTView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : View(context, attrs, defStyleAttr), Sink {
+) : View(context, attrs, defStyleAttr), Sink<FloatArray> {
 
     private val seriesPaint: Paint = Paint()
     private var series: Path = Path()
@@ -61,6 +71,14 @@ class FFTView @JvmOverloads constructor(
 
     }
 
+    /**
+     * Sets scale, label and ticks of frequency axis.
+     *
+     * @param centerFrequency Center frequency of the receiver.
+     * @param bandwidth Receiver bandwidth.
+     * @param ticks FloatArray of axis ticks that should be drawn.
+     * @param label Axis label, default [MHz].
+     */
     fun setupXAxis(
         centerFrequency: Float,
         bandwidth: Float,
@@ -73,6 +91,14 @@ class FFTView @JvmOverloads constructor(
         xLabel = label
     }
 
+    /**
+     * Sets scale, label and ticks of Y axis.
+     *
+     * @param min Minimum value.
+     * @param max Maximum value.
+     * @param ticks FloatArray of axis ticks that should be drawn.
+     * @param label Axis label, default [dB].
+     */
     fun setupYAxis(
         min: Int = -100,
         max: Int = 0,
@@ -131,6 +157,11 @@ class FFTView @JvmOverloads constructor(
 
     private fun yTranslate(value: Float) = height - (value - yMin) * height / (yMax - yMin)
 
+    /**
+     * Plots next FloatArray.
+     *
+     * @param input FloatArray representing power spectrum calculated by FFT.
+     */
     override fun write(input: FloatArray) {
         calculatePath(input)
         invalidate()

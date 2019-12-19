@@ -12,13 +12,22 @@ import com.mantz_it.hackrf_android.Hackrf
 import com.mantz_it.hackrf_android.HackrfCallbackInterface
 import kotlinx.android.synthetic.main.fragment_noaarcv.view.*
 import space.sdrmaker.sdrmobile.R
-import space.sdrmaker.sdrmobile.dsp.*
 import space.sdrmaker.sdrmobile.dsp.taps.*
 import space.sdrmaker.sdrmobile.noaa.NOAA_FREQUENCIES
 import java.sql.Timestamp
 import java.util.concurrent.ArrayBlockingQueue
 import kotlin.concurrent.thread
 import android.widget.ArrayAdapter
+import space.sdrmaker.sdrmobile.dsp.audio.AudioSink
+import space.sdrmaker.sdrmobile.dsp.demodulators.FMDemodulator
+import space.sdrmaker.sdrmobile.dsp.file.FileWriter
+import space.sdrmaker.sdrmobile.dsp.filters.ComplexFIRFilter
+import space.sdrmaker.sdrmobile.dsp.filters.FIRFilter
+import space.sdrmaker.sdrmobile.dsp.math.ComplexFFT
+import space.sdrmaker.sdrmobile.dsp.math.ComplexMultiply
+import space.sdrmaker.sdrmobile.dsp.plots.FFTView
+import space.sdrmaker.sdrmobile.dsp.sdr.HackRFSignalSource
+import space.sdrmaker.sdrmobile.dsp.utils.*
 
 
 class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
@@ -64,7 +73,7 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
         rxButton.setOnClickListener {
             startRX()
         }
-        fftPlot = root.fftPlot
+        fftPlot = root.fftPlot as FFTView
         noaaSelector = root.noaaSelector
         val spinnerArrayAdapter = ArrayAdapter<String>(
             context!!, android.R.layout.simple_spinner_item,
@@ -268,7 +277,7 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
         val fmQueueSource = QueueSource(fmQueue)
         val filter =
             ComplexFIRFilter(fmQueueSource, SR832k_20k_189)
-        val fmDemodulator = FMDemodulator(filter, 5000)
+        val fmDemodulator = FMDemodulator(filter, 5000, 2.toFloat() * 41600)
 
         val audioQueue = ArrayBlockingQueue<FloatArray>(1024)
         fileQueue = ArrayBlockingQueue(1024)

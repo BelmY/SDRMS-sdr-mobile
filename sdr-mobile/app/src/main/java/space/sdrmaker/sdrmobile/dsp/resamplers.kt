@@ -1,10 +1,23 @@
-package space.sdrmaker.sdrmobile.dsp
+package space.sdrmaker.sdrmobile.dsp.resamplers
 
+import space.sdrmaker.sdrmobile.dsp.filters.ComplexFIRFilter
+import space.sdrmaker.sdrmobile.dsp.filters.FIRFilter
 import kotlin.math.floor
 
+/**
+ * Performs upsampling of real-valued input signal by specified factor.
+ *
+ * @property input Iterator providing FloatArrays of real-valued input signal.
+ * @property factor Upsampling factor.
+ */
 class Upsampler(private val input: Iterator<FloatArray>, private val factor: Int) :
     Iterator<FloatArray> {
 
+    /**
+     * Performs upsampling on next array provided by input Iterator.
+     *
+     * @return FloatArray of upsampled real-valued signal based on input.
+     */
     override fun next(): FloatArray {
         val nextArray = input.next()
         return FloatArray(nextArray.size * factor) { index -> if (index.rem(factor) == 0) nextArray[index / factor] else 0f }
@@ -13,9 +26,20 @@ class Upsampler(private val input: Iterator<FloatArray>, private val factor: Int
     override fun hasNext() = input.hasNext()
 }
 
+/**
+ * Performs upsampling of complex (interleaved) input signal by specified factor.
+ *
+ * @property input Iterator providing FloatArrays of complex (interleaved) input signal.
+ * @property factor Upsampling factor.
+ */
 class ComplexUpsampler(private val input: Iterator<FloatArray>, private val factor: Int) :
     Iterator<FloatArray> {
 
+    /**
+     * Performs upsampling on next array provided by input Iterator.
+     *
+     * @return FloatArray of upsampled complex (interleaved) signal based on input.
+     */
     override fun next(): FloatArray {
         val nextArray = input.next()
         val iterator = nextArray.iterator()
@@ -36,11 +60,22 @@ class ComplexUpsampler(private val input: Iterator<FloatArray>, private val fact
     override fun hasNext() = input.hasNext()
 }
 
+/**
+ * Performs downsampling of real-valued input signal by specified factor.
+ *
+ * @property input Iterator providing FloatArrays of real-valued input signal.
+ * @property factor Downsampling factor.
+ */
 class Downsampler(private val input: Iterator<FloatArray>, private val factor: Int) :
     Iterator<FloatArray> {
 
     private var rem = 0
 
+    /**
+     * Performs downsampling on next array provided by input Iterator.
+     *
+     * @return FloatArray of downsampled real-valued signal based on input.
+     */
     override fun next(): FloatArray {
         val nextArray = input.next()
         val offset = (factor - rem).rem(factor)
@@ -54,11 +89,22 @@ class Downsampler(private val input: Iterator<FloatArray>, private val factor: I
     override fun hasNext() = input.hasNext()
 }
 
+/**
+ * Performs downsampling of complex (interleaved) input signal by specified factor.
+ *
+ * @property input Iterator providing FloatArrays of complex (interleaved) input signal.
+ * @property factor Downsampling factor.
+ */
 class ComplexDownsampler(private val input: Iterator<FloatArray>, private val factor: Int) :
     Iterator<FloatArray> {
 
     private var rem = 0
 
+    /**
+     * Performs downsampling on next array provided by input Iterator.
+     *
+     * @return FloatArray of downsampled complex (interleaved) signal based on input.
+     */
     override fun next(): FloatArray {
         val nextArray = input.next()
         val offset = (factor - rem).rem(factor)
@@ -73,6 +119,14 @@ class ComplexDownsampler(private val input: Iterator<FloatArray>, private val fa
     override fun hasNext() = input.hasNext()
 }
 
+/**
+ * Decimates real-valued input signal by specified factor.
+ *
+ * @param input Iterator providing FloatArrays of real-valued input signal.
+ * @param factor Decimation factor.
+ * @param taps FIR filter taps.
+ * @param gain Decimated signal gain.
+ */
 class Decimator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray, gain: Float = 1f) :
     Iterator<FloatArray> {
 
@@ -81,9 +135,22 @@ class Decimator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray, gain
 
     override fun hasNext() = downsampler.hasNext()
 
+    /**
+     * Decimates next array provided by input Iterator.
+     *
+     * @return FloatArray of decimated real-valued signal based on input.
+     */
     override fun next() = downsampler.next()
 }
 
+/**
+ * Decimates complex (interleaved) input signal by specified factor.
+ *
+ * @param input Iterator providing FloatArrays of complex (interleaved) input signal.
+ * @param factor Decimation factor.
+ * @param taps FIR filter taps.
+ * @param gain Decimated signal gain.
+ */
 class ComplexDecimator(
     input: Iterator<FloatArray>,
     factor: Int,
@@ -95,6 +162,11 @@ class ComplexDecimator(
     private val filter = ComplexFIRFilter(input, taps, gain = gain)
     private val downsampler = ComplexDownsampler(filter, factor)
 
+    /**
+     * Decimates next array provided by input Iterator.
+     *
+     * @return FloatArray of decimated complex (interleaved) signal based on input.
+     */
     override fun next(): FloatArray {
         return downsampler.next()
     }
@@ -102,6 +174,14 @@ class ComplexDecimator(
     override fun hasNext() = downsampler.hasNext()
 }
 
+/**
+ * Interpolates real-valued input signal by specified factor.
+ *
+ * @param input Iterator providing FloatArrays of real-valued input signal.
+ * @param factor Interpolation factor.
+ * @param taps FIR filter taps.
+ * @param gain Interpolated signal gain.
+ */
 class Interpolator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray, gain: Float = 1f) :
     Iterator<FloatArray> {
 
@@ -110,11 +190,24 @@ class Interpolator(input: Iterator<FloatArray>, factor: Int, taps: FloatArray, g
 
     override fun hasNext() = filter.hasNext()
 
+    /**
+     * Performs interpolation on next array provided by input Iterator.
+     *
+     * @return FloatArray of interpolated real-valued signal based on input.
+     */
     override fun next(): FloatArray {
         return filter.next()
     }
 }
 
+/**
+ * Performs interpolation of complex (interleaved) input signal by specified factor.
+ *
+ * @param input Iterator providing FloatArrays of complex (interleaved) input signal.
+ * @param factor Interpolation factor.
+ * @param taps FIR filter taps.
+ * @param gain Interpolated signal gain.
+ */
 class ComplexInterpolator(
     input: Iterator<FloatArray>,
     factor: Int,
@@ -128,11 +221,25 @@ class ComplexInterpolator(
 
     override fun hasNext() = filter.hasNext()
 
+    /**
+     * Performs interpolation on next array provided by input Iterator.
+     *
+     * @return FloatArray of interpolated complex (interleaved) signal based on input.
+     */
     override fun next(): FloatArray {
         return filter.next()
     }
 }
 
+/**
+ * Resamples real-valued input signal by performing interpolation and decimation.
+ *
+ * @param input Iterator providing FloatArrays of real-valued input signal.
+ * @param interpolation Interpolation factor.
+ * @param decimation Decimation factor.
+ * @param interpolatorTaps FIR taps used by interpolator.
+ * @param decimatorTaps FIR taps used by decimator.
+ */
 class Resampler(
     input: Iterator<FloatArray>,
     interpolation: Int,
@@ -146,9 +253,23 @@ class Resampler(
 
     override fun hasNext() = decimator.hasNext()
 
+    /**
+     * Performs resampling on next array provided by input Iterator.
+     *
+     * @return FloatArray of resampled real-valued signal based on input.
+     */
     override fun next() = decimator.next()
 }
 
+/**
+ * Resamples complex (interleaved) input signal by performing interpolation and decimation.
+ *
+ * @param input Iterator providing FloatArrays of real-valued input signal.
+ * @param interpolation Interpolation factor.
+ * @param decimation Decimation factor.
+ * @param interpolatorTaps FIR taps used by interpolator.
+ * @param decimatorTaps FIR taps used by decimator.
+ */
 class ComplexResampler(
     input: Iterator<FloatArray>,
     interpolation: Int,
@@ -163,5 +284,10 @@ class ComplexResampler(
 
     override fun hasNext() = decimator.hasNext()
 
+    /**
+     * Performs resampling on next array provided by input Iterator.
+     *
+     * @return FloatArray of resampled complex (interleaved) signal based on input.
+     */
     override fun next() = decimator.next()
 }

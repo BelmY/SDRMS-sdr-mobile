@@ -4,8 +4,8 @@ import org.junit.Test
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertArrayEquals
-import space.sdrmaker.sdrmobile.dsp.ComplexFIRFilter
-import space.sdrmaker.sdrmobile.dsp.FIRFilter
+import space.sdrmaker.sdrmobile.dsp.filters.ComplexFIRFilter
+import space.sdrmaker.sdrmobile.dsp.filters.FIRFilter
 
 
 class FiltersTest {

@@ -10,8 +10,14 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_noaadecode.view.*
 import space.sdrmaker.sdrmobile.R
-import space.sdrmaker.sdrmobile.dsp.*
+import space.sdrmaker.sdrmobile.dsp.demodulators.AMDemodulator
+import space.sdrmaker.sdrmobile.dsp.filters.FIRFilter
+import space.sdrmaker.sdrmobile.dsp.image.NOAAImageSink
+import space.sdrmaker.sdrmobile.dsp.image.NOAALineSyncer
+import space.sdrmaker.sdrmobile.dsp.math.HilbertTransform
+import space.sdrmaker.sdrmobile.dsp.math.Normalizer
 import space.sdrmaker.sdrmobile.dsp.taps.*
+import space.sdrmaker.sdrmobile.dsp.file.FileReader
 import java.io.File
 import kotlin.concurrent.thread
 import kotlin.math.round
@@ -72,10 +78,10 @@ class NOAADecodeFragment : Fragment(), TabLayout.OnTabSelectedListener {
 
     private fun listFiles(): List<String> {
         val dir = "${context!!.getExternalFilesDir(null)}"
-        val iqFiles = File(dir).listFiles().filter { it.extension == iqExtension }.map {
+        val iqFiles = File(dir).listFiles()!!.filter { it.extension == iqExtension }.map {
             it.name.slice(0 until it.name.length - iqExtension.length - 1)
         }.toSet()
-        val imgFiles = File(dir).listFiles().filter { it.extension == imgExtension }.map {
+        val imgFiles = File(dir).listFiles()!!.filter { it.extension == imgExtension }.map {
             it.name.slice(0 until it.name.length - imgExtension.length - 1)
         }.toSet()
 
