@@ -1,55 +1,55 @@
 image: thyrlian/android-sdk:3.0
 
 stages:
-  - lint_and_test
+#  - lint_and_test
   - build
 
-benchmarks_lint_and_test:
-  stage: lint_and_test
-  script:
-    - apt-get update && UCF_FORCE_CONFOLD=1 DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -qq --no-install-recommends install cmake ninja-build
-    # FIXME: linter warnings don't stop the build
-    - cd benchmarks  # && ./gradlew lint
-    - ./gradlew test
-
-benchmarks_build:
-  stage: build
-  script:
-    - apt-get update && UCF_FORCE_CONFOLD=1 DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -qq --no-install-recommends install cmake ninja-build
-    - cd benchmarks
-    - echo $KEYSTORE_FILE | base64 -d > my.keystore
-    - ./gradlew assembleRelease
-      -Pandroid.injected.signing.store.file=$(pwd)/my.keystore
-      -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD
-      -Pandroid.injected.signing.key.alias=$KEY_ALIAS
-      -Pandroid.injected.signing.key.password=$KEY_PASSWORD
-  artifacts:
-    paths:
-      - benchmarks/app/build/outputs/apk/release/app-release.apk
-
-sdrm_lint_and_test:
-  stage: lint_and_test
-  script:
-    - apt-get update && UCF_FORCE_CONFOLD=1 DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -qq --no-install-recommends install cmake ninja-build
-    # FIXME: linter warnings don't stop the build
-    - cd sdr-mobile  # && ./gradlew lint
-    - ./gradlew test
-
-sdrm_build:
-  stage: build
-  script:
-    - apt-get update && UCF_FORCE_CONFOLD=1 DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -qq --no-install-recommends install cmake ninja-build
-    - cd sdr-mobile
-    - echo $KEYSTORE_FILE | base64 -d > my.keystore
-    - ./gradlew assembleRelease
-      -Pandroid.injected.signing.store.file=$(pwd)/my.keystore
-      -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD
-      -Pandroid.injected.signing.key.alias=$KEY_ALIAS
-      -Pandroid.injected.signing.key.password=$KEY_PASSWORD
-  artifacts:
-    paths:
-      - sdr-mobile/app/build/outputs/apk/release/app-release.apk
-
+#benchmarks_lint_and_test:
+#  stage: lint_and_test
+#  script:
+#    - apt-get update && UCF_FORCE_CONFOLD=1 DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -qq --no-install-recommends install cmake ninja-build
+#    # FIXME: linter warnings don't stop the build
+#    - cd benchmarks  # && ./gradlew lint
+#    - ./gradlew test
+#
+#benchmarks_build:
+#  stage: build
+#  script:
+#    - apt-get update && UCF_FORCE_CONFOLD=1 DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -qq --no-install-recommends install cmake ninja-build
+#    - cd benchmarks
+#    - echo $KEYSTORE_FILE | base64 -d > my.keystore
+#    - ./gradlew assembleRelease
+#      -Pandroid.injected.signing.store.file=$(pwd)/my.keystore
+#      -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD
+#      -Pandroid.injected.signing.key.alias=$KEY_ALIAS
+#      -Pandroid.injected.signing.key.password=$KEY_PASSWORD
+#  artifacts:
+#    paths:
+#      - benchmarks/app/build/outputs/apk/release/app-release.apk
+#
+#sdrm_lint_and_test:
+#  stage: lint_and_test
+#  script:
+#    - apt-get update && UCF_FORCE_CONFOLD=1 DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -qq --no-install-recommends install cmake ninja-build
+#    # FIXME: linter warnings don't stop the build
+#    - cd sdr-mobile  # && ./gradlew lint
+#    - ./gradlew test
+#
+#sdrm_build:
+#  stage: build
+#  script:
+#    - apt-get update && UCF_FORCE_CONFOLD=1 DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -qq --no-install-recommends install cmake ninja-build
+#    - cd sdr-mobile
+#    - echo $KEYSTORE_FILE | base64 -d > my.keystore
+#    - ./gradlew assembleRelease
+#      -Pandroid.injected.signing.store.file=$(pwd)/my.keystore
+#      -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD
+#      -Pandroid.injected.signing.key.alias=$KEY_ALIAS
+#      -Pandroid.injected.signing.key.password=$KEY_PASSWORD
+#  artifacts:
+#    paths:
+#      - sdr-mobile/app/build/outputs/apk/release/app-release.apk
+#
 pages:
   stage: build
   script:
