@@ -49,3 +49,11 @@ sdrm_build:
   artifacts:
     paths:
       - sdr-mobile/app/build/outputs/apk/release/app-release.apk
+
+pages:
+  stage: build
+  script:
+    - cd sdr-mobile
+    - ./gradlew dokka
+    - cp -r app/build/dokka/* ../public
+    - cd ../public && ln -s app/index.html
