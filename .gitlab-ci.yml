@@ -55,8 +55,10 @@ pages:
   script:
     - cd sdr-mobile
     - ./gradlew dokka
-    - cp -r app/build/dokka/* ../public
-    - cd ../public && ln -s app/index.html
+    - cp -r app/build/dokka/app/* ../public
+    - cp -r app/build/dokka/style.css ../public
+    - cd ../public
+    - sed -i -- 's&../style.css&style.css&g' index.html
   artifacts:
     paths:
       - public
