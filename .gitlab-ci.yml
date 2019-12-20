@@ -57,3 +57,6 @@ pages:
     - ./gradlew dokka
     - cp -r app/build/dokka/* ../public
     - cd ../public && ln -s app/index.html
+  artifacts:
+    paths:
+      - public
