@@ -49,3 +49,16 @@ sdrm_build:
   artifacts:
     paths:
       - sdr-mobile/app/build/outputs/apk/release/app-release.apk
+
+pages:
+  stage: build
+  script:
+    - cd sdr-mobile
+    - ./gradlew dokka
+    - cp -r app/build/dokka/app/* ../public
+    - cp -r app/build/dokka/style.css ../public
+    - cd ../public
+    - sed -i -- 's&../style.css&style.css&g' index.html
+  artifacts:
+    paths:
+      - public
