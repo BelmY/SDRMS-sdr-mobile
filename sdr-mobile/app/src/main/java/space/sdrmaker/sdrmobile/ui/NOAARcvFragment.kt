@@ -189,6 +189,8 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
                 recButton.text = "REC Start"
                 recButton.setOnClickListener { startRec() }
 
+                noaaSelector.isEnabled = true
+
                 rxButton.isEnabled = true
                 rxButton.text = "RX Start"
                 rxButton.setOnClickListener { startRX() }
@@ -198,6 +200,8 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
                 recButton.text = "REC Start"
                 recButton.setOnClickListener { startRec() }
 
+                noaaSelector.isEnabled = false
+
                 rxButton.isEnabled = true
                 rxButton.text = "RX Stop"
                 rxButton.setOnClickListener { stopRX() }
@@ -206,6 +210,8 @@ class NOAARcvFragment : Fragment(), HackrfCallbackInterface {
                 recButton.isEnabled = true
                 recButton.text = "REC Stop"
                 recButton.setOnClickListener { stopRec() }
+
+                noaaSelector.isEnabled = false
 
                 rxButton.isEnabled = true
                 rxButton.text = "RX Stop"
