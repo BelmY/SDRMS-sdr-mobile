@@ -24,7 +24,7 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
         return when(position) {
             0 -> NOAARcvFragment()
             1 -> NOAADecodeFragment()
-            2 -> ImgBrowser()
+            2 -> ImgBrowserFragment()
             else -> NOAARcvFragment()
         }
     }

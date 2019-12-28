@@ -7,23 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_noaadecode.view.*
 import space.sdrmaker.sdrmobile.R
 import space.sdrmaker.sdrmobile.dsp.demodulators.AMDemodulator
+import space.sdrmaker.sdrmobile.dsp.file.FileReader
 import space.sdrmaker.sdrmobile.dsp.filters.FIRFilter
 import space.sdrmaker.sdrmobile.dsp.image.NOAAImageSink
 import space.sdrmaker.sdrmobile.dsp.image.NOAALineSyncer
 import space.sdrmaker.sdrmobile.dsp.math.HilbertTransform
 import space.sdrmaker.sdrmobile.dsp.math.Normalizer
-import space.sdrmaker.sdrmobile.dsp.taps.*
-import space.sdrmaker.sdrmobile.dsp.file.FileReader
+import space.sdrmaker.sdrmobile.dsp.taps.SR8320_2000_2100_75t
 import java.io.File
 import kotlin.concurrent.thread
 import kotlin.math.round
 
 
-class NOAADecodeFragment : Fragment(), TabLayout.OnTabSelectedListener {
+class NOAADecodeFragment : Fragment() {
 
     private lateinit var root: View
     private lateinit var decodeButton: Button
@@ -133,15 +132,13 @@ class NOAADecodeFragment : Fragment(), TabLayout.OnTabSelectedListener {
         }
     }
 
-    override fun onTabSelected(tab: TabLayout.Tab) {
-        refreshFileList()
-        toDecode = checkBoxes.filter { it.isChecked }.size
-        updateProgress()
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            refreshFileList()
+            toDecode = checkBoxes.filter { it.isChecked }.size
+            updateProgress()
+        }
     }
 
-    override fun onTabReselected(tab: TabLayout.Tab) {
-        onTabSelected(tab)
-    }
-
-    override fun onTabUnselected(tab: TabLayout.Tab) {}
 }
