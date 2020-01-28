@@ -3,6 +3,10 @@ image: thyrlian/android-sdk:3.0
 stages:
   - lint_and_test
   - build
+  - internal
+  - alpha
+  - beta
+  - production
 
 benchmarks_lint_and_test:
   stage: lint_and_test
@@ -62,3 +66,52 @@ pages:
   artifacts:
     paths:
       - public
+
+publishInternal:
+  stage: internal
+  when: on_success
+  only:
+    - master
+  before_script:
+    - cd sdr-mobile
+    - COPY Gemfile.lock .
+    - COPY Gemfile .
+    - RUN gem install bundle
+    - RUN bundle install
+    - echo $GOOGLE_PLAYSTORE_SERVICE_JSON > ~/google_play_api_key.json
+  after_script:
+    - rm ~/google_play_api_key.json
+  script:
+    - bundle exec fastlane internal
+
+.promote_job:
+  when: manual
+  only:
+    - master
+  before_script:
+    - cd sdr-mobile
+    - COPY Gemfile.lock .
+    - COPY Gemfile .
+    - RUN gem install bundle
+    - RUN bundle install
+    - echo $GOOGLE_PLAYSTORE_SERVICE_JSON > ~/google_play_api_key.json
+  after_script:
+    - rm ~/google_play_api_key.json
+
+promoteAlpha:
+  extends: .promote_job
+  stage: alpha
+  script:
+    - bundle exec fastlane promote_internal_to_alpha
+
+promoteBeta:
+  extends: .promote_job
+  stage: beta
+  script:
+    - bundle exec fastlane promote_alpha_to_beta
+
+promoteProduction:
+  extends: .promote_job
+  stage: production
+  script:
+    - bundle exec fastlane promote_beta_to_production
