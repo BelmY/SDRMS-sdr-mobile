@@ -53,8 +53,7 @@ sdrm_build:
   artifacts:
     paths:
       # - sdr-mobile/app/build/outputs/apk/release/app-release.abk
-      - sdr-mobile/app/build/outputs/bundle/release/app.aab
-
+      - sdr-mobile/app/build/outputs/bundle/
 pages:
   stage: build
   script:
