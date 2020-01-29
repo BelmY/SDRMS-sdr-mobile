@@ -20,7 +20,8 @@ platform :android do
   desc "Submit a new Internal Build to Play Store"
   lane :internal do
     # upload_to_play_store(track: 'internal', apk: 'dummy_app_v2.apk', release_status:'draft')
-    upload_to_play_store(track: 'internal', apk: 'app/build/outputs/apk/release/app-release.aab', release_status:'draft')
+    # upload_to_play_store(track: 'internal', apk: 'app/build/outputs/apk/release/app-release.apk', release_status:'draft')
+    upload_to_play_store(track: 'internal', aab: 'sdr-mobile/app/build/outputs/bundle/release/app.aab', release_status:'draft')
   end
 
   desc "Promote Internal to Alpha"
