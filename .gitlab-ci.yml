@@ -73,8 +73,8 @@ pages:
   #   - master
   before_script:
     - cd sdr-mobile
-    - COPY Gemfile.lock .
-    - COPY Gemfile .
+    - cp Gemfile.lock .
+    - cp Gemfile .
     - RUN gem install bundle
     - RUN bundle install
     - echo $GOOGLE_PLAYSTORE_SERVICE_JSON > ~/google_play_api_key.json
