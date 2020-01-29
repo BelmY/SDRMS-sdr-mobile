@@ -45,14 +45,14 @@ sdrm_build:
     - apt-get update && UCF_FORCE_CONFOLD=1 DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -qq --no-install-recommends install cmake ninja-build
     - cd sdr-mobile
     - echo $KEYSTORE_FILE | base64 -d > my.keystore
-    - ./gradlew assembleRelease
+    - ./gradlew bundle
       -Pandroid.injected.signing.store.file=$(pwd)/my.keystore
       -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD
       -Pandroid.injected.signing.key.alias=$KEY_ALIAS
       -Pandroid.injected.signing.key.password=$KEY_PASSWORD
   artifacts:
     paths:
-      - sdr-mobile/app/build/outputs/apk/release/app-release.apk
+      - sdr-mobile/app/build/outputs/apk/release/app-release.aab
 
 pages:
   stage: build
