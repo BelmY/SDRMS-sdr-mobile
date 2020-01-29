@@ -76,6 +76,8 @@ pages:
     - cd sdr-mobile
     # - cp Gemfile.lock .
     # - cp Gemfile .
+    - export LC_ALL=en_US.UTF-8
+    - export LANG=en_US.UTF-8
     - gem install bundle
     - bundle install
     - echo $GOOGLE_PLAYSTORE_SERVICE_JSON > ~/google_play_api_key.json
