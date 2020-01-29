@@ -68,6 +68,7 @@ pages:
       - public
 
 .promote_job:
+  image: "ruby:2.5"
   when: manual
   # only:
   #   - master
