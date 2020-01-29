@@ -16,20 +16,6 @@ default_platform(:android)
 
 platform :android do
 
-  desc "Builds the debug code"
-  lane :buildDebug do
-    gradle(task: "assembleDebug")
-  end
-
-  desc "Builds the release code"
-  lane :buildRelease do
-    gradle(task: "assembleRelease")
-  end
-
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
-  end
 
   desc "Submit a new Internal Build to Play Store"
   lane :internal do
@@ -49,5 +35,10 @@ platform :android do
   desc "Promote Beta to Production"
   lane :promote_beta_to_production do
     upload_to_play_store(track: 'beta', track_promote_to: 'production')
+  end
+
+  desc "Check key"
+  lane :validateJSON do
+  validate_play_store_json_key(json_key: '~/google_play_api_key.json')
   end
 end

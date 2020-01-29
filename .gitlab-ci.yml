@@ -67,27 +67,10 @@ pages:
     paths:
       - public
 
-publishInternal:
-  stage: internal
-  when: on_success
-  only:
-    - master
-  before_script:
-    - cd sdr-mobile
-    - COPY Gemfile.lock .
-    - COPY Gemfile .
-    - RUN gem install bundle
-    - RUN bundle install
-    - echo $GOOGLE_PLAYSTORE_SERVICE_JSON > ~/google_play_api_key.json
-  after_script:
-    - rm ~/google_play_api_key.json
-  script:
-    - bundle exec fastlane internal
-
 .promote_job:
   when: manual
-  only:
-    - master
+  # only:
+  #   - master
   before_script:
     - cd sdr-mobile
     - COPY Gemfile.lock .
@@ -97,6 +80,13 @@ publishInternal:
     - echo $GOOGLE_PLAYSTORE_SERVICE_JSON > ~/google_play_api_key.json
   after_script:
     - rm ~/google_play_api_key.json
+
+publishInternal:
+  extends: .promote_job
+  stage: internal
+  when: on_success
+  script:
+    - bundle exec fastlane internal
 
 promoteAlpha:
   extends: .promote_job
