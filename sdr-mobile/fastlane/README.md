@@ -16,21 +16,6 @@ or alternatively using `brew cask install fastlane`
 
 # Available Actions
 ## Android
-### android buildDebug
-```
-fastlane android buildDebug
-```
-Builds the debug code
-### android buildRelease
-```
-fastlane android buildRelease
-```
-Builds the release code
-### android test
-```
-fastlane android test
-```
-Runs all the tests
 ### android internal
 ```
 fastlane android internal
@@ -51,11 +36,11 @@ Promote Alpha to Beta
 fastlane android promote_beta_to_production
 ```
 Promote Beta to Production
-### android validate
+### android validateJSON
 ```
-fastlane android validate
+fastlane android validateJSON
 ```
-Get version number
+Check key
 
 ----
 

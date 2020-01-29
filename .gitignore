@@ -8,3 +8,5 @@ local.properties
 .externalNativeBuild
 release/
 .cxx
+# Ignore local fastlane logs
+sdr-mobile/fastlane/report.xml
