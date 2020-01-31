@@ -19,14 +19,20 @@ platform :android do
 
   desc "Submit a new Internal Build to Play Store"
   lane :internal do
-  	# echo(message:"ENV variable[nextStoreVersion]:" + $nextStoreVersion)
-    # *.apk
-    # upload_to_play_store(track: 'internal', apk: 'dummy_app_v2.apk', release_status:'draft')
-    # upload_to_play_store(track: 'internal', apk: 'app/build/outputs/apk/release/app-release.apk', release_status:'draft')
-    
-    # *.aab
-    upload_to_play_store(track: 'internal', aab: 'app/build/outputs/bundle/release/app-release.aab', skip_upload_apk:true, release_status:'draft')
-    # upload_to_play_store(track:'internal', aab:'app-release.aab', skip_upload_apk:true, release_status:'draft')
+      ver_internal = google_play_track_version_codes(track: 'internal').at(0)  # This is int
+	  ver_production = google_play_track_version_codes(track: 'production').at(0)  # This is int
+
+	  # Select newer version
+	  if ver_internal > ver_production
+	    new_ver = ver_internal
+	  else
+	    new_ver = ver_production
+	  end
+	  new_ver += 1
+	  # echo(message:"Next Version : " + ENV['nextStoreVersion'])
+      # *.aab
+	  upload_to_play_store(track: 'internal', version_code:new_ver, aab: 'app/build/outputs/bundle/release/app-release.aab', skip_upload_apk:true, release_status:'draft')
+      # upload_to_play_store(track: 'internal', version_code:new_ver, aab:'app-release.aab', skip_upload_apk:true, release_status:'draft')
   end
 
   desc "Promote Internal to Alpha"

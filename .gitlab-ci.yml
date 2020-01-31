@@ -2,7 +2,7 @@ image: thyrlian/android-sdk:3.0
 
 stages:
   - lint_and_test
-  - getStoreVersion
+  # - getStoreVersion
   - build
   - internal
   - alpha
@@ -75,8 +75,6 @@ pages:
   #   - master
   before_script:
     - cd sdr-mobile
-    # - cp Gemfile.lock .
-    # - cp Gemfile .
     - export LC_ALL=en_US.UTF-8
     - export LANG=en_US.UTF-8
     - gem install bundle
@@ -85,14 +83,14 @@ pages:
   after_script:
     - rm ~/google_play_api_key.json
 
-retriveStoreVersion:
-  stage: getStoreVersion
-  extends: .store_job
-  script:
-    - bundle exec fastlane getNextStoreVersion
-    - echo nextStoreVersion
-    - export nextStoreVersion
-    - echo $nextStoreVersion
+# retriveStoreVersion:
+#   stage: getStoreVersion
+#   extends: .store_job
+#   script:
+#     - bundle exec fastlane getNextStoreVersion
+#     - echo nextStoreVersion
+#     - export nextStoreVersion
+#     - echo $nextStoreVersion
 
 publishInternal:
   extends: .store_job
