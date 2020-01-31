@@ -97,6 +97,7 @@ publishInternal:
   stage: internal
   when: on_success
   script:
+    - echo $nextStoreVersion
     - bundle exec fastlane internal
 
 promoteAlpha:
