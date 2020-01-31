@@ -90,7 +90,9 @@ retriveStoreVersion:
   extends: .store_job
   script:
     - bundle exec fastlane getNextStoreVersion
+    - echo nextStoreVersion
     - export nextStoreVersion
+    - echo $nextStoreVersion
 
 publishInternal:
   extends: .store_job
