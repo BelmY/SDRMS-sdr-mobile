@@ -19,7 +19,7 @@ platform :android do
 
   desc "Submit a new Internal Build to Play Store"
   lane :internal do
-  	echo(message:"ENV variable[nextStoreVersion]:" + $nextStoreVersion)
+  	# echo(message:"ENV variable[nextStoreVersion]:" + $nextStoreVersion)
     # *.apk
     # upload_to_play_store(track: 'internal', apk: 'dummy_app_v2.apk', release_status:'draft')
     # upload_to_play_store(track: 'internal', apk: 'app/build/outputs/apk/release/app-release.apk', release_status:'draft')
