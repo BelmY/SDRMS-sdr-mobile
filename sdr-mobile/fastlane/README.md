@@ -41,6 +41,11 @@ Promote Beta to Production
 fastlane android validateJSON
 ```
 Check key
+### android getStoreVersion
+```
+fastlane android getStoreVersion
+```
+Retrive latest version number from internal track
 
 ----
 
