@@ -2,6 +2,7 @@ image: thyrlian/android-sdk:3.0
 
 stages:
   - lint_and_test
+  - getStoreVersion
   - build
   - internal
   - alpha
@@ -67,9 +68,9 @@ pages:
     paths:
       - public
 
-.promote_job:
+.store_job:
   image: "ruby:2.5"
-  when: manual
+  when: on_success
   # only:
   #   - master
   before_script:
@@ -84,27 +85,34 @@ pages:
   after_script:
     - rm ~/google_play_api_key.json
 
+retriveStoreVersion:
+  stage: getStoreVersion
+  extends: .store_job
+  script:
+    - bundle exec fastlane getNextStoreVersion
+
 publishInternal:
-  extends: .promote_job
+  extends: .store_job
   stage: internal
   when: on_success
   script:
     - bundle exec fastlane internal
 
 promoteAlpha:
-  extends: .promote_job
+  extends: .store_job
   stage: alpha
   script:
     - bundle exec fastlane promote_internal_to_alpha
 
 promoteBeta:
-  extends: .promote_job
+  extends: .store_job
   stage: beta
   script:
     - bundle exec fastlane promote_alpha_to_beta
 
 promoteProduction:
-  extends: .promote_job
+  extends: .store_job
+  when: manual
   stage: production
   script:
     - bundle exec fastlane promote_beta_to_production
