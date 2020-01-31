@@ -19,6 +19,7 @@ platform :android do
 
   desc "Submit a new Internal Build to Play Store"
   lane :internal do
+  	echo(message:"ENV variable[nextStoreVersion]:" + ENV['nextStoreVersion'])
     # *.apk
     # upload_to_play_store(track: 'internal', apk: 'dummy_app_v2.apk', release_status:'draft')
     # upload_to_play_store(track: 'internal', apk: 'app/build/outputs/apk/release/app-release.apk', release_status:'draft')
@@ -30,7 +31,6 @@ platform :android do
 
   desc "Promote Internal to Alpha"
   lane :promote_internal_to_alpha do
-  	echo(message:"ENV variable[nextStoreVersion]:" + ENV['nextStoreVersion'])
     upload_to_play_store(track: 'internal', track_promote_to: 'alpha', release_status:'draft')
   end
 
