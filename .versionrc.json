@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "release": "standard-version"
+  }
+  "bumpFiles": [
+    {
+      "filename": "VERSION_TRACKER.json",
+      //  See "Custom `updater`s" for more details.
+      "updater": "standard-version-updater.js"
+    }
+  ]
+}
