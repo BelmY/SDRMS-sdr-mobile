@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.7](https://gitlab.com/librespacefoundation/sdrmakerspace/sdr-mobile/compare/v1.1.5...v1.1.7) (2020-02-03)
+
 ### [1.0.1](https://gitlab.com/librespacefoundation/sdrmakerspace/sdr-mobile/compare/v1.1.5...v1.0.1) (2020-02-03)
 
 ### [1.1.5](https://gitlab.com/librespacefoundation/sdrmakerspace/sdr-mobile/compare/v1.1.4...v1.1.5) (2020-02-03)
