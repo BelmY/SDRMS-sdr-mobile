@@ -10,3 +10,4 @@ release/
 .cxx
 # Ignore local fastlane logs
 sdr-mobile/fastlane/report.xml
+node_modules
