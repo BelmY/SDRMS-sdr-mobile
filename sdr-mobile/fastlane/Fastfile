@@ -1,0 +1,64 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all ava123ilable plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+
+  desc "Submit a new Internal Build to Play Store"
+  lane :internal do
+      ver_internal = google_play_track_version_codes(track: 'internal').at(0)  # This is int
+	  ver_production = google_play_track_version_codes(track: 'production').at(0)  # This is int
+
+	  upload_to_play_store(track: 'internal', aab:'app/build/outputs/bundle/release/app-release.aab', skip_upload_apk:true)
+  end
+
+  desc "Promote Internal to Alpha"
+  lane :promote_internal_to_alpha do
+    upload_to_play_store(track: 'internal', track_promote_to:'alpha', skip_upload_aab:true, skip_upload_apk:true, release_status:'draft')
+  end
+
+  desc "Promote Alpha to Beta"
+  lane :promote_alpha_to_beta do
+    upload_to_play_store(track:'alpha', track_promote_to:'beta', skip_upload_aab:true, skip_upload_apk:true, release_status:'draft')
+  end
+
+  desc "Promote Beta to Production"
+  lane :promote_beta_to_production do
+    upload_to_play_store(track:'beta', track_promote_to:'production', skip_upload_aab:true, skip_upload_apk:true, release_status:'draft')
+  end
+
+  desc "Check key"
+  lane :validateJSON do
+  validate_play_store_json_key(json_key: '~/google_play_api_key.json')
+  end
+
+  desc "Retrive latest version number from internal track"
+  lane :getNextStoreVersion do
+	  ver_internal = google_play_track_version_codes(track: 'internal').at(0)  # This is int
+	  ver_production = google_play_track_version_codes(track: 'production').at(0)  # This is int
+	  
+	  # Select newer version
+	  if ver_internal > ver_production
+	  	new_ver = ver_internal
+	  else
+	  	new_ver = ver_production
+	  end
+
+	  ENV['nextStoreVersion'] = (new_ver + 1).to_s  # ENV variables are stored as strings
+	  echo(message:"Next Version : " + ENV['nextStoreVersion'])
+  end
+  
+end
