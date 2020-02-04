@@ -2,7 +2,6 @@ image: thyrlian/android-sdk:3.0
 
 stages:
   - lint_and_test
-  # - getStoreVersion
   - build
   - internal
   - alpha
@@ -53,7 +52,6 @@ sdrm_build:
       -Pandroid.injected.signing.key.password=$KEY_PASSWORD
   artifacts:
     paths:
-      # - sdr-mobile/app/build/outputs/apk/release/app-release.abk
       - sdr-mobile/app/build/outputs/bundle/
 pages:
   stage: build
@@ -71,8 +69,8 @@ pages:
 .store_job:
   image: "ruby:2.5"
   when: on_success
-  # only:
-  #   - master
+  only:
+    - master
   before_script:
     - cd sdr-mobile
     - export LC_ALL=en_US.UTF-8
@@ -82,15 +80,6 @@ pages:
     - echo $GOOGLE_PLAYSTORE_SERVICE_JSON > ~/google_play_api_key.json
   after_script:
     - rm ~/google_play_api_key.json
-
-# retriveStoreVersion:
-#   stage: getStoreVersion
-#   extends: .store_job
-#   script:
-#     - bundle exec fastlane getNextStoreVersion
-#     - echo nextStoreVersion
-#     - export nextStoreVersion
-#     - echo $nextStoreVersion
 
 publishInternal:
   extends: .store_job
